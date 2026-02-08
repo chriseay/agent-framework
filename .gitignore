@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Development artifacts (not part of the framework)
+AGENTS.md
+PROJECT.md
+ROADMAP.md
+FRAMEWORK-REFINEMENT.md
+planning/
+
+# Build artifacts from skill packaging (superseded by plugin system)
+build/
+dist/
