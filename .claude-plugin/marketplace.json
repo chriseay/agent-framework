@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "agent-framework",
+  "description": "A structured collaboration system for humans and AI coding agents. Workflow commands for discuss, research, plan, implement, test, and close-out.",
+  "owner": {
+    "name": "Christopher Seay",
+    "email": "chriseay@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "agent-framework",
+      "description": "Structured workflow commands for AI-assisted software development. 11 slash commands that guide you through discuss, research, plan, implement, test, and close-out cycles.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Christopher Seay",
+        "email": "chriseay@gmail.com"
+      },
+      "source": "./plugins/agent-framework",
+      "category": "productivity",
+      "homepage": "https://github.com/chriseay/agent-framework"
+    }
+  ]
+}
