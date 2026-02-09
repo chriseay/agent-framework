@@ -55,13 +55,13 @@ Scenario-specific:
 
 ## On Completion
 
-Update `.workflow/state.md`:
+1. Push the feature branch to origin. Use `AskUserQuestion` to confirm the push target before pushing.
+2. Update `.workflow/state.md`:
 ```
 - Step: implement (complete)
 - Implementation Step: [final step number]
 - Next Command: /test
 ```
-
-Tell the user:
+3. Tell the user:
 > Implementation complete. All [N] plan steps finished.
 > Next: type `/test` to verify the implementation.
