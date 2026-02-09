@@ -19,6 +19,16 @@ Execute the approved plan. This command handles branching, implementation, and t
 - Pushes require explicit approval. Propose the target branch first.
 - All source-control actions involving local and remote state must be performed together once approved.
 
+## Codex Dispatch
+
+For simple, mechanical subtasks (adding docstrings, renaming variables, formatting files, moving code), consider dispatching to Codex CLI instead of doing the work inline:
+
+```bash
+bash codex-dispatch.sh "task description"
+```
+
+Codex runs in a sandbox and returns the result. Always review the output before continuing. Do not dispatch tasks that require complex reasoning or multi-file coordination.
+
 ## Implementation Rules
 
 - Follow the plan steps in order.

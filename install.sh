@@ -35,3 +35,18 @@ echo "Commands available: /new-project, /onboard, /discuss, /research,"
 echo "  /plan, /implement, /test, /close-out, /retro, /status, /help"
 echo ""
 echo "Next: run ./setup.sh /path/to/your/project to copy framework files."
+echo ""
+
+# Codex CLI integration
+if command -v codex &> /dev/null; then
+    echo "Codex CLI detected ($(codex --version 2>/dev/null || echo 'unknown version'))."
+    echo "To enable Codex CLI support, add this to ~/.codex/config.toml:"
+    echo ""
+    echo '  project_doc_fallback_filenames = ["CLAUDE.md"]'
+    echo ""
+    echo "This lets Codex read CLAUDE.md as a fallback alongside AGENTS.md."
+    echo "setup.sh will copy both AGENTS.md and CLAUDE.md to your project."
+else
+    echo "Tip: Install Codex CLI to use it as an alternative agent backend."
+    echo "See: https://openai.com/codex"
+fi

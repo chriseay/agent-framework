@@ -43,6 +43,7 @@ fi
 echo "Copying framework files..."
 
 cp "$SCRIPT_DIR/CLAUDE.md" "$TARGET_DIR/CLAUDE.md"
+cp "$SCRIPT_DIR/AGENTS.md" "$TARGET_DIR/AGENTS.md"
 
 mkdir -p "$TARGET_DIR/.workflow"
 cp "$SCRIPT_DIR/.workflow/state.md" "$TARGET_DIR/.workflow/state.md"
@@ -80,13 +81,14 @@ fi
 echo "Done! Framework files installed."
 echo ""
 echo "Files added:"
-echo "  CLAUDE.md              Core rules (auto-loaded by Claude)"
+echo "  CLAUDE.md              Core rules (auto-loaded by Claude Code)"
+echo "  AGENTS.md              Core rules (auto-loaded by Codex CLI)"
 echo "  .workflow/state.md     Position tracker"
 echo "  skills/                Workflow commands (11 files)"
 echo "  templates/             Artifact templates (10 files)"
 echo ""
 echo "Next steps:"
-echo "  1. Open this directory in Claude Code"
+echo "  1. Open this directory in Claude Code or Codex CLI"
 
 if [ "$HAS_CODE" = true ]; then
     echo "  2. Type /onboard to scan your codebase and set up the workflow"

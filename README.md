@@ -133,6 +133,13 @@ claude plugin update agent-framework@agent-framework
 ./setup.sh /path/to/your/project   # re-copies framework files
 ```
 
+## Status
+
+Currently working on **v1.1 — Integrations & Efficiency**:
+- Phase 0: Codex Integration (not started)
+- Phase 1: Lighter Model Routing (not started)
+- Phase 2: GitHub Issues Integration (not started)
+
 ## Requirements
 
 - [Claude Code](https://claude.ai/claude-code) (Anthropic's CLI for Claude)
