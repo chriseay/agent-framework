@@ -2,7 +2,6 @@
 .DS_Store
 
 # Development artifacts (not part of the framework)
-AGENTS.md
 PROJECT.md
 ROADMAP.md
 FRAMEWORK-REFINEMENT.md
