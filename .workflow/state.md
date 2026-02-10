@@ -4,7 +4,7 @@
 
 - **Phase**: 1
 - **Phase Name**: Lighter Model Routing
-- **Step**: plan (approved)
-- **Implementation Step**: —
+- **Step**: test (complete)
+- **Implementation Step**: 9
 - **Research Tier**: standard
-- **Next Command**: /implement
+- **Next Command**: /close-out
