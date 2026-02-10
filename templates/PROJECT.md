@@ -51,10 +51,36 @@ Project-specific rules and lessons live here. Update `PROJECT.md` at phase close
 
 [Logging, monitoring, performance requirements or benchmarks. Use "N/A" if not applicable.]
 
-## 12) Lessons Learned (Project-Specific)
+## 12) Model Routing (Optional)
+
+This section is optional. The framework ships sensible defaults — only add overrides if you want to change which model tier is used for specific phases.
+
+### Phase-to-Tier Overrides
+
+| Phase | Default Tier | Your Override |
+|-------|-------------|---------------|
+| /discuss | light | |
+| /research | standard | |
+| /plan | heavy | |
+| /implement | heavy | |
+| /test | standard | |
+| /close-out | standard | |
+| /status | light | |
+| /help | light | |
+| /new-project | light | |
+| /onboard | heavy | |
+| /retro | standard | |
+
+Leave "Your Override" blank to use defaults. Supported tiers: `light`, `standard`, `heavy`, `codex`.
+
+### Preferences
+
+- auto-routing: no (set to `yes` to skip confirmation and use recommended tiers automatically)
+
+## 13) Lessons Learned (Project-Specific)
 
 [Empty until populated. Add entries at phase close-out when new constraints or patterns are discovered. Each entry should be actionable — not just "X was hard" but "when doing X, do Y because Z."]
 
-## 13) Phase Addenda (Roadmap-Specific)
+## 14) Phase Addenda (Roadmap-Specific)
 
 [Per-phase technical notes that apply across the project. Use "N/A" if not roadmap-driven.]
