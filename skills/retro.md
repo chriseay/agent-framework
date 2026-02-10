@@ -31,6 +31,9 @@ Model tier: standard
    - What Didn't Work
    - What Was Missing
    - Changes Made (CLAUDE.md / PROJECT.md / Removed or Simplified)
+6. **Propose commit and push** for explicit approval. Use `AskUserQuestion` for each.
+   - Commit message: `docs(retro): milestone [name] retrospective`
+   - Include all files changed during the retro (RETROSPECTIVE.md, CLAUDE.md, PROJECT.md, any removed/modified files).
 
 ## On Completion
 
