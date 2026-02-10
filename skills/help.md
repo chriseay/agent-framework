@@ -30,6 +30,7 @@ Workflow (run in order for each phase):
 
 Other:
   /status           Show current position and next command
+  /issues           List, create, and manage GitHub issues
   /retro            Milestone retrospective
   /help             This message
 ```

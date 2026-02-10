@@ -1,6 +1,6 @@
 ---
 description: Clarify requirements for the current workflow phase
-allowed-tools: [Read, Glob, Grep]
+allowed-tools: [Read, Glob, Grep, Bash]
 ---
 
 # /discuss
@@ -13,6 +13,11 @@ Clarify requirements for the current phase before any other work.
 2. Read `ROADMAP.md` to get the phase deliverables.
 3. Read any existing `planning/phase-XX/CONTEXT.md` (if resuming).
 4. Present the phase goal to the user.
+5. **Surface GitHub issues** (if `gh` CLI is available):
+   - Run `gh issue list --limit 10` and show a summary of open issues to the user.
+   - If there are open issues, use `AskUserQuestion` to ask whether any should be linked to this phase.
+   - If the user selects issues to link, record them in the `## Linked Issues` section of CONTEXT.md (format: `- #<number> — <title>`).
+   - If `gh` is not available, skip this step silently.
 
 ## Process
 

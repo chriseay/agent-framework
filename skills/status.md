@@ -11,6 +11,11 @@ Model tier: light
 3. Read `ROADMAP.md` for overall progress.
 4. Read the skill file for the current/next phase to determine the model tier. If `PROJECT.md` has a "Model Routing" section, check for overrides.
 
+5. **Show GitHub issue counts** (if `gh` CLI is available):
+   - Run `gh issue list --state open --json number --jq 'length'` to get the open issue count.
+   - If `planning/phase-XX/CONTEXT.md` exists and has a `## Linked Issues` section, count the linked issues.
+   - If `gh` is not available, skip this step silently.
+
 ## Output
 
 Present to the user:
@@ -21,6 +26,7 @@ Step:        [current workflow step]
 Model:       [tier] ([model name])
 Plan step:   [N of M] (if implementing)
 Milestone:   [name] (if defined)
+Issues:      [N open] ([M linked to phase]) (if gh available)
 Next:        type `/[command]` to continue
 ```
 

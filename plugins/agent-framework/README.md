@@ -16,6 +16,7 @@ A structured collaboration system for humans and AI coding agents, driven by sla
 | `/close-out` | Write postmortem, propose lessons, commit, merge |
 | `/retro` | Milestone retrospective — review and improve the process |
 | `/status` | Show current position and next command |
+| `/issues` | List, create, and manage GitHub issues |
 | `/help` | Show available commands and contextual suggestion |
 
 ## Installation

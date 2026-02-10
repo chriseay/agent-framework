@@ -25,11 +25,16 @@ Model tier: standard
 4. **Propose lessons learned**: Review both `CLAUDE.md` and `PROJECT.md` to avoid duplication. Use `AskUserQuestion` to confirm additions before writing.
 5. **Update** `ROADMAP.md` status for the completed phase.
 6. **Update** the Status section in `README.md` to reflect the completed phase.
-7. **Propose commit, push, and merge** for explicit approval. Use `AskUserQuestion` for each.
+7. **Close linked GitHub issues** (if `gh` CLI is available):
+   - Read `planning/phase-XX/CONTEXT.md` for the `## Linked Issues` section.
+   - If linked issues exist, for each one: show the issue number, title, and current status. Use `AskUserQuestion` to ask whether to close it.
+   - Close approved issues via `gh issue close <number>`.
+   - If `gh` is not available or no linked issues exist, skip this step.
+8. **Propose commit, push, and merge** for explicit approval. Use `AskUserQuestion` for each.
    - Merge messages: one headline + 2–4 bullet points.
-8. **Propose feature branch deletion** (local + remote) after merge.
-9. **Record process notes** in POSTMORTEM.md — any friction or gaps. Do not propose CLAUDE.md changes here; save that for `/retro`.
-10. **Confirm** docs contain enough context for the next session.
+9. **Propose feature branch deletion** (local + remote) after merge.
+10. **Record process notes** in POSTMORTEM.md — any friction or gaps. Do not propose CLAUDE.md changes here; save that for `/retro`.
+11. **Confirm** docs contain enough context for the next session.
 
 ## On Completion
 

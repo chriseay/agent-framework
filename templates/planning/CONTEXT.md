@@ -18,6 +18,10 @@ Phase [XX]: [Name]
 
 - [Risk or unknown identified during discussion]
 
+## Linked Issues
+
+[Populated by /discuss when GitHub issues are linked to this phase. Leave empty if none.]
+
 ## Open Questions
 
 [Should be empty before moving to the research step. If questions remain, resolve them first.]

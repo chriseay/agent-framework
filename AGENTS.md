@@ -41,7 +41,7 @@ Do not skip steps. When the user asks to run a phase, read the corresponding fil
 - `/test` → read `skills/test.md`
 - `/close-out` → read `skills/close-out.md`
 
-Other commands: `/new-project` → `skills/new-project.md`, `/onboard` → `skills/onboard.md`, `/retro` → `skills/retro.md`, `/status` → `skills/status.md`, `/help` → `skills/help.md`.
+Other commands: `/new-project` → `skills/new-project.md`, `/onboard` → `skills/onboard.md`, `/retro` → `skills/retro.md`, `/status` → `skills/status.md`, `/help` → `skills/help.md`, `/issues` → `skills/issues.md`.
 
 ### Always Apply
 
