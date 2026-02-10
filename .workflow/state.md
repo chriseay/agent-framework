@@ -4,7 +4,7 @@
 
 - **Phase**: 6
 - **Phase Name**: Deferred Item Categories
-- **Step**: implement (complete)
+- **Step**: test (complete)
 - **Implementation Step**: 7
 - **Research Tier**: light
-- **Next Command**: /test
+- **Next Command**: /close-out
