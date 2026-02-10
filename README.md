@@ -86,6 +86,7 @@ Every step tells you the next one. Type `/status` at any time to check your posi
 | `/close-out` | Write postmortem, propose lessons, commit, merge |
 | `/retro` | Milestone retrospective — review and improve the process |
 | `/status` | Show current position and next command |
+| `/issues` | List, create, and manage GitHub issues |
 | `/help` | Show available commands and contextual suggestion |
 
 ## How It Works
@@ -146,7 +147,7 @@ Each workflow phase has a recommended **model tier** to balance cost and capabil
 |------|-------------|-----------|
 | heavy | Opus | `/plan`, `/implement`, `/onboard` — architecture and code generation |
 | standard | Sonnet | `/research`, `/test`, `/close-out`, `/retro` — investigation and summarisation |
-| light | Haiku | `/discuss`, `/status`, `/help`, `/new-project` — conversational and lookups |
+| light | Haiku | `/discuss`, `/status`, `/issues`, `/help`, `/new-project` — conversational and lookups |
 | codex | Codex CLI | Mechanical subtasks dispatched during `/implement` |
 
 The agent shows the recommended tier in the status block at the start of each phase. By default it asks for confirmation — you can override to a different tier if needed.
@@ -181,7 +182,7 @@ claude plugin update agent-framework@agent-framework
 Currently working on **v1.1 — Integrations & Efficiency**:
 - Phase 0: Codex Integration (complete)
 - Phase 1: Lighter Model Routing (complete)
-- Phase 2: GitHub Issues Integration (not started)
+- Phase 2: GitHub Issues Integration (complete)
 
 ## Requirements
 
