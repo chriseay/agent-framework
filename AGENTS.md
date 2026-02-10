@@ -13,6 +13,7 @@ This file is automatically loaded at the start of every Codex CLI session. Detai
 ```
 Phase: [number] — [name]
 Step:  [current workflow step]
+Model: [tier] ([model name])
 Next:  [next phase command to run]
 ```
 
@@ -62,6 +63,28 @@ These commands are **never allowed** without explicit user approval: `git push -
 ### Conflict Resolution
 
 Process rules in `AGENTS.md` take precedence over `PROJECT.md`. Project-specific technical rules in `PROJECT.md` override general guidance. If unclear, stop and ask.
+
+### Model Routing
+
+The framework uses **model tiers** to route phases to appropriately-sized models:
+
+| Tier | Claude Model | Codex Model | Purpose |
+|------|-------------|-------------|---------|
+| heavy | Opus | gpt-5.3-codex | Architecture, code generation, complex reasoning |
+| standard | Sonnet | gpt-5-codex-mini | Investigation, testing, summarisation |
+| light | Haiku | gpt-5-codex-mini | Conversational Q&A, simple lookups |
+| codex | — | gpt-5.3-codex | Mechanical subtasks (via `codex-dispatch.sh`) |
+
+Each skill file declares its tier in its On Start section. The agent resolves the tier as follows:
+
+1. **Detect current model**: In Codex CLI, the model is set via `~/.codex/config.toml` or the `-m` flag. Note which model is active.
+2. **Look up phase tier**: Read the skill file's `Model tier:` annotation.
+3. **Check for overrides**: If `PROJECT.md` has a "Model Routing" section, use those overrides instead of defaults.
+4. **Show in status block**: Display the tier and model name in the `Model:` line.
+
+**Confirmation mode** (default): Show the tier in the status block as a brief inline note. The user can override by requesting a different tier.
+
+If `PROJECT.md` sets `auto-routing: yes`, skip confirmation and proceed with the recommended tier automatically.
 
 ## Documents
 

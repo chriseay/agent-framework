@@ -2,11 +2,14 @@
 
 Create an implementation plan that builds on the discuss and research findings. Includes an automatic verification check before asking the user to approve.
 
+Model tier: heavy
+
 ## On Start
 
 1. Read `.workflow/state.md` to identify the current phase.
-2. Read `planning/phase-XX/CONTEXT.md` and `planning/phase-XX/RESEARCH.md`.
-3. Read `ROADMAP.md` for the phase deliverables.
+2. Note the model tier for this phase: `heavy`. Include it in the status block.
+3. Read `planning/phase-XX/CONTEXT.md` and `planning/phase-XX/RESEARCH.md`.
+4. Read `ROADMAP.md` for the phase deliverables.
 
 ## Process
 

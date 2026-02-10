@@ -2,6 +2,8 @@
 
 Bring an existing codebase into the structured workflow. Scans the codebase first, then asks the user to confirm and fill gaps — instead of starting from scratch.
 
+Model tier: heavy
+
 ## When to Use
 
 Use `/onboard` instead of `/new-project` when:

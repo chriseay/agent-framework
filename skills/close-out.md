@@ -2,10 +2,13 @@
 
 Complete the phase, create the postmortem, and prepare for the next phase.
 
+Model tier: standard
+
 ## On Start
 
 1. Read `.workflow/state.md` to identify the current phase.
-2. Read `planning/phase-XX/CONTEXT.md`, `PLAN.md`, and any test results from the session.
+2. Note the model tier for this phase: `standard`. Include it in the status block.
+3. Read `planning/phase-XX/CONTEXT.md`, `PLAN.md`, and any test results from the session.
 
 ## Process
 

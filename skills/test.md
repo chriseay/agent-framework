@@ -2,10 +2,13 @@
 
 Verify the implementation works before proposing commits.
 
+Model tier: standard
+
 ## On Start
 
 1. Read `.workflow/state.md` to identify the current phase.
-2. Read `planning/phase-XX/PLAN.md` for the verification steps defined in the plan.
+2. Note the model tier for this phase: `standard`. Include it in the status block.
+3. Read `planning/phase-XX/PLAN.md` for the verification steps defined in the plan.
 
 ## Process
 

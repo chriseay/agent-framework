@@ -2,6 +2,8 @@
 
 Show available commands, the workflow, and suggest what to do based on current state.
 
+Model tier: light
+
 ## Process
 
 1. Read `.workflow/state.md` for current position.

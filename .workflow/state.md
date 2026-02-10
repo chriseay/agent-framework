@@ -4,7 +4,7 @@
 
 - **Phase**: 1
 - **Phase Name**: Lighter Model Routing
-- **Step**: not started
+- **Step**: plan (approved)
 - **Implementation Step**: —
-- **Research Tier**: —
-- **Next Command**: /discuss
+- **Research Tier**: standard
+- **Next Command**: /implement

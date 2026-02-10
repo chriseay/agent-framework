@@ -2,6 +2,8 @@
 
 Run a framework retrospective — review the workflow itself, not just the project.
 
+Model tier: standard
+
 ## When to Use
 
 - At milestone completion (prompted by `/close-out`)
