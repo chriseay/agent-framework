@@ -49,6 +49,7 @@ Other commands: `/new-project` → `skills/new-project.md`, `/onboard` → `skil
 - Never add scope during implementation — defer new requirements to `ROADMAP.md`.
 - Try **one fix** then escalate — never brute-force through repeated failures.
 - When in doubt, **ask the user**.
+- **Before marking any step complete**, re-read the current skill file's On Completion section and verify every action has been performed.
 
 ### Approval Gates
 
