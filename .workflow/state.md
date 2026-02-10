@@ -2,9 +2,9 @@
 
 <!-- This file is updated automatically by workflow commands. Do not edit manually. -->
 
-- **Phase**: 1
-- **Phase Name**: Lighter Model Routing
-- **Step**: test (complete)
-- **Implementation Step**: 9
-- **Research Tier**: standard
-- **Next Command**: /close-out
+- **Phase**: 6
+- **Phase Name**: Deferred Item Categories
+- **Step**: implement (complete)
+- **Implementation Step**: 7
+- **Research Tier**: light
+- **Next Command**: /test
