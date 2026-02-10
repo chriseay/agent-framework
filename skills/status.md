@@ -33,4 +33,5 @@ Next:        type `/[command]` to continue
 Then show a brief progress summary:
 - Phases complete: [N of total]
 - Current phase deliverable: [from ROADMAP.md]
-- Deferred items: [count, if any]
+- Deferred phases: [count, if any]
+- Deferred verifications: [count, if any]

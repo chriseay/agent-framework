@@ -102,7 +102,7 @@ Reading files never requires approval.
 
 **Skipping `/research`**: Plans built without codebase understanding fail during implementation. Even Light research catches issues.
 
-**Adding scope during `/implement`**: New requirements get deferred to ROADMAP.md, not added to the current phase.
+**Adding scope during `/implement`**: New requirements get deferred to ROADMAP.md (as either a deferred phase or deferred verification), not added to the current phase.
 
 **Ignoring the verification in `/plan`**: The plan is checked against your docs before you approve it. If something contradicts CONTEXT.md or RESEARCH.md, it gets flagged.
 

@@ -20,7 +20,7 @@ Model tier: standard
 ## Rules
 
 - Do not propose commits or lessons learned until verification is complete.
-- If manual checks are deferred (e.g., device-only features), record the deferral in `ROADMAP.md` Deferred Actions with the follow-up phase.
+- If manual checks are deferred (e.g., device-only features), record the deferral in `ROADMAP.md` under `## Deferred Verifications`. Note the originating phase.
 
 ## On Completion
 

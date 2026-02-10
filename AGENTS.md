@@ -93,7 +93,7 @@ If `PROJECT.md` sets `auto-routing: yes`, skip confirmation and proceed with the
 |----------|---------|
 | `AGENTS.md` | Core rules, always loaded |
 | `PROJECT.md` | Project-specific constraints, tech stack, lessons learned |
-| `ROADMAP.md` | Phases, deliverables, status, deferred actions |
+| `ROADMAP.md` | Phases, deliverables, status, deferred phases/verifications |
 | `planning/phase-XX/` | Per-phase artifacts (CONTEXT, RESEARCH, PLAN, POSTMORTEM) |
 | `.workflow/state.md` | Current position in the workflow (auto-updated by commands) |
 | `skills/` | Detailed rules for each workflow command |

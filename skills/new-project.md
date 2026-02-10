@@ -49,7 +49,7 @@ Before writing each document, provide its outline and get explicit approval.
 - Phase list with deliverables
 - Verification expectations per phase
 - Status for each phase
-- Deferred Actions section
+- Deferred Phases and Deferred Verifications sections
 
 ### README.md Required Sections
 - Project description

@@ -54,7 +54,7 @@ Codex runs in a sandbox and returns the result. Always review the output before 
 - Follow the plan steps in order.
 - After completing each step, **update the Current Step marker** in PLAN.md.
 - If deviation is needed, explain why and use `AskUserQuestion` to get approval.
-- If a new requirement is discovered, **do not add it to the current phase**. Record it in the Deferred Actions section of `ROADMAP.md`.
+- If a new requirement is discovered, **do not add it to the current phase**. Record it in `ROADMAP.md` under the appropriate section — `## Deferred Phases` (if it needs its own phase cycle) or `## Deferred Verifications` (if it's a check to perform later). Propose a category based on context and use `AskUserQuestion` to confirm.
 
 ## Recovery
 

@@ -30,10 +30,18 @@
 
 <!-- Add more phases as needed. Each phase should be small enough to complete in one focused session. -->
 
-## Deferred Actions
+## Deferred Phases
 
-<!-- Record deferred work here during implementation. Each entry notes the originating phase and the intended follow-up phase. -->
+<!-- Deferred work that needs its own /discuss → /close-out cycle. Promote to a numbered phase during /discuss when ready. -->
 
 <!-- Example:
-- Phase 2: On-device testing for camera features deferred. Follow-up: Phase 5 (Testing and Hardening).
+- **API rate limiting**: Implement request throttling. Deferred from Phase 2 — not urgent until public launch.
+-->
+
+## Deferred Verifications
+
+<!-- Verifications postponed from earlier phases. Check off during /discuss when satisfied; convert to a deferred phase if dedicated work is needed. -->
+
+<!-- Example:
+- **Load test under concurrency**: Verify the API handles 100 concurrent users. Deferred from Phase 3 — needs staging environment.
 -->

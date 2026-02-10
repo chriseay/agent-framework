@@ -25,33 +25,44 @@ Before diving into phase requirements, review the roadmap with the user to captu
 1. **Present a compact summary** of `ROADMAP.md`:
    - Current milestone name and success criteria (one line)
    - Each phase: number, name, and status (one line per phase)
-   - Deferred actions: count and brief labels
+   - Deferred phases: count and brief labels (or "none")
+   - Deferred verifications: count and brief labels (or "none")
 
    Example format:
    ```
    Milestone: v1.2 — Workflow Refinement
      Phase 3: Consolidate Skill/Plugin Files — Complete
      Phase 4: Roadmap Scoping in /discuss — Not started
-   Deferred: 2 items (per-task routing, post-merge smoke test)
+   Deferred phases: 1 item (API rate limiting)
+   Deferred verifications: 1 item (load test under concurrency)
    ```
 
-2. **Gate question**: Use `AskUserQuestion` to ask: "Any roadmap changes — new items to add, or deferred items to promote?" with options:
+2. **Gate question**: Use `AskUserQuestion` to ask: "Any roadmap changes — new items to add, or deferred items to address?" with options:
    - "No changes" — skip to the next On Start step.
    - "Yes, I have changes" — continue with the review flow below.
 
 3. **If the user has changes**, run this flow:
 
-   a. **Deferred actions**: List each deferred item by name. For each, use `AskUserQuestion` to ask whether it should be promoted to a phase or left deferred.
+   a. **Deferred Verifications**: List each deferred verification by name. For each, use `AskUserQuestion` to ask:
+      - "Satisfied — remove" — the verification has been met; delete it from the list.
+      - "Not yet — keep deferred" — leave it in Deferred Verifications.
+      - "Convert to deferred phase" — move it to the Deferred Phases section (it needs dedicated work).
 
-   b. **New items**: Ask the user what they'd like to add. For each new item:
+   b. **Deferred Phases**: List each deferred phase by name. For each, use `AskUserQuestion` to ask:
+      - "Promote to numbered phase" — add it as a new phase in the roadmap (use existing placement logic).
+      - "Keep deferred" — leave it in Deferred Phases.
+
+   c. **New items**: Ask the user what they'd like to add. For each new item:
       - Ask clarifying questions (one at a time) to define scope, deliverable, and verification criteria.
       - Recommend placement using `AskUserQuestion`:
         - **New phase** — recommend where it fits best (between existing phases, at the end of the current milestone, or in a future milestone). If inserting between existing phases, renumber subsequent phases.
-        - **Deferred action** — if the item isn't urgent or well-defined enough for a phase yet.
+        - **Deferred phase** — if the item needs its own phase cycle but isn't urgent or well-defined enough yet.
+        - **Deferred verification** — if the item is a check or test to perform later.
         - **Fold into existing phase** — if it naturally extends an existing phase's scope.
+      - The agent should propose a category (phase or verification) based on context. The user confirms or overrides.
       - After the user confirms, update `ROADMAP.md` immediately using the Edit tool.
 
-   c. **Repeat** until the user says they have no more changes.
+   d. **Repeat** until the user says they have no more changes.
 
 4. After the review (or skip), continue with On Start step 6.
 
