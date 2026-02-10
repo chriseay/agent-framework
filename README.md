@@ -179,7 +179,11 @@ claude plugin update agent-framework@agent-framework
 
 ## Status
 
-Currently working on **v1.1 — Integrations & Efficiency**:
+Currently working on **v1.2 — Workflow Refinement**:
+- Phase 3: Consolidate Skill/Plugin Files (complete)
+- Phase 4: Roadmap Scoping in /discuss (not started)
+
+Previously completed — **v1.1 — Integrations & Efficiency**:
 - Phase 0: Codex Integration (complete)
 - Phase 1: Lighter Model Routing (complete)
 - Phase 2: GitHub Issues Integration (complete)
