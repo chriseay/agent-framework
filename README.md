@@ -179,7 +179,12 @@ claude plugin update agent-framework@agent-framework
 
 ## Status
 
-Completed **v1.2 — Workflow Refinement**:
+Currently working on **v1.3 — Smarter Routing & Tracking**:
+- Phase 5: Per-Task Model Routing (complete)
+- Phase 6: Deferred Item Categories (not started)
+- Phase 7: Phase-to-GitHub Sync (not started)
+
+Previously completed — **v1.2 — Workflow Refinement**:
 - Phase 3: Consolidate Skill/Plugin Files (complete)
 - Phase 4: Roadmap Scoping in /discuss (complete)
 
