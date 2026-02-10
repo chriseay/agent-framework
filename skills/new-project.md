@@ -2,6 +2,8 @@
 
 Set up a new project from scratch. Creates PROJECT.md, ROADMAP.md, and README.md.
 
+Model tier: light
+
 ## Trigger
 
 Run when `.workflow/state.md` shows "Next Command: /new-project" or when the user explicitly requests project setup.

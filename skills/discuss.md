@@ -2,12 +2,15 @@
 
 Clarify requirements for the current phase before any other work.
 
+Model tier: light
+
 ## On Start
 
 1. Read `.workflow/state.md` to identify the current phase.
-2. Read `ROADMAP.md` to get the phase deliverables.
-3. Read any existing `planning/phase-XX/CONTEXT.md` (if resuming).
-4. Present the phase goal to the user.
+2. Note the model tier for this phase: `light`. Include it in the status block.
+3. Read `ROADMAP.md` to get the phase deliverables.
+4. Read any existing `planning/phase-XX/CONTEXT.md` (if resuming).
+5. Present the phase goal to the user.
 
 ## Process
 

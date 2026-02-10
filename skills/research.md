@@ -2,11 +2,14 @@
 
 Investigate the codebase, constraints, and risks before planning.
 
+Model tier: standard
+
 ## On Start
 
 1. Read `.workflow/state.md` to identify the current phase.
-2. Read `planning/phase-XX/CONTEXT.md` to understand the requirements.
-3. Propose a research depth tier and get user confirmation.
+2. Note the model tier for this phase: `standard`. Include it in the status block.
+3. Read `planning/phase-XX/CONTEXT.md` to understand the requirements.
+4. Propose a research depth tier and get user confirmation.
 
 ## Research Depth Tiers
 

@@ -2,11 +2,14 @@
 
 Execute the approved plan. This command handles branching, implementation, and the Current Step marker.
 
+Model tier: heavy
+
 ## On Start
 
 1. Read `.workflow/state.md` to identify the current phase and implementation step.
-2. Read `planning/phase-XX/PLAN.md` — check the Current Step marker to determine where to resume.
-3. If no feature branch exists yet, propose a branch name via `AskUserQuestion` and create it after approval.
+2. Note the model tier for this phase: `heavy`. Include it in the status block.
+3. Read `planning/phase-XX/PLAN.md` — check the Current Step marker to determine where to resume.
+4. If no feature branch exists yet, propose a branch name via `AskUserQuestion` and create it after approval.
 
 ## Git Rules
 
@@ -19,15 +22,26 @@ Execute the approved plan. This command handles branching, implementation, and t
 - Pushes require explicit approval. Propose the target branch first.
 - All source-control actions involving local and remote state must be performed together once approved.
 
-## Codex Dispatch
+## Model-Aware Dispatch
 
-For simple, mechanical subtasks (adding docstrings, renaming variables, formatting files, moving code), consider dispatching to Codex CLI instead of doing the work inline:
+For subtasks that don't require the current session's model, consider dispatching to a lighter model:
+
+**Codex dispatch** — for simple, mechanical subtasks (adding docstrings, renaming variables, formatting files, moving code):
 
 ```bash
 bash codex-dispatch.sh "task description"
 ```
 
 Codex runs in a sandbox and returns the result. Always review the output before continuing. Do not dispatch tasks that require complex reasoning or multi-file coordination.
+
+**Lighter Claude subagents** — when the current session runs a heavier model than a subtask needs, dispatch via the Task tool with an explicit `model` parameter:
+
+```
+Task tool → model: haiku (for simple lookups, formatting)
+Task tool → model: sonnet (for moderate reasoning, test interpretation)
+```
+
+Always set the `model` parameter explicitly — do not rely on model inheritance (known bug #5456). Only dispatch self-contained subtasks that don't require the full session context.
 
 ## Implementation Rules
 

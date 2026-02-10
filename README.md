@@ -59,6 +59,7 @@ When you open Claude Code, the agent immediately tells you where you are:
 ```
 Phase: 3 — Capture and Attachments
 Step:  implement (step 4 of 6)
+Model: heavy (Opus)
 Next:  type /implement to continue
 ```
 
@@ -116,6 +117,48 @@ Close the terminal whenever you want. Nothing is lost:
 
 Next session picks up exactly where you left off.
 
+## Using with Codex CLI
+
+Agent Framework works with [Codex CLI](https://developers.openai.com/codex/cli/) in two modes:
+
+### Native workflow
+
+Run `codex` in your project directory. Codex loads `AGENTS.md` (the Codex equivalent of `CLAUDE.md`) and follows the same workflow — status block, approval gates, skill files, and state tracking. Ask Codex to run any workflow command by name (e.g. "run /discuss").
+
+### Dispatch from Claude Code
+
+During `/implement`, you can dispatch simple subtasks to Codex:
+
+```bash
+bash codex-dispatch.sh "add docstrings to src/utils.js"
+bash codex-dispatch.sh "rename all instances of oldName to newName in lib/" --model gpt-5.3-codex
+```
+
+Codex runs in a sandbox and returns the result. Best for mechanical tasks — renaming, formatting, adding documentation. Don't dispatch tasks that need complex reasoning or multi-file coordination.
+
+Setup copies both `CLAUDE.md` and `AGENTS.md` into your project. Codex CLI is optional — the framework works fine with Claude Code alone.
+
+## Model Routing
+
+Each workflow phase has a recommended **model tier** to balance cost and capability:
+
+| Tier | Claude Model | When Used |
+|------|-------------|-----------|
+| heavy | Opus | `/plan`, `/implement`, `/onboard` — architecture and code generation |
+| standard | Sonnet | `/research`, `/test`, `/close-out`, `/retro` — investigation and summarisation |
+| light | Haiku | `/discuss`, `/status`, `/help`, `/new-project` — conversational and lookups |
+| codex | Codex CLI | Mechanical subtasks dispatched during `/implement` |
+
+The agent shows the recommended tier in the status block at the start of each phase. By default it asks for confirmation — you can override to a different tier if needed.
+
+To skip confirmation and use recommended tiers automatically, add this to the Model Routing section of your `PROJECT.md`:
+
+```
+- auto-routing: yes
+```
+
+To override the default tier for a specific phase, fill in the "Your Override" column in the Model Routing table in `PROJECT.md`.
+
 ## Documentation
 
 - **[FRAMEWORK-GUIDE.md](FRAMEWORK-GUIDE.md)** — Detailed guide for new users
@@ -137,9 +180,10 @@ claude plugin update agent-framework@agent-framework
 
 Currently working on **v1.1 — Integrations & Efficiency**:
 - Phase 0: Codex Integration (complete)
-- Phase 1: Lighter Model Routing (not started)
+- Phase 1: Lighter Model Routing (complete)
 - Phase 2: GitHub Issues Integration (not started)
 
 ## Requirements
 
 - [Claude Code](https://claude.ai/claude-code) (Anthropic's CLI for Claude)
+- [Codex CLI](https://developers.openai.com/codex/cli/) (optional — for dispatch and native Codex workflow)

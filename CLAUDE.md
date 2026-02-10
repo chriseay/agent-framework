@@ -13,6 +13,7 @@ This file is automatically loaded at the start of every session. Detailed step-b
 ```
 Phase: [number] — [name]
 Step:  [current workflow step]
+Model: [tier] ([model name])
 Next:  type `/[next command]` to continue
 ```
 
@@ -54,6 +55,31 @@ These commands are **never allowed** without explicit user approval: `git push -
 ### Conflict Resolution
 
 Process rules in `CLAUDE.md` take precedence over `PROJECT.md`. Project-specific technical rules in `PROJECT.md` override general guidance. If unclear, stop and ask.
+
+### Model Routing
+
+The framework uses **model tiers** to route phases to appropriately-sized models:
+
+| Tier | Claude Model | Purpose |
+|------|-------------|---------|
+| heavy | Opus | Architecture, code generation, complex reasoning |
+| standard | Sonnet | Investigation, testing, summarisation |
+| light | Haiku | Conversational Q&A, simple lookups |
+| codex | Codex CLI | Mechanical subtasks (via `codex-dispatch.sh`) |
+
+Each skill file declares its tier in its On Start section. The agent resolves the tier as follows:
+
+1. **Detect current model**: Read the system prompt injection ("You are powered by the model named...") to identify the active model.
+2. **Detect Codex availability**: Check if Codex CLI is installed (`command -v codex`).
+3. **Look up phase tier**: Read the skill file's `Model tier:` annotation.
+4. **Check for overrides**: If `PROJECT.md` has a "Model Routing" section, use those overrides instead of defaults.
+5. **Show in status block**: Display the tier and model name in the `Model:` line.
+
+**Confirmation mode** (default): Show the tier in the status block as a brief inline note. The user can override by requesting a different tier.
+
+If `PROJECT.md` sets `auto-routing: yes`, skip confirmation and proceed with the recommended tier automatically.
+
+When dispatching to a lighter model via the Task tool, always set the `model` parameter explicitly (e.g. `model: haiku`). Do not rely on model inheritance.
 
 ## Documents
 
