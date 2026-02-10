@@ -136,7 +136,7 @@ claude plugin update agent-framework@agent-framework
 ## Status
 
 Currently working on **v1.1 — Integrations & Efficiency**:
-- Phase 0: Codex Integration (not started)
+- Phase 0: Codex Integration (complete)
 - Phase 1: Lighter Model Routing (not started)
 - Phase 2: GitHub Issues Integration (not started)
 
