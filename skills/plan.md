@@ -20,7 +20,21 @@ Model tier: heavy
    - Calls out constraints and risks identified during research.
    - Includes verification steps (build, test, manual checks).
    - Includes a `Current Step: 0` marker at the top of the Steps section.
+   - **Assigns a model tier to each step** based on complexity. Include the tier inline in the step heading: `### Step N: Description (Tier: heavy/standard/light/codex)`. Steps that match the phase's default tier may omit the annotation — only annotate steps that should route to a different model. See the **Tier Assignment Guide** below for heuristics.
 2. If the plan is complex, use `EnterPlanMode` for structured exploration before writing PLAN.md.
+
+## Tier Assignment Guide
+
+Assign tiers to plan steps based on what the step involves. The phase's default tier (from the skill file's `Model tier:` annotation) applies to unannotated steps.
+
+| Tier | Use when the step involves... |
+|------|-------------------------------|
+| heavy | Multi-file code changes, architectural decisions, complex reasoning, debugging |
+| standard | Single-file edits with moderate logic, test writing, investigation, summarisation |
+| light | Doc updates, README changes, config tweaks, simple lookups, formatting |
+| codex | Mechanical transforms (rename, reformat, move code) — if Codex CLI available |
+
+When in doubt, leave the step unannotated (it inherits the phase default). Prefer routing down only when you're confident the step is self-contained and doesn't need the heavier model's reasoning.
 
 ## Verify (Automatic)
 

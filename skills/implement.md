@@ -24,24 +24,30 @@ Model tier: heavy
 
 ## Model-Aware Dispatch
 
-For subtasks that don't require the current session's model, consider dispatching to a lighter model:
+Plan steps may include a tier annotation in the heading: `### Step N: Description (Tier: heavy/standard/light/codex)`. Steps without an annotation inherit the phase's default tier.
 
-**Codex dispatch** — for simple, mechanical subtasks (adding docstrings, renaming variables, formatting files, moving code):
+### Per-step dispatch
+
+When starting each plan step:
+
+1. **Check the tier annotation** in the step heading.
+2. **Compare to the current model**. If the annotated tier matches the current session's model (or the step has no annotation), execute the step normally.
+3. **If the tier differs**, auto-dispatch the step to a subagent:
+   - Use the `Task` tool with `subagent_type: general-purpose` and the `model` parameter set explicitly (`haiku`, `sonnet`, or `opus`). Do not rely on model inheritance.
+   - Include in the prompt: the full step description, relevant file paths, requirements from CONTEXT.md, and any session decisions that affect the step.
+   - The subagent should be given a clear goal, input, expected output, and success criteria.
+4. **Review the subagent's output** before continuing. If the result looks wrong or incomplete, escalate via `AskUserQuestion`. If acceptable, proceed to the next step.
+5. **Graceful degradation**: If the dispatch fails (e.g. model parameter error, subagent crash), log the failure and execute the step locally. Do not crash the workflow.
+
+### Codex dispatch
+
+For steps annotated `(Tier: codex)`, or for simple mechanical subtasks (adding docstrings, renaming variables, formatting files, moving code):
 
 ```bash
 bash codex-dispatch.sh "task description"
 ```
 
 Codex runs in a sandbox and returns the result. Always review the output before continuing. Do not dispatch tasks that require complex reasoning or multi-file coordination.
-
-**Lighter Claude subagents** — when the current session runs a heavier model than a subtask needs, dispatch via the Task tool with an explicit `model` parameter:
-
-```
-Task tool → model: haiku (for simple lookups, formatting)
-Task tool → model: sonnet (for moderate reasoning, test interpretation)
-```
-
-Always set the `model` parameter explicitly — do not rely on model inheritance (known bug #5456). Only dispatch self-contained subtasks that don't require the full session context.
 
 ## Implementation Rules
 
