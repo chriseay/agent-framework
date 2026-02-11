@@ -137,6 +137,8 @@ Within a phase, `/plan` annotates individual steps with model tiers, and `/imple
 
 ## GitHub Integration
 
+Requires the [GitHub CLI](https://cli.github.com/) (`gh`) installed and authenticated (`gh auth login`).
+
 Phases sync automatically to GitHub Issues and Milestones:
 
 - `/discuss` creates a GitHub Issue (and Milestone if needed) for each new phase added to the roadmap.
