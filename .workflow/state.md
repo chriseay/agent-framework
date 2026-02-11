@@ -4,7 +4,7 @@
 
 - **Phase**: 10
 - **Phase Name**: .gitignore Template & Setup
-- **Step**: plan (approved)
-- **Implementation Step**: —
+- **Step**: close-out (complete)
+- **Implementation Step**: 6
 - **Research Tier**: standard
-- **Next Command**: /implement
+- **Next Command**: /discuss
