@@ -16,41 +16,30 @@ Each command loads the right rules, does the work, and tells you what to type ne
 
 ## Installation
 
-### 1. Clone the repo
+### Quick start
 
 ```bash
-git clone https://github.com/chriseay/agent-framework.git
+curl -sL https://raw.githubusercontent.com/chriseay/agent-framework/main/bootstrap.sh | bash -s -- /path/to/your/project
 ```
 
-### 2. Install the plugin
-
-```bash
-cd agent-framework
-./install.sh
-```
-
-This registers the marketplace and installs the workflow commands as Claude Code slash commands (`/discuss`, `/research`, `/plan`, etc.).
-
-### 3. Set up your project
-
-```bash
-./setup.sh /path/to/your/project
-cd /path/to/your/project
-```
-
-The setup script copies `CLAUDE.md`, `.workflow/`, `skills/`, `templates/`, and a `.gitignore` into your project directory. It detects whether you have existing code and tells you which command to run:
+This clones the framework to `~/.agent-framework`, registers the Claude Code plugin, and copies framework files (`CLAUDE.md`, `.workflow/`, `skills/`, `templates/`, `.gitignore`) into your project. It detects whether you have existing code and tells you which command to run:
 
 - **New project (no code yet)**: Open in Claude Code, type `/new-project`
 - **Existing codebase**: Open in Claude Code, type `/onboard`
 
+Requires `git` and the [Claude Code CLI](https://claude.ai/claude-code).
+
 ### Manual installation (alternative)
 
-If you prefer to install manually instead of using the script:
+If you prefer to install the plugin manually:
 
 ```bash
+git clone https://github.com/chriseay/agent-framework.git ~/.agent-framework
 claude plugin marketplace add chriseay/agent-framework
 claude plugin install agent-framework@agent-framework
 ```
+
+Then copy the framework files into your project by running `~/.agent-framework/bootstrap.sh /path/to/your/project`.
 
 ## What a Session Looks Like
 
@@ -176,13 +165,10 @@ Phases sync automatically to GitHub Issues and Milestones. When `/discuss` adds 
 
 ## Updating
 
-To update the framework:
+Run the same install command again — it pulls the latest version and re-copies files:
 
 ```bash
-cd agent-framework
-git pull
-claude plugin update agent-framework@agent-framework
-./setup.sh /path/to/your/project   # re-copies framework files
+curl -sL https://raw.githubusercontent.com/chriseay/agent-framework/main/bootstrap.sh | bash -s -- /path/to/your/project
 ```
 
 ## Status

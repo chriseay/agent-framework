@@ -28,6 +28,6 @@ claude plugin install agent-framework
 
 ## Usage
 
-After installing the plugin, run `setup.sh` to copy framework files (CLAUDE.md, templates, etc.) into your project directory. Then open Claude Code and type `/new-project` or `/onboard` to get started.
+After installing the plugin, run `bootstrap.sh /path/to/project` to copy framework files (CLAUDE.md, skills, templates, etc.) into your project directory. Then open Claude Code and type `/new-project` or `/onboard` to get started.
 
 See the [main README](../../README.md) for full documentation.
