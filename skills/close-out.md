@@ -24,7 +24,12 @@ Model tier: standard
    - **Process Notes**: Friction, gaps, or observations about the workflow (consumed by `/retro`)
 4. **Propose lessons learned**: Review both `CLAUDE.md` and `PROJECT.md` to avoid duplication. Use `AskUserQuestion` to confirm additions before writing.
 5. **Update** `ROADMAP.md` status for the completed phase.
-6. **Update** the Status section in `README.md` to reflect the completed phase.
+6. **Documentation refresh**:
+   a. **Discover documentation files**: Scan for common patterns — `README.md`, `CONTRIBUTING.md`, `ARCHITECTURE.md`, `FRAMEWORK-GUIDE.md`, `PROJECT.md`, `CHANGELOG.md` in the repo root, and `docs/*.md` or `doc/*.md` directories. Exclude framework internals: `CLAUDE.md`, `AGENTS.md`, `skills/*.md`, `templates/*.md`, `planning/**/*.md`.
+   b. If no documentation files are found, use `AskUserQuestion` to ask the user if there are docs the agent is missing.
+   c. **Compare against phase changes**: For each discovered doc, read it and check whether the phase's deliverables introduce new features, change existing behaviour, or make any content stale.
+   d. **Propose updates** via `AskUserQuestion` — additions for new features, updates for changed behaviour (including the README Status section), and removals for stale content. Confirm each proposed change before applying.
+   e. If no updates are needed for any doc, confirm this to the user: "Documentation reviewed — no updates needed."
 7. **Close GitHub issues** (if `gh` CLI is available):
    a. **Close the phase issue**:
       - Read `planning/phase-XX/CONTEXT.md` for the `## Sync Status` section.
@@ -50,7 +55,7 @@ Model tier: standard
    - Merge messages: one headline + 2–4 bullet points.
 10. **Propose feature branch deletion** (local + remote) after merge.
 11. **Record process notes** in POSTMORTEM.md — any friction or gaps. Do not propose CLAUDE.md changes here; save that for `/retro`.
-12. **Confirm** docs contain enough context for the next session.
+12. **Confirm** planning artifacts (CONTEXT.md, PLAN.md, POSTMORTEM.md) contain enough context for the next session.
 
 ## On Completion
 

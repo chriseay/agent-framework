@@ -179,6 +179,12 @@ claude plugin update agent-framework@agent-framework
 
 ## Status
 
+Currently working on **v1.4 — Polish & Onboarding**:
+- Phase 8: Documentation Refresh Process (complete)
+- Phase 9: Documentation Backfill (not started)
+- Phase 10: .gitignore Template & Setup (not started)
+- Phase 11: Install Process Simplification (not started)
+
 Previously completed — **v1.3 — Smarter Routing & Tracking**:
 - Phase 5: Per-Task Model Routing (complete)
 - Phase 6: Deferred Item Categories (complete)
