@@ -160,6 +160,12 @@ To skip confirmation and use recommended tiers automatically, add this to the Mo
 
 To override the default tier for a specific phase, fill in the "Your Override" column in the Model Routing table in `PROJECT.md`.
 
+Within a phase, `/plan` annotates individual steps with model tiers, and `/implement` dispatches each step to the annotated tier — so a single phase can use multiple models.
+
+## GitHub Integration
+
+Phases sync automatically to GitHub Issues and Milestones. When `/discuss` adds a new phase to the roadmap, it creates a corresponding GitHub Issue (and Milestone if needed). When `/close-out` completes a phase, it closes the issue. Use `/issues` to manage issues outside the normal workflow.
+
 ## Documentation
 
 - **[FRAMEWORK-GUIDE.md](FRAMEWORK-GUIDE.md)** — Detailed guide for new users

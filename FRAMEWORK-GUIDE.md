@@ -27,7 +27,7 @@ You can type `/status` at any time to see where you are.
 |---------|-------------|
 | `/new-project` | Set up a new project from scratch through guided questions |
 | `/onboard` | Scan an existing codebase and set up the workflow around it |
-| `/discuss` | Clarify requirements for the current phase (one question at a time) |
+| `/discuss` | Review the roadmap, then clarify requirements for the current phase |
 | `/research` | Investigate codebase and constraints (light / standard / deep) |
 | `/plan` | Create and verify an implementation plan |
 | `/implement` | Execute the plan on a feature branch |
@@ -103,11 +103,46 @@ Reading files never requires approval.
 
 **Skipping `/research`**: Plans built without codebase understanding fail during implementation. Even Light research catches issues.
 
-**Adding scope during `/implement`**: New requirements get deferred to ROADMAP.md (as either a deferred phase or deferred verification), not added to the current phase.
+**Adding scope during `/implement`**: New requirements get deferred to ROADMAP.md, not added to the current phase. Deferrals come in two flavours:
+- **Deferred Phases** need their own full `/discuss` → `/close-out` cycle.
+- **Deferred Verifications** are checks postponed from earlier phases — they get reviewed during `/discuss` and ticked off when satisfied.
 
 **Ignoring the verification in `/plan`**: The plan is checked against your docs before you approve it. If something contradicts CONTEXT.md or RESEARCH.md, it gets flagged.
 
 **Stale documents**: The agent updates docs during `/close-out`. If you skip close-out, the next session starts with outdated context.
+
+## Using with Codex CLI
+
+The framework optionally supports [Codex CLI](https://developers.openai.com/codex/cli/) as an alternative backend:
+
+- **Native workflow**: Run `codex` in your project directory. Codex loads `AGENTS.md` and follows the same workflow — status block, approval gates, skill files, and state tracking.
+- **Dispatch from Claude Code**: During `/implement`, dispatch mechanical subtasks (renaming, formatting, adding docs) to Codex via `codex-dispatch.sh`.
+
+Setup copies both `CLAUDE.md` and `AGENTS.md` into your project. Codex is optional — the framework works fine with Claude Code alone. See [README.md](README.md#using-with-codex-cli) for full details.
+
+## Model Routing
+
+Each workflow phase has a recommended **model tier** to balance cost and capability:
+
+| Tier | Purpose |
+|------|---------|
+| heavy | Architecture, code generation, complex reasoning (`/plan`, `/implement`) |
+| standard | Investigation, testing, summarisation (`/research`, `/test`, `/close-out`) |
+| light | Conversational Q&A, simple lookups (`/discuss`, `/status`, `/issues`) |
+| codex | Mechanical subtasks dispatched via `codex-dispatch.sh` |
+
+The agent shows the recommended tier in the status block. You can override to a different tier if needed, or set `auto-routing: yes` in `PROJECT.md` to skip confirmation.
+
+Within a phase, `/plan` annotates individual steps with model tiers, and `/implement` dispatches each step to the annotated tier. See [README.md](README.md#model-routing) for the full tier-to-phase mapping and override options.
+
+## GitHub Integration
+
+Phases sync automatically to GitHub Issues and Milestones:
+
+- `/discuss` creates a GitHub Issue (and Milestone if needed) for each new phase added to the roadmap.
+- `/close-out` closes the corresponding GitHub Issue when a phase completes.
+
+Use `/issues` to list, create, and manage issues outside the normal workflow.
 
 ## File Structure
 
@@ -129,7 +164,9 @@ your-project/
 │   ├── test.md
 │   ├── close-out.md
 │   ├── retro.md
-│   └── status.md
+│   ├── status.md
+│   ├── help.md
+│   └── issues.md
 ├── templates/
 │   ├── PROJECT.md
 │   ├── ROADMAP.md
