@@ -173,11 +173,11 @@ curl -sL https://raw.githubusercontent.com/chriseay/agent-framework/main/bootstr
 
 ## Status
 
-Currently working on **v1.4 — Polish & Onboarding**:
+Previously completed — **v1.4 — Polish & Onboarding**:
 - Phase 8: Documentation Refresh Process (complete)
 - Phase 9: Documentation Backfill (complete)
 - Phase 10: .gitignore Template & Setup (complete)
-- Phase 11: Install Process Simplification (not started)
+- Phase 11: Install Process Simplification (complete)
 
 Previously completed — **v1.3 — Smarter Routing & Tracking**:
 - Phase 5: Per-Task Model Routing (complete)
