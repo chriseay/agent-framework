@@ -2,9 +2,9 @@
 
 <!-- This file is updated automatically by workflow commands. Do not edit manually. -->
 
-- **Phase**: 6
-- **Phase Name**: Deferred Item Categories
+- **Phase**: 7
+- **Phase Name**: Phase-to-GitHub Sync
 - **Step**: test (complete)
-- **Implementation Step**: 7
-- **Research Tier**: light
+- **Implementation Step**: 6
+- **Research Tier**: standard
 - **Next Command**: /close-out

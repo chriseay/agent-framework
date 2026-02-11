@@ -11,7 +11,7 @@ Model tier: light
 3. Check that `gh` CLI is available:
    - Run `command -v gh`. If missing, tell the user: "GitHub CLI (`gh`) is not installed. Install it from https://cli.github.com/ and run `gh auth login`." Then stop.
    - Run `gh auth status`. If not authenticated, tell the user: "GitHub CLI is not authenticated. Run `gh auth login` to set up access." Then stop.
-4. Ensure framework labels exist. For each of `bug`, `feature`, `chore`, `deferred`:
+4. Ensure framework labels exist. For each of `bug`, `feature`, `chore`, `deferred`, `phase`:
    - Run `gh label create <name> --force`. If it fails (permission error), warn the user: "Could not create label `<name>` — you may not have write access to this repo. Continuing without label enforcement." Do not stop.
 
 ## Operations

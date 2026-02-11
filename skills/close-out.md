@@ -25,16 +25,32 @@ Model tier: standard
 4. **Propose lessons learned**: Review both `CLAUDE.md` and `PROJECT.md` to avoid duplication. Use `AskUserQuestion` to confirm additions before writing.
 5. **Update** `ROADMAP.md` status for the completed phase.
 6. **Update** the Status section in `README.md` to reflect the completed phase.
-7. **Close linked GitHub issues** (if `gh` CLI is available):
-   - Read `planning/phase-XX/CONTEXT.md` for the `## Linked Issues` section.
-   - If linked issues exist, for each one: show the issue number, title, and current status. Use `AskUserQuestion` to ask whether to close it.
-   - Close approved issues via `gh issue close <number>`.
-   - If `gh` is not available or no linked issues exist, skip this step.
-8. **Propose commit, push, and merge** for explicit approval. Use `AskUserQuestion` for each.
+7. **Close GitHub issues** (if `gh` CLI is available):
+   a. **Close the phase issue**:
+      - Read `planning/phase-XX/CONTEXT.md` for the `## Sync Status` section.
+      - If a GitHub Issue number is recorded:
+        - Get the merge commit hash(es) from the current branch.
+        - Post a summary comment: what was delivered + commit hash(es).
+        - Use `AskUserQuestion` to confirm, then close via `gh issue close <number>`.
+      - If Sync Status says "not created":
+        - Create the issue (using the Sync flow from /discuss), post the summary comment, and immediately close it.
+      - If no Sync Status section exists, search by title: `gh issue list --state all --search "Phase N in:title" --json number,title`
+        - If found, comment and close. If not found, skip (pre-Phase 7 phase).
+      - If `gh` is not available, record `- GitHub Issue: not closed (gh unavailable)` in Sync Status.
+   b. **Close linked issues**: (existing behaviour)
+      - Read `planning/phase-XX/CONTEXT.md` for the `## Linked Issues` section.
+      - If linked issues exist, for each one: show the issue number, title, and current status. Use `AskUserQuestion` to ask whether to close it.
+      - Close approved issues via `gh issue close <number>`.
+8. **Check milestone completion** (if `gh` CLI is available and a phase issue was closed):
+   - Read the milestone title from Sync Status.
+   - Check if all issues are closed: `gh issue list --milestone "TITLE" --state open --json number | jq 'length'`
+   - If the count is 0, use `AskUserQuestion` to propose closing the milestone.
+   - If approved: find the milestone number via `gh api repos/:owner/:repo/milestones --method GET -F state=all | jq ...` and close it via `gh api repos/:owner/:repo/milestones/N -X PATCH -f state="closed"`.
+9. **Propose commit, push, and merge** for explicit approval. Use `AskUserQuestion` for each.
    - Merge messages: one headline + 2–4 bullet points.
-9. **Propose feature branch deletion** (local + remote) after merge.
-10. **Record process notes** in POSTMORTEM.md — any friction or gaps. Do not propose CLAUDE.md changes here; save that for `/retro`.
-11. **Confirm** docs contain enough context for the next session.
+10. **Propose feature branch deletion** (local + remote) after merge.
+11. **Record process notes** in POSTMORTEM.md — any friction or gaps. Do not propose CLAUDE.md changes here; save that for `/retro`.
+12. **Confirm** docs contain enough context for the next session.
 
 ## On Completion
 
