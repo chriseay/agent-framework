@@ -2,9 +2,9 @@
 
 <!-- This file is updated automatically by workflow commands. Do not edit manually. -->
 
-- **Phase**: 10
-- **Phase Name**: .gitignore Template & Setup
-- **Step**: close-out (complete)
-- **Implementation Step**: 6
+- **Phase**: 11
+- **Phase Name**: Install Process Simplification
+- **Step**: plan (approved)
+- **Implementation Step**: —
 - **Research Tier**: standard
-- **Next Command**: /discuss
+- **Next Command**: /implement
