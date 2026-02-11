@@ -29,7 +29,7 @@ cd agent-framework
 ./install.sh
 ```
 
-This registers the marketplace and installs all 11 workflow commands as Claude Code slash commands (`/discuss`, `/research`, `/plan`, etc.).
+This registers the marketplace and installs the workflow commands as Claude Code slash commands (`/discuss`, `/research`, `/plan`, etc.).
 
 ### 3. Set up your project
 
@@ -91,9 +91,9 @@ Every step tells you the next one. Type `/status` at any time to check your posi
 
 ## How It Works
 
-**CLAUDE.md** (70 lines) is auto-loaded every session with core rules: approval gates, git safety, and the workflow sequence.
+**CLAUDE.md** is auto-loaded every session with core rules: approval gates, git safety, and the workflow sequence.
 
-**Commands** (installed as a Claude Code plugin) contain the detailed rules for each workflow step. They're only loaded when you invoke the command — the agent isn't trying to hold 400 lines of rules in its head at once.
+**Commands** (installed as a Claude Code plugin) contain the detailed rules for each workflow step. They're only loaded when you invoke the command — the agent isn't trying to hold all the rules in its head at once.
 
 **State** (`.workflow/state.md`) tracks your exact position. Every command updates it. New sessions read it immediately so the agent knows where you left off — even after abrupt exits.
 

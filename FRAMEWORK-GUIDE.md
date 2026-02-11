@@ -35,6 +35,7 @@ You can type `/status` at any time to see where you are.
 | `/close-out` | Write postmortem, propose lessons, commit, merge |
 | `/retro` | Milestone retrospective — review and improve the process |
 | `/status` | Show current position and next command |
+| `/issues` | List, create, and manage GitHub issues |
 
 ### State Tracking
 
@@ -112,7 +113,7 @@ Reading files never requires approval.
 
 ```
 your-project/
-├── CLAUDE.md                    (core rules — 70 lines)
+├── CLAUDE.md                    (core rules)
 ├── PROJECT.md                   (created by /new-project)
 ├── ROADMAP.md                   (created by /new-project)
 ├── README.md                    (created by /new-project)
