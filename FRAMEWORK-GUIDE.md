@@ -4,7 +4,7 @@ A structured collaboration system for humans and AI coding agents, driven by sla
 
 ## Quick Start
 
-1. Copy `CLAUDE.md`, `.workflow/`, `skills/`, and `templates/` into your project root.
+1. Copy `CLAUDE.md`, `.workflow/`, `skills/`, `templates/`, and `.gitignore` into your project root.
 2. Start Claude Code.
 3. The agent reads `.workflow/state.md` and tells you what to do:
    - **New project (no code yet)**: "Type `/new-project` to get started."
@@ -173,6 +173,7 @@ your-project/
 │   ├── PROJECT.md
 │   ├── ROADMAP.md
 │   ├── README.md
+│   ├── gitignore.template
 │   └── planning/
 │       ├── CONTEXT.md
 │       ├── RESEARCH-light.md

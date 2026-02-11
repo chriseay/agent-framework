@@ -38,7 +38,7 @@ This registers the marketplace and installs the workflow commands as Claude Code
 cd /path/to/your/project
 ```
 
-The setup script copies `CLAUDE.md`, `.workflow/`, `skills/`, and `templates/` into your project directory. It detects whether you have existing code and tells you which command to run:
+The setup script copies `CLAUDE.md`, `.workflow/`, `skills/`, `templates/`, and a `.gitignore` into your project directory. It detects whether you have existing code and tells you which command to run:
 
 - **New project (no code yet)**: Open in Claude Code, type `/new-project`
 - **Existing codebase**: Open in Claude Code, type `/onboard`
@@ -190,7 +190,7 @@ claude plugin update agent-framework@agent-framework
 Currently working on **v1.4 — Polish & Onboarding**:
 - Phase 8: Documentation Refresh Process (complete)
 - Phase 9: Documentation Backfill (complete)
-- Phase 10: .gitignore Template & Setup (not started)
+- Phase 10: .gitignore Template & Setup (complete)
 - Phase 11: Install Process Simplification (not started)
 
 Previously completed — **v1.3 — Smarter Routing & Tracking**:
