@@ -45,7 +45,7 @@ Model tier: standard
    - Read the milestone title from Sync Status.
    - Check if all issues are closed: `gh issue list --milestone "TITLE" --state open --json number | jq 'length'`
    - If the count is 0, use `AskUserQuestion` to propose closing the milestone.
-   - If approved: find the milestone number via `gh api repos/:owner/:repo/milestones --field state=all | jq ...` and close it via `gh api repos/:owner/:repo/milestones/N -X PATCH -f state="closed"`.
+   - If approved: find the milestone number via `gh api repos/:owner/:repo/milestones --method GET -F state=all | jq ...` and close it via `gh api repos/:owner/:repo/milestones/N -X PATCH -f state="closed"`.
 9. **Propose commit, push, and merge** for explicit approval. Use `AskUserQuestion` for each.
    - Merge messages: one headline + 2–4 bullet points.
 10. **Propose feature branch deletion** (local + remote) after merge.

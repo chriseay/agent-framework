@@ -82,7 +82,7 @@ When a new phase is added to the roadmap (via step 3b promote or step 3c new pha
 
 3. **Find or create the GitHub Milestone**:
    - Identify the ROADMAP milestone the phase belongs to (e.g., `v1.3 — Smarter Routing & Tracking`).
-   - Check if it exists: `gh api repos/:owner/:repo/milestones --field state=all | jq -r --arg t "TITLE" '.[] | select(.title == $t) | .number'`
+   - Check if it exists: `gh api repos/:owner/:repo/milestones --method GET -F state=all | jq -r --arg t "TITLE" '.[] | select(.title == $t) | .number'`
    - If not found, create it: `gh api repos/:owner/:repo/milestones -X POST -f title="TITLE"`
    - Note the milestone number from the response.
 
