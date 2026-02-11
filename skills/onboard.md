@@ -79,6 +79,7 @@ Use `AskUserQuestion` — one question at a time — to fill in what the scan co
 - Any known constraints or gotchas learned the hard way
 - Preferred language and regional conventions (default: New Zealand English)
 - Whether phases should be grouped into milestones
+- Whether planning artifacts should be tracked in git (default: yes). If no, `planning/` will be added to `.gitignore`.
 
 **Only ask about things the scan didn't already answer.** If the README already describes the goals, don't re-ask.
 
@@ -105,6 +106,8 @@ Build from the user's priorities + scanned issues:
 ## Phase 5: Initialize State
 
 Create `planning/` directory if it doesn't exist.
+
+If the user opted out of tracking planning artifacts, append `planning/` to the project's `.gitignore` (check for existing entry first to avoid duplicates).
 
 Update `.workflow/state.md`:
 ```

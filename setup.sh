@@ -54,6 +54,18 @@ cp "$SCRIPT_DIR/skills/"*.md "$TARGET_DIR/skills/"
 mkdir -p "$TARGET_DIR/templates/planning"
 cp "$SCRIPT_DIR/templates/"*.md "$TARGET_DIR/templates/"
 cp "$SCRIPT_DIR/templates/planning/"*.md "$TARGET_DIR/templates/planning/"
+cp "$SCRIPT_DIR/templates/gitignore.template" "$TARGET_DIR/templates/gitignore.template"
+
+# Set up .gitignore
+MARKER="# Agent Framework"
+if [ -f "$TARGET_DIR/.gitignore" ]; then
+    if ! grep -q "$MARKER" "$TARGET_DIR/.gitignore"; then
+        echo "" >> "$TARGET_DIR/.gitignore"
+        cat "$SCRIPT_DIR/templates/gitignore.template" >> "$TARGET_DIR/.gitignore"
+    fi
+else
+    cp "$SCRIPT_DIR/templates/gitignore.template" "$TARGET_DIR/.gitignore"
+fi
 
 # Detect existing codebase
 echo ""
@@ -84,8 +96,9 @@ echo "Files added:"
 echo "  CLAUDE.md              Core rules (auto-loaded by Claude Code)"
 echo "  AGENTS.md              Core rules (auto-loaded by Codex CLI)"
 echo "  .workflow/state.md     Position tracker"
-echo "  skills/                Workflow commands (11 files)"
-echo "  templates/             Artifact templates (10 files)"
+echo "  .gitignore             Git ignore rules"
+echo "  skills/                Workflow commands"
+echo "  templates/             Artifact templates"
 echo ""
 echo "Next steps:"
 echo "  1. Open this directory in Claude Code or Codex CLI"

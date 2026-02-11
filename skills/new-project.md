@@ -16,6 +16,7 @@ Run when `.workflow/state.md` shows "Next Command: /new-project" or when the use
    - Key features / phases of work
    - Preferred language and regional conventions (default: New Zealand English)
    - Whether phases should be grouped into **milestones** (e.g., "MVP", "Beta"). Milestones are optional but enable structured retrospectives.
+   - Whether planning artifacts should be tracked in git (default: yes). If no, `planning/` will be added to `.gitignore`.
 
 2. **Research**: Review any existing files or context. List unknowns and risks.
 
@@ -58,6 +59,8 @@ Before writing each document, provide its outline and get explicit approval.
 - How to run/build/test (or "TBD")
 
 ## On Completion
+
+If the user opted out of tracking planning artifacts, append `planning/` to the project's `.gitignore` (check for existing entry first to avoid duplicates).
 
 Update `.workflow/state.md`:
 ```
