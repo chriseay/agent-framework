@@ -4,7 +4,7 @@
 
 - **Phase**: 14
 - **Phase Name**: New User Tutorial
-- **Step**: test (complete)
+- **Step**: close-out (complete)
 - **Implementation Step**: 3
 - **Research Tier**: light
-- **Next Command**: /close-out
+- **Next Command**: /retro
