@@ -2,9 +2,9 @@
 
 <!-- This file is updated automatically by workflow commands. Do not edit manually. -->
 
-- **Phase**: 11
-- **Phase Name**: Install Process Simplification
-- **Step**: close-out (complete)
-- **Implementation Step**: 6
-- **Research Tier**: standard
-- **Next Command**: /retro
+- **Phase**: 12
+- **Phase Name**: Command Transition UX
+- **Step**: test (complete)
+- **Implementation Step**: 10
+- **Research Tier**: light
+- **Next Command**: /close-out

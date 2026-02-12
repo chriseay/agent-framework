@@ -59,7 +59,15 @@ Model tier: standard
 
 ## On Completion
 
-Identify the next phase from `ROADMAP.md`. Update `.workflow/state.md`:
+### 1. Detect milestone boundary
+
+Read `ROADMAP.md` and find the milestone heading that contains the current phase. Check whether any subsequent phase under that same milestone heading has a status other than "Complete". If every remaining phase is complete (or there are no subsequent phases), this is a **milestone boundary**.
+
+### 2. Route based on boundary
+
+**If NOT a milestone boundary** (more phases remain in this milestone):
+
+Identify the next incomplete phase. Update `.workflow/state.md`:
 ```
 - Phase: [next phase number]
 - Phase Name: [next phase name]
@@ -69,15 +77,47 @@ Identify the next phase from `ROADMAP.md`. Update `.workflow/state.md`:
 - Next Command: /discuss
 ```
 
-If this was the last phase in a milestone, set:
-```
-- Next Command: /retro
-```
+Tell the user:
+
+**Phase [N] complete** and merged.
+
+Next → type `/discuss` to start **Phase [N+1]: [name]**.
+
+**If a milestone boundary:**
 
 Tell the user:
-> Phase [N] complete and merged.
-> Next: type `/discuss` to start **Phase [N+1]: [name]**.
 
-Or if milestone boundary:
-> Phase [N] complete. This finishes the **[milestone name]** milestone.
-> Next: type `/retro` to run a milestone retrospective before starting the next milestone.
+**Phase [N] complete.** This finishes the **[milestone name]** milestone.
+
+Then use `AskUserQuestion` with three options:
+
+1. **Add more phases to this milestone** — run the inline flow below, then set Next Command to `/discuss`.
+2. **Run /retro** — set Next Command to `/retro`. Update state.md with the next milestone's first phase number/name (or keep current if no next milestone exists).
+3. **Skip retro, continue to /discuss** — identify the next milestone's first phase. Update state.md to point to it with Next Command `/discuss`.
+
+### 3. Inline "add phases" flow (milestone boundary only)
+
+When the user chooses "Add more phases to this milestone":
+
+1. Use `AskUserQuestion` to get the new phase **name**.
+2. Use `AskUserQuestion` to get a one-line **scope and deliverable**.
+3. Append the new phase to `ROADMAP.md` under the current milestone heading, with status "Not started" and the next available phase number.
+4. Run the **GitHub Phase Sync** flow from `skills/discuss.md` (label, milestone, issue creation).
+5. Use `AskUserQuestion`: "Add another phase, or done?"
+   - If "Add another" → repeat from step 1.
+   - If "Done" → continue below.
+6. Update `.workflow/state.md` to point to the **first newly added phase**:
+   ```
+   - Phase: [new phase number]
+   - Phase Name: [new phase name]
+   - Step: not started
+   - Implementation Step: —
+   - Research Tier: —
+   - Next Command: /discuss
+   ```
+
+Tell the user:
+
+**[count] phase(s) added** to the **[milestone name]** milestone.
+
+Next → type `/discuss` to start **Phase [N]: [name]**.
