@@ -74,6 +74,6 @@ Update `.workflow/state.md`:
 
 Tell the user:
 
-> **Project setup complete.** PROJECT.md, ROADMAP.md, and .workflow/state.md created.
->
-> Next → type `/discuss` to start **Phase 0: [name]**.
+**Project setup complete.** PROJECT.md, ROADMAP.md, and .workflow/state.md created.
+
+Next → type `/discuss` to start **Phase 0: [name]**.

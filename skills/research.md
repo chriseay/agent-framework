@@ -68,10 +68,10 @@ Update `.workflow/state.md`:
 
 Tell the user:
 
-> **Research complete** ([tier]). RESEARCH.md created.
->
-> Key findings:
-> - [bullet 1]
-> - [bullet 2]
->
-> Next → type `/plan` to create the implementation plan.
+**Research complete** ([tier]). RESEARCH.md created.
+
+Key findings:
+- [bullet 1]
+- [bullet 2]
+
+Next → type `/plan` to create the implementation plan.

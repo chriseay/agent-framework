@@ -32,6 +32,6 @@ Update `.workflow/state.md`:
 
 Tell the user:
 
-> **Verification complete.** [Summary of results — what passed, what's deferred.]
->
-> Next → type `/close-out` to wrap up the phase.
+**Verification complete.** [Summary of results — what passed, what's deferred.]
+
+Next → type `/close-out` to wrap up the phase.

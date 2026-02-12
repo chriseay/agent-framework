@@ -61,6 +61,6 @@ Update `.workflow/state.md`:
 
 Tell the user:
 
-> **Plan approved.** PLAN.md created with [N] steps.
->
-> Next → type `/implement` to start building on a feature branch.
+**Plan approved.** PLAN.md created with [N] steps.
+
+Next → type `/implement` to start building on a feature branch.

@@ -131,6 +131,6 @@ Update `.workflow/state.md`:
 
 Tell the user:
 
-> **Discuss complete.** CONTEXT.md created for Phase [N].
->
-> Next → type `/research` to investigate codebase and constraints.
+**Discuss complete.** CONTEXT.md created for Phase [N].
+
+Next → type `/research` to investigate codebase and constraints.

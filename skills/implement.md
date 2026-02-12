@@ -84,6 +84,6 @@ Scenario-specific:
 ```
 3. Tell the user:
 
-> **Implementation complete.** All [N] plan steps finished.
->
-> Next → type `/test` to verify the changes.
+**Implementation complete.** All [N] plan steps finished.
+
+Next → type `/test` to verify the changes.

@@ -79,15 +79,15 @@ Identify the next incomplete phase. Update `.workflow/state.md`:
 
 Tell the user:
 
-> **Phase [N] complete** and merged.
->
-> Next → type `/discuss` to start **Phase [N+1]: [name]**.
+**Phase [N] complete** and merged.
+
+Next → type `/discuss` to start **Phase [N+1]: [name]**.
 
 **If a milestone boundary:**
 
 Tell the user:
 
-> **Phase [N] complete.** This finishes the **[milestone name]** milestone.
+**Phase [N] complete.** This finishes the **[milestone name]** milestone.
 
 Then use `AskUserQuestion` with three options:
 
@@ -118,6 +118,6 @@ When the user chooses "Add more phases to this milestone":
 
 Tell the user:
 
-> **[count] phase(s) added** to the **[milestone name]** milestone.
->
-> Next → type `/discuss` to start **Phase [N]: [name]**.
+**[count] phase(s) added** to the **[milestone name]** milestone.
+
+Next → type `/discuss` to start **Phase [N]: [name]**.

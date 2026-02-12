@@ -123,6 +123,6 @@ Update `.workflow/state.md`:
 
 Tell the user:
 
-> **Onboarding complete.** PROJECT.md, ROADMAP.md, and .workflow/state.md created.
->
-> Next → type `/discuss` to start **Phase 0: [name]**.
+**Onboarding complete.** PROJECT.md, ROADMAP.md, and .workflow/state.md created.
+
+Next → type `/discuss` to start **Phase 0: [name]**.

@@ -47,6 +47,6 @@ Update `.workflow/state.md` to point to the next milestone's first phase:
 
 Tell the user:
 
-> **Retrospective complete.** RETROSPECTIVE.md created.
->
-> Next → type `/discuss` to start **Phase [N]: [name]**.
+**Retrospective complete.** RETROSPECTIVE.md created.
+
+Next → type `/discuss` to start **Phase [N]: [name]**.
