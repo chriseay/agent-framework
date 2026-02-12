@@ -56,7 +56,7 @@ You type the command, the agent does the work, and when it's done:
 
 ```
 Implementation complete. All 6 plan steps finished.
-Next: type /test to verify the implementation.
+Next → type /test to verify the changes.
 ```
 
 Every step tells you the next one. Type `/status` at any time to check your position. Type `/help` to see all commands.
@@ -178,6 +178,7 @@ Previously completed — **v1.4 — Polish & Onboarding**:
 - Phase 9: Documentation Backfill (complete)
 - Phase 10: .gitignore Template & Setup (complete)
 - Phase 11: Install Process Simplification (complete)
+- Phase 12: Command Transition UX (complete)
 
 Previously completed — **v1.3 — Smarter Routing & Tracking**:
 - Phase 5: Per-Task Model Routing (complete)
