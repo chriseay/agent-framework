@@ -26,28 +26,46 @@ Model tier: heavy
 
 Plan steps may include a tier annotation in the heading: `### Step N: Description (Tier: heavy/standard/light/codex)`. Steps without an annotation inherit the phase's default tier.
 
+### Dispatch checkpoint (mandatory)
+
+**Before executing each step**, output a dispatch checkpoint:
+
+```
+Step N: [description]
+Tier: [annotated tier] | Current model: [model] | Action: [local / dispatch to Haiku / dispatch to Sonnet / codex-dispatch]
+```
+
+This makes the routing decision visible. Do not skip this checkpoint — if the step's tier differs from the current model, you **must** dispatch. Executing a lighter-tier step locally on a heavier model is a visible deviation that wastes tokens.
+
 ### Per-step dispatch
 
-When starting each plan step:
+After the checkpoint:
 
-1. **Check the tier annotation** in the step heading.
-2. **Compare to the current model**. If the annotated tier matches the current session's model (or the step has no annotation), execute the step normally.
-3. **If the tier differs**, auto-dispatch the step to a subagent:
-   - Use the `Task` tool with `subagent_type: general-purpose` and the `model` parameter set explicitly (`haiku`, `sonnet`, or `opus`). Do not rely on model inheritance.
-   - Include in the prompt: the full step description, relevant file paths, requirements from CONTEXT.md, and any session decisions that affect the step.
-   - The subagent should be given a clear goal, input, expected output, and success criteria.
-4. **Review the subagent's output** before continuing. If the result looks wrong or incomplete, escalate via `AskUserQuestion`. If acceptable, proceed to the next step.
-5. **Graceful degradation**: If the dispatch fails (e.g. model parameter error, subagent crash), log the failure and execute the step locally. Do not crash the workflow.
+1. **If the tier matches the current model** (or the step has no annotation), execute the step normally.
+2. **If the tier is lighter** (`standard`, `light`), dispatch to a subagent:
+   - Use the `Task` tool with `subagent_type: general-purpose` and the `model` parameter set explicitly (`haiku` for light, `sonnet` for standard). Never rely on model inheritance.
+   - The prompt must be **self-contained**: include the full step description, relevant file paths, the content of any files the subagent needs to read or edit, and success criteria. The subagent does not have session context.
+3. **If the tier is `codex`**, use Codex dispatch (see below). Do not execute codex-tier steps locally.
+4. **Review the subagent's or Codex's output** before continuing. If the result looks wrong or incomplete, escalate via `AskUserQuestion`.
+5. **Graceful degradation**: If dispatch fails (model parameter error, subagent crash), log the failure and execute the step locally. Do not crash the workflow.
 
 ### Codex dispatch
 
-For steps annotated `(Tier: codex)`, or for simple mechanical subtasks (adding docstrings, renaming variables, formatting files, moving code):
+Steps annotated `(Tier: codex)` **must** be dispatched to Codex CLI. Do not execute them locally.
 
 ```bash
-bash codex-dispatch.sh "task description"
+bash codex-dispatch.sh "task description" --dir /path/to/project
 ```
 
-Codex runs in a sandbox and returns the result. Always review the output before continuing. Do not dispatch tasks that require complex reasoning or multi-file coordination.
+Codex runs in a sandbox and returns the result. Always review the output before continuing. Only use Codex for mechanical, self-contained tasks — not complex reasoning or multi-file coordination.
+
+### Dispatch summary
+
+At the end of implementation (before On Completion), output a dispatch summary:
+
+```
+Dispatch report: N local, M dispatched (X to Haiku, Y to Sonnet, Z to Codex)
+```
 
 ## Implementation Rules
 
