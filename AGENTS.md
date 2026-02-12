@@ -51,6 +51,7 @@ Other commands: `/new-project` → `skills/new-project.md`, `/onboard` → `skil
 - When in doubt, **ask the user**.
 - **Before marking any step complete**, re-read the current skill file's On Completion section and verify every action has been performed.
 - In research findings, **prefer the agent's full capability** over conservative defaults. Only restrict when there is a concrete risk.
+- Output a `---` separator before asking the user a question, to prevent the input widget from covering the last line of output.
 
 ### Approval Gates
 

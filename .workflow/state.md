@@ -2,9 +2,9 @@
 
 <!-- This file is updated automatically by workflow commands. Do not edit manually. -->
 
-- **Phase**: 12
-- **Phase Name**: Command Transition UX
+- **Phase**: 13
+- **Phase Name**: Per-Task Tier Annotations
 - **Step**: test (complete)
-- **Implementation Step**: 10
-- **Research Tier**: light
+- **Implementation Step**: 5
+- **Research Tier**: standard
 - **Next Command**: /close-out
