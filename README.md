@@ -159,6 +159,7 @@ Phases sync automatically to GitHub Issues and Milestones. When `/discuss` adds 
 
 ## Documentation
 
+- **[TUTORIAL.md](TUTORIAL.md)** — Step-by-step walkthrough for first-time users
 - **[FRAMEWORK-GUIDE.md](FRAMEWORK-GUIDE.md)** — Detailed guide for new users
 - **[skills/](skills/)** — Individual command documentation (human-readable)
 - **[templates/](templates/)** — Artifact templates
