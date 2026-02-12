@@ -83,5 +83,7 @@ Scenario-specific:
 - Next Command: /test
 ```
 3. Tell the user:
-> Implementation complete. All [N] plan steps finished.
-> Next: type `/test` to verify the implementation.
+
+> **Implementation complete.** All [N] plan steps finished.
+>
+> Next → type `/test` to verify the changes.

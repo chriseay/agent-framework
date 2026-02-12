@@ -122,10 +122,7 @@ Update `.workflow/state.md`:
 ## On Completion
 
 Tell the user:
-> Onboarding complete.
-> - PROJECT.md: created with [N] sections populated from scan
-> - ROADMAP.md: [N] phases across [N] milestones
-> - README.md: [created / updated]
-> - [N] TODOs/FIXMEs captured in roadmap
+
+> **Onboarding complete.** PROJECT.md, ROADMAP.md, and .workflow/state.md created.
 >
-> Next: type `/discuss` to start **Phase 0: [name]**.
+> Next → type `/discuss` to start **Phase 0: [name]**.
