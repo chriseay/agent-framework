@@ -22,19 +22,31 @@ Here's the path we'll follow:
 
 Each command is a phase in the workflow. You don't skip steps — the framework guides you through each one, asking questions, creating documents, and building incrementally.
 
+One thing to know upfront: **you're not expected to have all the answers.** When the agent asks you a question, you can always say "I'm not sure — what would you recommend?" and it'll propose a sensible default. You can also push back on anything ("actually, I'd prefer X") or ask for clarification ("what does that mean?"). It's a conversation, not a quiz.
+
 Let's get started.
 
 ---
 
+## Before You Start
+
+The framework handles the workflow, but a few things need to be set up outside of it:
+
+- **Git** — Your project needs to be a git repository. The framework creates branches, commits, and merges on your behalf (with your approval). If you haven't used git before, you'll want to get comfortable with the basics first.
+- **Claude Code** — Anthropic's CLI for Claude. This is the AI agent that does the work. [Install it here](https://claude.ai/claude-code).
+- **GitHub CLI** (optional but recommended) — If you want the framework to push code to a remote repository, create pull requests, and automatically track phases as GitHub Issues and Milestones, install the [GitHub CLI](https://cli.github.com/) and run `gh auth login`. Without it, the workflow still works locally — you just won't get remote version control or issue tracking integration.
+- **Your project's runtime** — Whatever you're building with (Node.js, Python, etc.) needs to be installed. The agent will run commands like `npm install` or `pip install` during implementation, so the tools need to be there.
+
 ## Installation
 
-You'll need Claude Code (Anthropic's official CLI) installed. If you haven't done that yet, check the [README.md](README.md) for the bootstrap command — it's a one-liner that sets everything up.
+Check the [README.md](README.md) for the bootstrap command — it's a one-liner that installs the framework and sets everything up.
 
 Once installed, open Claude Code in your project directory:
 
 ```bash
 mkdir bookmark-manager
 cd bookmark-manager
+git init
 claude
 ```
 
@@ -85,6 +97,8 @@ Model: light (Haiku)
 Next:  type `/discuss` to start Phase 0: Core CLI
 ```
 
+The **Model** line shows which AI model is handling this step. The framework picks the right size automatically — lightweight models (Haiku) for simple conversations, mid-range models (Sonnet) for investigation and testing, and heavyweight models (Opus) for writing code and making architectural decisions. You don't need to think about this; it's just there so you can see what's happening under the hood.
+
 And a transition message:
 
 > **Project setup complete.** PROJECT.md, ROADMAP.md, and .workflow/state.md created. Next → type `/discuss` to start **Phase 0: Core CLI**.
@@ -120,6 +134,8 @@ The agent reads your roadmap and asks questions to flesh out the requirements. I
 
 **You:**
 > By index — show a numbered list, then let the user delete by number.
+
+Notice that you don't have to know the "right" answer to every question. If you're unsure about storage format, deletion strategy, or anything else, you can say "what do you recommend?" and the agent will suggest an approach. You can also say "let's keep it simple for now" and defer decisions to a later phase.
 
 The agent captures all of this in `planning/phase-00/CONTEXT.md` — a structured summary of your requirements. It'll reference this later during planning and implementation.
 
@@ -251,6 +267,10 @@ Next:  type `/implement` to start building on a feature branch
 ```
 
 > **Plan approved.** PLAN.md created with 3 steps. Next → type `/implement` to start building on a feature branch.
+
+**What if you don't approve?**
+
+You're never locked in. If the plan doesn't look right, you can say "I'd like to change Step 2" or "can we split this into smaller steps?" and the agent will revise it. The same goes for commit messages, branch names, and merge decisions later — saying "no" doesn't break anything, it just opens a conversation about what you'd prefer instead.
 
 **What just happened?**
 
