@@ -181,6 +181,7 @@ Previously completed — **v1.4 — Polish & Onboarding**:
 - Phase 11: Install Process Simplification (complete)
 - Phase 12: Command Transition UX (complete)
 - Phase 13: Per-Task Tier Annotations (complete)
+- Phase 14: New User Tutorial (complete)
 
 Previously completed — **v1.3 — Smarter Routing & Tracking**:
 - Phase 5: Per-Task Model Routing (complete)

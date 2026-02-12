@@ -2,9 +2,9 @@
 
 <!-- This file is updated automatically by workflow commands. Do not edit manually. -->
 
-- **Phase**: 13
-- **Phase Name**: Per-Task Tier Annotations
+- **Phase**: 14
+- **Phase Name**: New User Tutorial
 - **Step**: test (complete)
-- **Implementation Step**: 5
-- **Research Tier**: standard
+- **Implementation Step**: 3
+- **Research Tier**: light
 - **Next Command**: /close-out

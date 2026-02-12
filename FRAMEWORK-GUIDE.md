@@ -2,6 +2,8 @@
 
 A structured collaboration system for humans and AI coding agents, driven by slash commands.
 
+New to the framework? Start with the [tutorial](TUTORIAL.md) — it walks you through a complete project from start to finish.
+
 ## Quick Start
 
 1. Copy `CLAUDE.md`, `.workflow/`, `skills/`, `templates/`, and `.gitignore` into your project root.
