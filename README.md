@@ -174,6 +174,11 @@ curl -sL https://raw.githubusercontent.com/chriseay/agent-framework/main/bootstr
 
 ## Status
 
+In progress — **v1.5 — Sub-Agents & Housekeeping**:
+- Phase 15: State Tracking Configuration (complete)
+- Phase 16: Sub-Agent & Agent Team Research (not started)
+- Phase 17: Sub-Agent Implementation (not started)
+
 Previously completed — **v1.4 — Polish & Onboarding**:
 - Phase 8: Documentation Refresh Process (complete)
 - Phase 9: Documentation Backfill (complete)

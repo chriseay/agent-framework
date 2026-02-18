@@ -80,6 +80,7 @@ Use `AskUserQuestion` — one question at a time — to fill in what the scan co
 - Preferred language and regional conventions (default: New Zealand English)
 - Whether phases should be grouped into milestones
 - Whether planning artifacts should be tracked in git (default: yes). If no, `planning/` will be added to `.gitignore`.
+- Whether `.workflow/state.md` should be tracked in git (default: no). Explain: "Workflow state tracks your current phase and step. Tracking it in git lets collaborators see where you are; ignoring it keeps your git history cleaner. Most solo projects leave it untracked." If no (default), `.workflow/` will be added to `.gitignore`.
 
 **Only ask about things the scan didn't already answer.** If the README already describes the goals, don't re-ask.
 
@@ -108,6 +109,8 @@ Build from the user's priorities + scanned issues:
 Create `planning/` directory if it doesn't exist.
 
 If the user opted out of tracking planning artifacts, append `planning/` to the project's `.gitignore` (check for existing entry first to avoid duplicates).
+
+If the user opted out of state tracking (default), append `.workflow/` to the project's `.gitignore` (check for existing entry first to avoid duplicates). If the user opted in to state tracking, remove `.workflow/` from `.gitignore` if it was previously added by bootstrap.
 
 Update `.workflow/state.md`:
 ```

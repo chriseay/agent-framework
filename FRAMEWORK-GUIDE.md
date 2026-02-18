@@ -49,6 +49,8 @@ You can type `/status` at any time to see where you are.
 
 Every command updates this file. When you open a new session, the agent reads it and immediately shows you where you are and what to do next.
 
+By default, `.workflow/` is gitignored so state changes don't clutter your commit history. During `/new-project` or `/onboard`, you can opt in to tracking — useful if you want collaborators to see the current workflow position.
+
 ## What the User Does
 
 You don't need to read CLAUDE.md or memorise rules. Just follow the commands:
