@@ -20,7 +20,7 @@ Here's the path we'll follow:
 /new-project → /discuss → /research → /plan → /implement → /test → /close-out
 ```
 
-Each command is a phase in the workflow. You don't skip steps — the framework guides you through each one, asking questions, creating documents, and building incrementally.
+Each command is a step in the workflow. You don't skip steps — the framework guides you through each one, asking questions, creating documents, and building incrementally.
 
 One thing to know upfront: **you're not expected to have all the answers.** When the agent asks you a question, you can always say "I'm not sure — what would you recommend?" and it'll propose a sensible default. You can also push back on anything ("actually, I'd prefer X") or ask for clarification ("what does that mean?"). It's a conversation, not a quiz.
 
@@ -454,7 +454,7 @@ You've just completed a full workflow cycle. Here's what you should know:
 
 ## You're Ready
 
-That's it. You've seen the full cycle: clarify → investigate → plan → build → verify → ship.
+That's it. You've seen the full cycle: `/new-project` → `/discuss` → `/research` → `/plan` → `/implement` → `/test` → `/close-out`.
 
 The framework keeps you organised, the agent keeps you moving, and the documents keep context alive across sessions. It's a different way of working with AI — less "help me with this snippet" and more "let's build this thing together".
 
