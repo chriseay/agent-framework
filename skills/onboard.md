@@ -38,6 +38,8 @@ Run parallel `Explore` subagents (via `Task` tool) to map the codebase. Each age
 - Linter/formatter configuration
 - Known debt indicators (commented-out code, skip annotations, suppressed warnings)
 
+**Wait for all four subagent results to return before proceeding to Phase 2.** Do not compile findings or present results until every dispatched Task has completed.
+
 ## Phase 2: Present Findings
 
 Compile the scan results into a structured summary and present to the user:
