@@ -44,12 +44,21 @@ You can type `/status` at any time to see where you are.
 `.workflow/state.md` tracks your exact position:
 - Current phase and name
 - Current workflow step
+- Current subphase (N of M) — only when the phase is split into subphases
 - Implementation progress (which plan step)
 - The next command to run
 
 Every command updates this file. When you open a new session, the agent reads it and immediately shows you where you are and what to do next.
 
 By default, `.workflow/` is gitignored so state changes don't clutter your commit history. During `/new-project` or `/onboard`, you can opt in to tracking — useful if you want collaborators to see the current workflow position.
+
+### Subphases
+
+Some phases are too complex to deliver in a single `/implement` run. When `/plan` produces more steps than can be completed in one cycle, the agent will propose splitting the phase into subphases.
+
+Subphases share a single `/discuss` and `/research` cycle. Each subphase then runs its own `/implement` → `/test` → `/close-out` cycle. Mid-phase close-outs are lightweight (commit + brief notes). The final subphase runs the full close-out sequence.
+
+`.workflow/state.md` gains a `Subphase: N of M` line that shows your position within the cycle. Type `/status` to see it at any time.
 
 ## What the User Does
 
@@ -66,7 +75,7 @@ You don't need to read CLAUDE.md or memorise rules. Just follow the commands:
 
 If you close the terminal mid-phase, nothing is lost:
 - `.workflow/state.md` tracks your position
-- `PLAN.md` has a Current Step marker showing implementation progress
+- `PLAN.md` (or `sub-N/PLAN.md` if using subphases) has a Current Step marker showing implementation progress
 - All artifacts (CONTEXT, RESEARCH, PLAN) are saved as you go
 
 Next session, the agent reads the state and picks up exactly where you left off.

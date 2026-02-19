@@ -8,9 +8,37 @@ Model tier: standard
 
 1. Read `.workflow/state.md` to identify the current phase.
 2. Note the model tier for this phase: `standard`. Include it in the status block.
-3. Read `planning/phase-XX/CONTEXT.md`, `PLAN.md`, and any test results from the session.
+3. Read `planning/phase-XX/CONTEXT.md` and any test results from the session.
+   - Read the **Subphase** field from `.workflow/state.md`.
+   - If the field is **absent**: read `planning/phase-XX/PLAN.md` (standard behaviour).
+   - If set and this is the **final subphase** (Subphase: N of N): read all `planning/phase-XX/sub-N/PLAN.md` and `planning/phase-XX/sub-N/POSTMORTEM.md` files to build a complete picture for the main POSTMORTEM.md.
+   - If set and **not the final subphase**: read only `planning/phase-XX/sub-N/PLAN.md` for the current subphase. Lightweight close-out applies — see Process step 0.
 
 ## Process
+
+0. **Subphase check** — run this before anything else:
+   - Read the **Subphase** field from `.workflow/state.md`.
+   - If the field is **absent** or this is the **final subphase** (Subphase: N of N): proceed with the full close-out sequence (steps 1–12 below).
+   - If this is a **mid-subphase close-out** (Subphase: N of M where N < M): run the **Lightweight Close-Out** path below and stop — do not continue to steps 1–12.
+
+### Lightweight Close-Out (mid-subphase only)
+
+1. Summarise what subphase N delivered.
+2. Write `planning/phase-XX/sub-N/POSTMORTEM.md` with three sections only:
+   - **Summary**: what was delivered in this subphase
+   - **Issues Encountered**: problems hit and how they were resolved
+   - **Decisions and Rationale**: key choices made and why
+3. Propose a commit to the user. Use `AskUserQuestion` to confirm the commit message before committing. Use Conventional Commit format: `feat(phase-XX): subphase N of M — [brief description]`
+4. Update `.workflow/state.md`:
+   ```
+   - Subphase: [N+1] of M
+   - Step: implement (not started)
+   - Implementation Step: —
+   - Next Command: /implement
+   ```
+5. Tell the user: **Subphase N of M complete.** Type `/implement` to continue with subphase N+1.
+
+---
 
 1. **Summarise** what changed and why.
 2. **List verification** performed (automated + manual).
@@ -22,6 +50,8 @@ Model tier: standard
    - **Deferred Items**: What was pushed to later phases
    - **Close-Out Summary**: Final state of the work
    - **Process Notes**: Friction, gaps, or observations about the workflow (consumed by `/retro`)
+
+   If the phase used subphases, begin by reading all `sub-N/PLAN.md` and `sub-N/POSTMORTEM.md` files. Synthesise them into the main POSTMORTEM.md — the main POSTMORTEM covers the full phase, not just the final subphase.
 4. **Propose lessons learned**: Review both `CLAUDE.md` and `PROJECT.md` to avoid duplication. Use `AskUserQuestion` to confirm additions before writing.
 5. **Update** `ROADMAP.md` status for the completed phase.
 6. **Documentation refresh**:
@@ -77,6 +107,8 @@ Identify the next incomplete phase. Update `.workflow/state.md`:
 - Next Command: /discuss
 ```
 
+If the completed phase used subphases, omit the `Subphase` field from state.md entirely (do not write `Subphase: —`).
+
 Tell the user:
 
 **Phase [N] complete** and merged.
@@ -115,6 +147,7 @@ When the user chooses "Add more phases to this milestone":
    - Research Tier: —
    - Next Command: /discuss
    ```
+   If the completed phase used subphases, omit the `Subphase` field from state.md entirely.
 
 Tell the user:
 

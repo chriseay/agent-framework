@@ -11,11 +11,14 @@ This file is automatically loaded at the start of every Codex CLI session. Detai
 4. Present this status block to the user:
 
 ```
-Phase: [number] — [name]
-Step:  [current workflow step]
-Model: [tier] ([model name])
-Next:  [next phase command to run]
+Phase:    [number] — [name]
+Step:     [current workflow step]
+Subphase: N of M (only if in a subphase cycle)
+Model:    [tier] ([model name])
+Next:     [next phase command to run]
 ```
+
+Omit the `Subphase` line entirely when not in a subphase cycle.
 
 5. Ask the user to confirm the status is accurate before proceeding.
 

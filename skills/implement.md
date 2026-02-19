@@ -8,8 +8,16 @@ Model tier: heavy
 
 1. Read `.workflow/state.md` to identify the current phase and implementation step.
 2. Note the model tier for this phase: `heavy`. Include it in the status block.
-3. Read `planning/phase-XX/PLAN.md` — check the Current Step marker to determine where to resume.
-4. If no feature branch exists yet, propose a branch name via `AskUserQuestion` and create it after approval.
+3. PLAN.md path resolution:
+   - Read the **Subphase** field from `.workflow/state.md`.
+   - If the field is set (e.g., `Subphase: 2 of 3`): resolve the plan path as `planning/phase-XX/sub-N/PLAN.md` where N is the current subphase number (e.g., `sub-2/PLAN.md`).
+   - If the field is absent: resolve the path as `planning/phase-XX/PLAN.md` (standard behaviour — no change).
+   - Read the resolved PLAN.md and check the Current Step marker to determine where to resume.
+4. Research Note check:
+   - Scan the resolved PLAN.md for a `## Research Note` section.
+   - If present: surface the recommendation via `AskUserQuestion` — "This subphase has a research note: [topic]. Run targeted research before implementing?" Options: "Yes, investigate first" / "No, proceed".
+   - If the user approves: perform targeted investigation using Grep/Glob/Read as needed, then record findings in `planning/phase-XX/sub-N/RESEARCH.md` before continuing.
+5. If no feature branch exists yet, propose a branch name via `AskUserQuestion` and create it after approval.
 
 ## Git Rules
 

@@ -102,7 +102,7 @@ You approve plans before implementation starts. You approve lessons learned befo
 
 Close the terminal whenever you want. Nothing is lost:
 - `.workflow/state.md` tracks your position
-- `PLAN.md` has a Current Step marker showing implementation progress
+- `PLAN.md` (or `sub-N/PLAN.md` if using subphases) has a Current Step marker showing implementation progress
 - All artifacts are saved as you go
 
 Next session picks up exactly where you left off.
@@ -177,7 +177,7 @@ curl -sL https://raw.githubusercontent.com/chriseay/agent-framework/main/bootstr
 In progress — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 15: State Tracking Configuration (complete)
 - Phase 16: Framework Polish (complete)
-- Phase 17: Subphases (not started)
+- Phase 17: Subphases (complete)
 - Phase 18: Model Change Instructions (not started)
 - Phase 19: Model Updates Process (not started)
 - Phase 20: Sub-Agent & Agent Team Research (not started)

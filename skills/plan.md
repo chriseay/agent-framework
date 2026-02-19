@@ -50,6 +50,27 @@ Assign tiers to plan steps based on what the step involves. The phase's default 
 
 **Actively evaluate each step.** If the step is a single-file edit following a prescribed spec, route it down to a lighter tier. Only leave a step unannotated (inheriting the phase default) if it genuinely requires the phase-level model's reasoning. Defaulting everything to the phase tier wastes tokens and defeats the purpose of per-step routing.
 
+## Subphase Check
+
+After completing the Tier Review, assess whether the plan warrants splitting into subphases before presenting it to the user.
+
+**When to propose a split**: Use your judgement. A useful heuristic is more than ~8 steps, or steps that span multiple large subsystems with independent test points where incremental delivery adds value. The heuristic is a guide — don't split a plan of 9 trivial steps just because the count exceeds 8.
+
+**If a split is warranted**:
+
+1. Use `AskUserQuestion` to propose the split. Include:
+   - Total step count and why it warrants splitting
+   - Suggested number of subphases and how you'd divide the steps (e.g., "Subphase 1: steps 1–5, Subphase 2: steps 6–10")
+2. **If the user approves**:
+   - Create `planning/phase-XX/sub-1/`, `sub-2/`, … directories.
+   - Write a `PLAN.md` inside each, covering only that subphase's steps. Each sub-N/PLAN.md uses the standard PLAN.md format (References, Steps with Current Step marker, Constraints & Risks, Verification, Assumptions, Tier Review).
+   - Do **not** create a main `planning/phase-XX/PLAN.md` — the sub-N/PLAN.md files are the plan.
+   - Update `.workflow/state.md`: add `- **Subphase**: 1 of N` (where N = total number of subphases).
+   - **Research Note flag**: If you judge that a specific subphase will need targeted research before implementation (e.g., it touches an unfamiliar module or introduces a significant unknown), add a `## Research Note` section at the top of that sub-N/PLAN.md specifying what needs investigation.
+3. **If the user rejects the split**: proceed with the main `planning/phase-XX/PLAN.md` as created. Leave the Subphase field absent from state.md.
+
+**If a split is not warranted**: proceed directly to Verify with the main PLAN.md. No subphase machinery is needed.
+
 ## Verify (Automatic)
 
 Before presenting the plan to the user, run this check:

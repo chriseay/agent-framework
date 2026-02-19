@@ -11,11 +11,14 @@ This file is automatically loaded at the start of every session. Detailed step-b
 4. Present this status block to the user:
 
 ```
-Phase: [number] — [name]
-Step:  [current workflow step]
-Model: [tier] ([model name])
-Next:  type `/[next command]` to continue
+Phase:    [number] — [name]
+Step:     [current workflow step]
+Subphase: N of M (only if in a subphase cycle)
+Model:    [tier] ([model name])
+Next:     type `/[next command]` to continue
 ```
+
+Omit the `Subphase` line entirely when not in a subphase cycle.
 
 5. Use `AskUserQuestion` to confirm the status is accurate before proceeding.
 
