@@ -11,6 +11,16 @@ Use `/onboard` instead of `/new-project` when:
 - The user wants to start using the structured workflow on an existing codebase
 - There's no `PROJECT.md` or `ROADMAP.md` yet (or they're outdated/incomplete)
 
+## On Start
+
+1. Note the model tier for this command: `heavy`. Include it in the status block.
+   **Model check**: This phase runs at heavy tier — recommended model: Opus.
+   Detect the current model from the system prompt ("You are powered by the model named…").
+   If the current model does not match this tier:
+   - State the mismatch clearly (e.g., "This phase needs Opus; you're currently on Sonnet.").
+   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
+   Wait for the user's response before proceeding.
+
 ## Phase 1: Scan
 
 Run parallel `Explore` subagents (via `Task` tool) to map the codebase. Each agent focuses on one area:
@@ -69,6 +79,11 @@ Compile the scan results into a structured summary and present to the user:
 - [Things the scan couldn't determine — deployment process, security requirements, etc.]
 ```
 
+Output:
+**About to**: present the codebase scan results for user review
+**Why**: verifying scan accuracy before generating project documents from it
+**Affects**: nothing yet — this is a review step before any writes
+
 Use `AskUserQuestion` to ask: "Does this look accurate? Anything to correct or add?"
 
 ## Phase 3: Fill Gaps
@@ -91,7 +106,14 @@ Use `AskUserQuestion` — one question at a time — to fill in what the scan co
 **Creation order** (strict): `PROJECT.md` → `ROADMAP.md` → `README.md`.
 
 ### PROJECT.md
-Pre-populate from scan results + gap-filling answers. Use the template from `templates/PROJECT.md` but fill in discovered values instead of placeholders. Present outline to user and get approval before writing.
+Pre-populate from scan results + gap-filling answers. Use the template from `templates/PROJECT.md` but fill in discovered values instead of placeholders.
+
+Output:
+**About to**: write `PROJECT.md` from the codebase scan and gap-filling answers
+**Why**: creating the primary project constraints document for the workflow
+**Affects**: project root (new file `PROJECT.md`)
+
+Present outline to user and get approval via `AskUserQuestion` before writing.
 
 ### ROADMAP.md
 Build from the user's priorities + scanned issues:
@@ -99,20 +121,43 @@ Build from the user's priorities + scanned issues:
 2. Use `AskUserQuestion` to ask which ones to include in the roadmap and what new work to add.
 3. Propose a phase structure grouping related work together.
 4. Ask about milestone groupings if the user opted in.
-5. Get approval before writing.
+5. Output:
+   **About to**: write `ROADMAP.md` with the phase structure agreed above
+   **Why**: creating the roadmap that drives the entire workflow
+   **Affects**: project root (new file `ROADMAP.md`)
+
+   Then get approval via `AskUserQuestion` before writing.
 
 ### README.md
 - If a README already exists, propose updates to add missing sections (status, build instructions, etc.) rather than replacing it.
 - If no README exists, create from `templates/README.md` pre-populated with scan results.
-- Get approval before writing or modifying.
+
+Output:
+**About to**: [write or update] `README.md`
+**Why**: ensuring the README reflects the current project state and setup instructions
+**Affects**: `README.md` ([new file / existing file will be modified])
+
+Get approval via `AskUserQuestion` before writing or modifying.
 
 ## Phase 5: Initialize State
 
 Create `planning/` directory if it doesn't exist.
 
-If the user opted out of tracking planning artifacts, append `planning/` to the project's `.gitignore` (check for existing entry first to avoid duplicates).
+If the user opted out of tracking planning artifacts:
 
-If the user opted out of state tracking (default), append `.workflow/` to the project's `.gitignore` (check for existing entry first to avoid duplicates). If the user opted in to state tracking, remove `.workflow/` from `.gitignore` if it was previously added by bootstrap.
+**About to**: append `planning/` to the project's `.gitignore`
+**Why**: user chose not to track planning artifacts in git
+**Affects**: `.gitignore` (new entry; checked for duplicates first)
+
+Use `AskUserQuestion` with question "Append `planning/` to `.gitignore`?" and options: "Yes, append it" / "Skip — I'll manage this manually". Then append `planning/` to the project's `.gitignore` (check for existing entry first to avoid duplicates).
+
+If the user opted out of state tracking (default):
+
+**About to**: append `.workflow/` to the project's `.gitignore`
+**Why**: user chose not to track workflow state in git (default behaviour)
+**Affects**: `.gitignore` (new entry; checked for duplicates first)
+
+Use `AskUserQuestion` with question "Append `.workflow/` to `.gitignore`?" and options: "Yes, append it" / "Skip — I'll manage this manually". Then append `.workflow/` to the project's `.gitignore` (check for existing entry first to avoid duplicates). If the user opted in to state tracking, remove `.workflow/` from `.gitignore` if it was previously added by bootstrap.
 
 Update `.workflow/state.md`:
 ```

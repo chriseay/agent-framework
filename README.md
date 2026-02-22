@@ -178,7 +178,7 @@ In progress — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 15: State Tracking Configuration (complete)
 - Phase 16: Framework Polish (complete)
 - Phase 17: Subphases (complete)
-- Phase 18: Model Change Instructions (not started)
+- Phase 18: Model Change Instructions (complete)
 - Phase 19: Model Updates Process (not started)
 - Phase 20: Sub-Agent & Agent Team Research (not started)
 - Phase 21: Sub-Agent Implementation (not started)

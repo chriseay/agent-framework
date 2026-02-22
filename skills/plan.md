@@ -8,6 +8,12 @@ Model tier: heavy
 
 1. Read `.workflow/state.md` to identify the current phase.
 2. Note the model tier for this phase: `heavy`. Include it in the status block.
+   **Model check**: This phase runs at heavy tier — recommended model: Opus.
+   Detect the current model from the system prompt ("You are powered by the model named…").
+   If the current model does not match this tier:
+   - State the mismatch clearly (e.g., "This phase needs Opus; you're currently on Sonnet.").
+   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
+   Wait for the user's response before proceeding to the next On Start step.
 3. Read `planning/phase-XX/CONTEXT.md` and `planning/phase-XX/RESEARCH.md`.
 4. Read `ROADMAP.md` for the phase deliverables.
 
@@ -23,6 +29,11 @@ Model tier: heavy
    - **Assigns a model tier to each step** based on complexity. Include the tier inline in the step heading: `### Step N: Description (Tier: heavy/standard/light/codex)`. Steps that match the phase's default tier may omit the annotation — only annotate steps that should route to a different model. See the **Tier Assignment Guide** below for heuristics.
 2. If the plan is complex, use `EnterPlanMode` for structured exploration before writing PLAN.md.
 3. **Tier Review** (mandatory): After drafting all steps, add a `## Tier Review` section to PLAN.md — a table listing each step, its assigned tier, and a one-line justification for the tier choice. Include this review in the plan summary presented to the user. If every step has the same tier, explain why differentiation wasn't possible.
+4. **Intuition-based tier override**: At any point during planning, if you detect any of the following signals, stop and recommend a model change before continuing:
+   - The plan is growing significantly more complex than the phase's default tier can handle reliably (e.g., many interdependent architectural decisions emerging).
+   - A specific plan step clearly requires a lighter touch (e.g., a pure doc update or rename) and the current model is wasteful for it.
+   - Cross-cutting concerns emerge that weren't visible during research.
+   When triggered: output a one-line justification and use `AskUserQuestion` with options: "Switch to [recommended model] — ready to continue" / "Continue on current model."
 
 ## Tier Assignment Guide
 
@@ -58,7 +69,12 @@ After completing the Tier Review, assess whether the plan warrants splitting int
 
 **If a split is warranted**:
 
-1. Use `AskUserQuestion` to propose the split. Include:
+1. Output:
+   **About to**: propose splitting this plan into subphases
+   **Why**: the step count or complexity warrants incremental delivery with separate test points
+   **Affects**: planning directory structure, `.workflow/state.md`, and the implementation workflow
+
+   Use `AskUserQuestion` to propose the split. Include:
    - Total step count and why it warrants splitting
    - Suggested number of subphases and how you'd divide the steps (e.g., "Subphase 1: steps 1–5, Subphase 2: steps 6–10")
 2. **If the user approves**:
@@ -83,6 +99,11 @@ If verification fails, revise the plan before presenting it.
 ## Present to User
 
 Present the plan summary **inline** — key steps + verification approach. Do not ask the user to open the file.
+
+Output:
+**About to**: present the implementation plan for approval
+**Why**: plan approval is required before implementation begins
+**Affects**: `planning/phase-XX/PLAN.md` is finalised; next step is `/implement`
 
 Use `AskUserQuestion` to ask the user to approve, request changes, or reject.
 
