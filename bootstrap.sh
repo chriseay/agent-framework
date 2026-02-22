@@ -131,7 +131,7 @@ cp "$FRAMEWORK_DIR/CLAUDE.md" "$TARGET_DIR/CLAUDE.md"
 cp "$FRAMEWORK_DIR/AGENTS.md" "$TARGET_DIR/AGENTS.md"
 
 mkdir -p "$TARGET_DIR/.workflow"
-cp "$FRAMEWORK_DIR/.workflow/state.md" "$TARGET_DIR/.workflow/state.md"
+cp "$FRAMEWORK_DIR/templates/state.md" "$TARGET_DIR/.workflow/state.md"
 
 mkdir -p "$TARGET_DIR/skills"
 cp "$FRAMEWORK_DIR/skills/"*.md "$TARGET_DIR/skills/"
