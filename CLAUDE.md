@@ -66,12 +66,16 @@ Process rules in `CLAUDE.md` take precedence over `PROJECT.md`. Project-specific
 
 The framework uses **model tiers** to route phases to appropriately-sized models:
 
-| Tier | Claude Model | Purpose |
-|------|-------------|---------|
-| heavy | Opus | Architecture, code generation, complex reasoning |
-| standard | Sonnet | Investigation, testing, summarisation |
-| light | Haiku | Conversational Q&A, simple lookups |
-| codex | Codex CLI | Mechanical subtasks (via `codex-dispatch.sh`) |
+| Tier | Claude Model | Model ID | Purpose |
+|------|-------------|----------|---------|
+| heavy | Opus 4.6 | `claude-opus-4-6` | Architecture, code generation, complex reasoning |
+| standard | Sonnet 4.6 | `claude-sonnet-4-6` | Investigation, testing, summarisation |
+| light | Haiku 4.5 | `claude-haiku-4-5` | Conversational Q&A, simple lookups |
+| codex | Codex CLI | — | Mechanical subtasks (via `codex-dispatch.sh`) |
+
+**`opusplan` alias**: Claude Code offers an `opusplan` model alias that uses Opus during planning and Sonnet during execution. This matches the framework's heavy/standard tier intent and may be a convenient default for users on Max or Team plans.
+
+**Adaptive thinking**: Sonnet 4.6 with adaptive thinking (`effort: "high"`) can match Opus performance on many complex tasks at lower cost. Consider this as an alternative to Opus for cost-sensitive projects. Only Opus supports `effort: "max"` for unconstrained reasoning depth. Haiku 4.5 does not support adaptive thinking.
 
 Each skill file declares its tier in its On Start section. The agent resolves the tier as follows:
 
@@ -86,6 +90,16 @@ Each skill file declares its tier in its On Start section. The agent resolves th
 If `PROJECT.md` sets `auto-routing: yes`, skip confirmation and proceed with the recommended tier automatically.
 
 When dispatching to a lighter model via the Task tool, always set the `model` parameter explicitly (e.g. `model: haiku`). Do not rely on model inheritance.
+
+### Updating Model Tiers
+
+When Anthropic releases a new model family, review and update the tier mapping:
+
+1. **Check**: Compare the tier table above against Anthropic's [model overview page](https://docs.anthropic.com/en/docs/about-claude/models). Note any new model IDs, deprecated models, or capability changes.
+2. **Update**: If the mapping is stale, update the tier table (model names and IDs) and the model-check blocks in all 10 skill files (`skills/*.md`). Each skill file has an On Start model-check block that references a specific model name and `/model` alias.
+3. **Propagate**: Re-run `bootstrap.sh` on active projects to copy the updated `CLAUDE.md` and skill files.
+
+If your `PROJECT.md` doesn't have a Model Routing section, see `templates/PROJECT.md` for a template that includes per-project tier overrides and update cadence settings.
 
 ## Documents
 

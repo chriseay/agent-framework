@@ -132,12 +132,12 @@ Setup copies both `CLAUDE.md` and `AGENTS.md` into your project. Codex CLI is op
 
 Each workflow phase has a recommended **model tier** to balance cost and capability:
 
-| Tier | Claude Model | When Used |
-|------|-------------|-----------|
-| heavy | Opus | `/plan`, `/implement`, `/onboard` — architecture and code generation |
-| standard | Sonnet | `/research`, `/test`, `/close-out`, `/retro` — investigation and summarisation |
-| light | Haiku | `/discuss`, `/status`, `/issues`, `/help`, `/new-project` — conversational and lookups |
-| codex | Codex CLI | Mechanical subtasks dispatched during `/implement` |
+| Tier | Claude Model | Model ID | When Used |
+|------|-------------|----------|-----------|
+| heavy | Opus 4.6 | `claude-opus-4-6` | `/plan`, `/implement`, `/onboard` — architecture and code generation |
+| standard | Sonnet 4.6 | `claude-sonnet-4-6` | `/research`, `/test`, `/close-out`, `/retro` — investigation and summarisation |
+| light | Haiku 4.5 | `claude-haiku-4-5` | `/discuss`, `/status`, `/issues`, `/help`, `/new-project` — conversational and lookups |
+| codex | Codex CLI | — | Mechanical subtasks dispatched during `/implement` |
 
 The agent shows the recommended tier in the status block at the start of each phase. By default it asks for confirmation — you can override to a different tier if needed.
 
@@ -179,7 +179,7 @@ In progress — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 16: Framework Polish (complete)
 - Phase 17: Subphases (complete)
 - Phase 18: Model Change Instructions (complete)
-- Phase 19: Model Updates Process (not started)
+- Phase 19: Model Updates Process (complete)
 - Phase 20: Sub-Agent & Agent Team Research (not started)
 - Phase 21: Sub-Agent Implementation (not started)
 
