@@ -77,6 +77,24 @@ Leave "Your Override" blank to use defaults. Supported tiers: `light`, `standard
 
 - auto-routing: no (set to `yes` to skip confirmation and use recommended tiers automatically)
 
+### Model Update Cadence
+
+Review the model tier mapping when Anthropic announces a new model family. The framework's `CLAUDE.md` contains the current tier table — compare it against the [Anthropic model overview](https://docs.anthropic.com/en/docs/about-claude/models) and update if needed.
+
+- **Review trigger**: New model family released by Anthropic (e.g., Claude 5.x)
+- **Responsible**: [Your name or team — fill in during project setup]
+- **Last reviewed**: [Date — fill in when you check]
+
+### Extended Thinking & Effort Levels
+
+Sonnet 4.6 with adaptive thinking and `effort: "high"` can match Opus performance on many complex tasks at lower cost. Consider using this combination instead of upgrading to Opus for cost-sensitive projects.
+
+- Only Opus supports `effort: "max"` (unconstrained reasoning depth).
+- Haiku 4.5 does not support adaptive thinking.
+- In Claude Code, use the `opusplan` model alias to automatically use Opus during planning and Sonnet during execution.
+
+For details, see Anthropic's [extended thinking documentation](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking).
+
 ## 13) Lessons Learned (Project-Specific)
 
 [Empty until populated. Add entries at phase close-out when new constraints or patterns are discovered. Each entry should be actionable — not just "X was hard" but "when doing X, do Y because Z."]

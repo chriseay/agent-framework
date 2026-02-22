@@ -18,6 +18,7 @@ Use `/onboard` instead of `/new-project` when:
    Detect the current model from the system prompt ("You are powered by the model named…").
    If the current model does not match this tier:
    - State the mismatch clearly (e.g., "This phase needs Opus; you're currently on Sonnet.").
+   - Tell the user how to switch: "To switch, type `/model opus` in Claude Code (conversation history is preserved)."
    - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
    Wait for the user's response before proceeding.
 

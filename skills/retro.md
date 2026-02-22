@@ -18,6 +18,7 @@ Model tier: standard
    Detect the current model from the system prompt ("You are powered by the model named…").
    If the current model does not match this tier:
    - State the mismatch clearly (e.g., "This phase needs Sonnet; you're currently on Opus.").
+   - Tell the user how to switch: "To switch, type `/model sonnet` in Claude Code (conversation history is preserved)."
    - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
    Wait for the user's response before proceeding.
 
