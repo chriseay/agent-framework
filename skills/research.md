@@ -26,9 +26,9 @@ Model tier: standard
 | **Deep** | Complex or risky phases (migrations, new infrastructure, unfamiliar technology, persistence changes, multiple platform-dependent unknowns, features with significant hardware/environment variability) | Full codebase review including indirect dependencies. Detailed integration point mapping. Thorough online research with cited sources. Risk matrix with mitigations. Feasibility assessment or prototype recommendation if warranted. |
 
 Output:
-> **About to**: confirm the research depth tier before beginning investigation
-> **Why**: the depth tier determines scope, time, and resources for this phase's research
-> **Affects**: the research process and RESEARCH.md deliverable
+**About to**: confirm the research depth tier before beginning investigation
+**Why**: the depth tier determines scope, time, and resources for this phase's research
+**Affects**: the research process and RESEARCH.md deliverable
 
 Use `AskUserQuestion` to propose a tier with a brief rationale and get confirmation.
 
@@ -40,9 +40,9 @@ Use `AskUserQuestion` to propose a tier with a brief rationale and get confirmat
    - **Wait for all subagent results to return before proceeding.** Do not write RESEARCH.md or advance to the next step until every dispatched Task has completed and its output has been incorporated.
    - For Standard and Deep tiers, include online research.
 2. **Escalation rule**: If Standard research surfaces significant unknowns, platform-dependent risks, or unfamiliar technology, output:
-   > **About to**: upgrade research depth from Standard to Deep
-   > **Why**: [one-sentence explanation of what was found that warrants deeper investigation]
-   > **Affects**: research scope, time, and RESEARCH.md depth
+   **About to**: upgrade research depth from Standard to Deep
+   **Why**: [one-sentence explanation of what was found that warrants deeper investigation]
+   **Affects**: research scope, time, and RESEARCH.md depth
 
    Then propose upgrading to Deep via `AskUserQuestion` before continuing.
 3. **Intuition-based tier override**: At any point during research, if you detect any of the following signals, stop and recommend a model change before continuing:

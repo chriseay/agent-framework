@@ -70,9 +70,9 @@ After completing the Tier Review, assess whether the plan warrants splitting int
 **If a split is warranted**:
 
 1. Output:
-   > **About to**: propose splitting this plan into subphases
-   > **Why**: the step count or complexity warrants incremental delivery with separate test points
-   > **Affects**: planning directory structure, `.workflow/state.md`, and the implementation workflow
+   **About to**: propose splitting this plan into subphases
+   **Why**: the step count or complexity warrants incremental delivery with separate test points
+   **Affects**: planning directory structure, `.workflow/state.md`, and the implementation workflow
 
    Use `AskUserQuestion` to propose the split. Include:
    - Total step count and why it warrants splitting
@@ -101,9 +101,9 @@ If verification fails, revise the plan before presenting it.
 Present the plan summary **inline** — key steps + verification approach. Do not ask the user to open the file.
 
 Output:
-> **About to**: present the implementation plan for approval
-> **Why**: plan approval is required before implementation begins
-> **Affects**: `planning/phase-XX/PLAN.md` is finalised; next step is `/implement`
+**About to**: present the implementation plan for approval
+**Why**: plan approval is required before implementation begins
+**Affects**: `planning/phase-XX/PLAN.md` is finalised; next step is `/implement`
 
 Use `AskUserQuestion` to ask the user to approve, request changes, or reject.
 

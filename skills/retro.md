@@ -36,9 +36,9 @@ Model tier: standard
    - **Project-specific lessons** → update `PROJECT.md`
    - **Remove or simplify** → rules that added friction without value
 4. **Present proposals**: For each proposed change, output:
-   > **About to**: write changes to `CLAUDE.md` and/or `PROJECT.md`
-   > **Why**: applying the framework improvements identified in this retrospective
-   > **Affects**: `CLAUDE.md` (process rules), `PROJECT.md` (project-specific lessons)
+   **About to**: write changes to `CLAUDE.md` and/or `PROJECT.md`
+   **Why**: applying the framework improvements identified in this retrospective
+   **Affects**: `CLAUDE.md` (process rules), `PROJECT.md` (project-specific lessons)
 
    Then present via `AskUserQuestion` — clearly separating CLAUDE.md changes from PROJECT.md changes. Get approval before writing.
 5. **Create** `planning/milestone-[name]/RETROSPECTIVE.md` with:
@@ -48,9 +48,9 @@ Model tier: standard
    - What Was Missing
    - Changes Made (CLAUDE.md / PROJECT.md / Removed or Simplified)
 6. **Propose commit and push**: Output:
-   > **About to**: commit and push the retrospective changes
-   > **Why**: finalising the retrospective and recording it in the repo
-   > **Affects**: `RETROSPECTIVE.md`, `CLAUDE.md`, `PROJECT.md`, feature branch, remote origin
+   **About to**: commit and push the retrospective changes
+   **Why**: finalising the retrospective and recording it in the repo
+   **Affects**: `RETROSPECTIVE.md`, `CLAUDE.md`, `PROJECT.md`, feature branch, remote origin
 
    Then propose for explicit approval. Use `AskUserQuestion` for each.
    - Commit message: `docs(retro): milestone [name] retrospective`

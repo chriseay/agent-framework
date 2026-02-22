@@ -40,9 +40,9 @@ Run when `.workflow/state.md` shows "Next Command: /new-project" or when the use
 **Creation order** (strict): `PROJECT.md` → `ROADMAP.md` → `README.md`.
 
 Before writing each document, output:
-> **About to**: write `[document name]` (e.g., `PROJECT.md`, `ROADMAP.md`, `README.md`)
-> **Why**: creating the required project documentation for this new project
-> **Affects**: the target project directory (new file will be created)
+**About to**: write `[document name]` (e.g., `PROJECT.md`, `ROADMAP.md`, `README.md`)
+**Why**: creating the required project documentation for this new project
+**Affects**: the target project directory (new file will be created)
 
 Then provide the document outline and get explicit approval via `AskUserQuestion`.
 
@@ -77,16 +77,16 @@ Then provide the document outline and get explicit approval via `AskUserQuestion
 ## On Completion
 
 If the user opted out of tracking planning artifacts:
-> **About to**: append `planning/` to the project's `.gitignore`
-> **Why**: user chose not to track planning artifacts in git
-> **Affects**: `.gitignore` (new entry; checked for duplicates first)
+**About to**: append `planning/` to the project's `.gitignore`
+**Why**: user chose not to track planning artifacts in git
+**Affects**: `.gitignore` (new entry; checked for duplicates first)
 
 Use `AskUserQuestion` with question "Append `planning/` to `.gitignore`?" and options: "Yes, append it" / "Skip — I'll manage this manually". Then append `planning/` to the project's `.gitignore` (check for existing entry first to avoid duplicates).
 
 If the user opted out of state tracking (default):
-> **About to**: append `.workflow/` to the project's `.gitignore`
-> **Why**: user chose not to track workflow state in git (default behaviour)
-> **Affects**: `.gitignore` (new entry; checked for duplicates first)
+**About to**: append `.workflow/` to the project's `.gitignore`
+**Why**: user chose not to track workflow state in git (default behaviour)
+**Affects**: `.gitignore` (new entry; checked for duplicates first)
 
 Use `AskUserQuestion` with question "Append `.workflow/` to `.gitignore`?" and options: "Yes, append it" / "Skip — I'll manage this manually". Then append `.workflow/` to the project's `.gitignore` (check for existing entry first to avoid duplicates). If the user opted in to state tracking, remove `.workflow/` from `.gitignore` if it was previously added by bootstrap.
 

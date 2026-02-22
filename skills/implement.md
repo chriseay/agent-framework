@@ -24,9 +24,9 @@ Model tier: heavy
    - If present: surface the recommendation via `AskUserQuestion` — "This subphase has a research note: [topic]. Run targeted research before implementing?" Options: "Yes, investigate first" / "No, proceed".
    - If the user approves: perform targeted investigation using Grep/Glob/Read as needed, then record findings in `planning/phase-XX/sub-N/RESEARCH.md` before continuing.
 5. If no feature branch exists yet, output:
-   > **About to**: create a new feature branch
-   > **Why**: all implementation work must happen on a feature branch, not on main
-   > **Affects**: local git repo (new branch from HEAD)
+   **About to**: create a new feature branch
+   **Why**: all implementation work must happen on a feature branch, not on main
+   **Affects**: local git repo (new branch from HEAD)
 
    Then propose a branch name via `AskUserQuestion` and create it after approval.
 
@@ -38,15 +38,15 @@ Model tier: heavy
 - If a phase is delivered in a single commit, briefly state why splitting wasn't warranted.
 - For complex changes, use verbose messages: summary line + bullet points.
 - Before each commit, output:
-  > **About to**: commit [N file(s)] — [brief description of what's changing]
-  > **Why**: [one-sentence reason — e.g., "completing Step N: [step name]"]
-  > **Affects**: [list of files being committed]
+  **About to**: commit [N file(s)] — [brief description of what's changing]
+  **Why**: [one-sentence reason — e.g., "completing Step N: [step name]"]
+  **Affects**: [list of files being committed]
 
   Then use `AskUserQuestion` to confirm the commit message before committing.
 - Before each push, output:
-  > **About to**: push branch `[branch-name]` to `origin/[branch-name]`
-  > **Why**: [one-sentence reason — e.g., "making changes available for review / CI"]
-  > **Affects**: remote origin; branch will be visible to collaborators
+  **About to**: push branch `[branch-name]` to `origin/[branch-name]`
+  **Why**: [one-sentence reason — e.g., "making changes available for review / CI"]
+  **Affects**: remote origin; branch will be visible to collaborators
 
   Then propose the target branch. Pushes require explicit approval.
 - All source-control actions involving local and remote state must be performed together once approved.
@@ -111,15 +111,15 @@ Dispatch report: N local, M dispatched (X to Haiku, Y to Sonnet, Z to Codex)
 - Follow the plan steps in order.
 - After completing each step, **update the Current Step marker** in PLAN.md.
 - If deviation is needed, output:
-  > **About to**: deviate from the approved plan
-  > **Why**: [explain what was discovered and why the plan step cannot be followed as written]
-  > **Affects**: [which plan steps are affected; what alternative approach is proposed]
+  **About to**: deviate from the approved plan
+  **Why**: [explain what was discovered and why the plan step cannot be followed as written]
+  **Affects**: [which plan steps are affected; what alternative approach is proposed]
 
   Then use `AskUserQuestion` to get approval before proceeding with the deviation.
 - If a new requirement is discovered, **do not add it to the current phase**. Output:
-  > **About to**: defer a new requirement to ROADMAP.md
-  > **Why**: new scope discovered during implementation; adding it now would break the approved plan
-  > **Affects**: `ROADMAP.md` (Deferred Phases or Deferred Verifications section)
+  **About to**: defer a new requirement to ROADMAP.md
+  **Why**: new scope discovered during implementation; adding it now would break the approved plan
+  **Affects**: `ROADMAP.md` (Deferred Phases or Deferred Verifications section)
 
   Then record it in `ROADMAP.md` under the appropriate section — `## Deferred Phases` (if it needs its own phase cycle) or `## Deferred Verifications` (if it's a check to perform later). Propose a category based on context and use `AskUserQuestion` to confirm.
 
@@ -129,9 +129,9 @@ If something goes wrong:
 
 - **Try one fix** for clear errors (missing import, typo, obvious logic error).
 - If the fix doesn't work, output:
-  > **About to**: escalate a failure that could not be resolved with one fix attempt
-  > **Why**: [one-sentence summary of the error and what was tried]
-  > **Affects**: current plan step; may require returning to `/plan` or a different approach
+  **About to**: escalate a failure that could not be resolved with one fix attempt
+  **Why**: [one-sentence summary of the error and what was tried]
+  **Affects**: current plan step; may require returning to `/plan` or a different approach
 
   Then **stop and escalate** via `AskUserQuestion` with: what you attempted, the error, suspected root cause, and proposed options.
 - **Never** retry the same approach or suppress errors.
@@ -140,9 +140,9 @@ Scenario-specific:
 - **Build failure**: Fix the root cause, not symptoms. Escalate if unclear.
 - **Test failure**: Distinguish real bugs from flaky tests. Never silently modify tests.
 - **Bad commit**: Output:
-  > **About to**: propose a revert commit to undo a bad commit
-  > **Why**: [describe what is wrong with the commit]
-  > **Affects**: git history on the feature branch; never force-push/amend/rebase without approval
+  **About to**: propose a revert commit to undo a bad commit
+  **Why**: [describe what is wrong with the commit]
+  **Affects**: git history on the feature branch; never force-push/amend/rebase without approval
 
   Then propose the revert via `AskUserQuestion`. Never force-push/amend/rebase without approval.
 - **Branch in bad state**: Propose options (stash, find last good commit, cleanup plan).
@@ -153,9 +153,9 @@ Scenario-specific:
 ## On Completion
 
 1. Output:
-   > **About to**: push feature branch `[branch-name]` to `origin/[branch-name]`
-   > **Why**: implementation is complete; pushing for review and handoff to `/test`
-   > **Affects**: remote origin; branch will be visible to collaborators
+   **About to**: push feature branch `[branch-name]` to `origin/[branch-name]`
+   **Why**: implementation is complete; pushing for review and handoff to `/test`
+   **Affects**: remote origin; branch will be visible to collaborators
 
    Then use `AskUserQuestion` to confirm the push target before pushing.
 2. Update `.workflow/state.md`:

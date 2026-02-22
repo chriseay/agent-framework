@@ -80,9 +80,9 @@ Compile the scan results into a structured summary and present to the user:
 ```
 
 Output:
-> **About to**: present the codebase scan results for user review
-> **Why**: verifying scan accuracy before generating project documents from it
-> **Affects**: nothing yet — this is a review step before any writes
+**About to**: present the codebase scan results for user review
+**Why**: verifying scan accuracy before generating project documents from it
+**Affects**: nothing yet — this is a review step before any writes
 
 Use `AskUserQuestion` to ask: "Does this look accurate? Anything to correct or add?"
 
@@ -109,9 +109,9 @@ Use `AskUserQuestion` — one question at a time — to fill in what the scan co
 Pre-populate from scan results + gap-filling answers. Use the template from `templates/PROJECT.md` but fill in discovered values instead of placeholders.
 
 Output:
-> **About to**: write `PROJECT.md` from the codebase scan and gap-filling answers
-> **Why**: creating the primary project constraints document for the workflow
-> **Affects**: project root (new file `PROJECT.md`)
+**About to**: write `PROJECT.md` from the codebase scan and gap-filling answers
+**Why**: creating the primary project constraints document for the workflow
+**Affects**: project root (new file `PROJECT.md`)
 
 Present outline to user and get approval via `AskUserQuestion` before writing.
 
@@ -122,9 +122,9 @@ Build from the user's priorities + scanned issues:
 3. Propose a phase structure grouping related work together.
 4. Ask about milestone groupings if the user opted in.
 5. Output:
-   > **About to**: write `ROADMAP.md` with the phase structure agreed above
-   > **Why**: creating the roadmap that drives the entire workflow
-   > **Affects**: project root (new file `ROADMAP.md`)
+   **About to**: write `ROADMAP.md` with the phase structure agreed above
+   **Why**: creating the roadmap that drives the entire workflow
+   **Affects**: project root (new file `ROADMAP.md`)
 
    Then get approval via `AskUserQuestion` before writing.
 
@@ -133,9 +133,9 @@ Build from the user's priorities + scanned issues:
 - If no README exists, create from `templates/README.md` pre-populated with scan results.
 
 Output:
-> **About to**: [write or update] `README.md`
-> **Why**: ensuring the README reflects the current project state and setup instructions
-> **Affects**: `README.md` ([new file / existing file will be modified])
+**About to**: [write or update] `README.md`
+**Why**: ensuring the README reflects the current project state and setup instructions
+**Affects**: `README.md` ([new file / existing file will be modified])
 
 Get approval via `AskUserQuestion` before writing or modifying.
 
@@ -145,17 +145,17 @@ Create `planning/` directory if it doesn't exist.
 
 If the user opted out of tracking planning artifacts:
 
-> **About to**: append `planning/` to the project's `.gitignore`
-> **Why**: user chose not to track planning artifacts in git
-> **Affects**: `.gitignore` (new entry; checked for duplicates first)
+**About to**: append `planning/` to the project's `.gitignore`
+**Why**: user chose not to track planning artifacts in git
+**Affects**: `.gitignore` (new entry; checked for duplicates first)
 
 Use `AskUserQuestion` with question "Append `planning/` to `.gitignore`?" and options: "Yes, append it" / "Skip — I'll manage this manually". Then append `planning/` to the project's `.gitignore` (check for existing entry first to avoid duplicates).
 
 If the user opted out of state tracking (default):
 
-> **About to**: append `.workflow/` to the project's `.gitignore`
-> **Why**: user chose not to track workflow state in git (default behaviour)
-> **Affects**: `.gitignore` (new entry; checked for duplicates first)
+**About to**: append `.workflow/` to the project's `.gitignore`
+**Why**: user chose not to track workflow state in git (default behaviour)
+**Affects**: `.gitignore` (new entry; checked for duplicates first)
 
 Use `AskUserQuestion` with question "Append `.workflow/` to `.gitignore`?" and options: "Yes, append it" / "Skip — I'll manage this manually". Then append `.workflow/` to the project's `.gitignore` (check for existing entry first to avoid duplicates). If the user opted in to state tracking, remove `.workflow/` from `.gitignore` if it was previously added by bootstrap.
 

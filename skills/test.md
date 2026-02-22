@@ -19,22 +19,22 @@ Model tier: standard
 ## Process
 
 1. **Automated verification**: Output:
-   > **About to**: run automated builds/tests
-   > **Why**: verifying the phase's implementation meets the plan's verification criteria
-   > **Affects**: local build environment; may produce output, artefacts, or failures
+   **About to**: run automated builds/tests
+   **Why**: verifying the phase's implementation meets the plan's verification criteria
+   **Affects**: local build environment; may produce output, artefacts, or failures
 
    Then propose running builds/tests. Requires user approval each time.
 2. **Manual verification**: Output:
-   > **About to**: request manual verification steps from the user
-   > **Why**: some checks require local environment access (simulators, devices, browser) the agent cannot perform
-   > **Affects**: user's local environment; results will determine whether the phase passes verification
+   **About to**: request manual verification steps from the user
+   **Why**: some checks require local environment access (simulators, devices, browser) the agent cannot perform
+   **Affects**: user's local environment; results will determine whether the phase passes verification
 
    Use `AskUserQuestion` to ask the user to perform checks that require local environment access (simulators, devices, browser). Be specific about what to do and what to expect.
 3. **Collect results**: Record what passed and what failed.
 4. If tests fail, output:
-   > **About to**: attempt one fix for the test failure, then escalate if it doesn't work
-   > **Why**: following the Recovery rule — one fix attempt before escalating to user
-   > **Affects**: source files related to the failing test
+   **About to**: attempt one fix for the test failure, then escalate if it doesn't work
+   **Why**: following the Recovery rule — one fix attempt before escalating to user
+   **Affects**: source files related to the failing test
 
    Then follow the Recovery rules from `/implement` — one fix attempt, then escalate.
 

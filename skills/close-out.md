@@ -35,9 +35,9 @@ Model tier: standard
    - **Issues Encountered**: problems hit and how they were resolved
    - **Decisions and Rationale**: key choices made and why
 3. Output:
-   > **About to**: commit the subphase N of M deliverables
-   > **Why**: closing out this subphase so the next one can begin
-   > **Affects**: feature branch (new commit); `planning/phase-XX/sub-N/POSTMORTEM.md`
+   **About to**: commit the subphase N of M deliverables
+   **Why**: closing out this subphase so the next one can begin
+   **Affects**: feature branch (new commit); `planning/phase-XX/sub-N/POSTMORTEM.md`
 
    Then propose a commit to the user. Use `AskUserQuestion` to confirm the commit message before committing. Use Conventional Commit format: `feat(phase-XX): subphase N of M — [brief description]`
 4. Update `.workflow/state.md`:
@@ -64,9 +64,9 @@ Model tier: standard
 
    If the phase used subphases, begin by reading all `sub-N/PLAN.md` and `sub-N/POSTMORTEM.md` files. Synthesise them into the main POSTMORTEM.md — the main POSTMORTEM covers the full phase, not just the final subphase.
 4. **Propose lessons learned**: Review both `CLAUDE.md` and `PROJECT.md` to avoid duplication. For each proposed addition, output:
-   > **About to**: write a new lesson learned to `PROJECT.md`
-   > **Why**: [one-sentence reason — e.g., "this pattern recurred and should be recorded"]
-   > **Affects**: `PROJECT.md` (Lessons Learned section)
+   **About to**: write a new lesson learned to `PROJECT.md`
+   **Why**: [one-sentence reason — e.g., "this pattern recurred and should be recorded"]
+   **Affects**: `PROJECT.md` (Lessons Learned section)
 
    Then use `AskUserQuestion` to confirm each addition before writing.
 5. **Update** `ROADMAP.md` status for the completed phase.
@@ -75,9 +75,9 @@ Model tier: standard
    b. If no documentation files are found, use `AskUserQuestion` to ask the user if there are docs the agent is missing.
    c. **Compare against phase changes**: For each discovered doc, read it and check whether the phase's deliverables introduce new features, change existing behaviour, or make any content stale.
    d. For each proposed doc update, output:
-      > **About to**: update `[doc filename]`
-      > **Why**: [one-sentence reason — e.g., "Phase 18 added model-check blocks; README Status needs updating"]
-      > **Affects**: `[doc filename]`
+      **About to**: update `[doc filename]`
+      **Why**: [one-sentence reason — e.g., "Phase 18 added model-check blocks; README Status needs updating"]
+      **Affects**: `[doc filename]`
 
       Then **propose updates** via `AskUserQuestion` — additions for new features, updates for changed behaviour (including the README Status section), and removals for stale content. Confirm each proposed change before applying.
    e. If no updates are needed for any doc, confirm this to the user: "Documentation reviewed — no updates needed."
@@ -88,9 +88,9 @@ Model tier: standard
         - Get the merge commit hash(es) from the current branch.
         - Post a summary comment: what was delivered + commit hash(es).
         - Output:
-          > **About to**: close GitHub issue #[number] — Phase [N]: [name]
-          > **Why**: the phase is complete; closing the tracking issue
-          > **Affects**: GitHub Issues (issue will be marked closed)
+          **About to**: close GitHub issue #[number] — Phase [N]: [name]
+          **Why**: the phase is complete; closing the tracking issue
+          **Affects**: GitHub Issues (issue will be marked closed)
 
           Then use `AskUserQuestion` to confirm, then close via `gh issue close <number>`.
       - If Sync Status says "not created":
@@ -102,44 +102,44 @@ Model tier: standard
       - Read `planning/phase-XX/CONTEXT.md` for the `## Linked Issues` section.
       - If linked issues exist, for each one: show the issue number, title, and current status. Use `AskUserQuestion` to ask whether to close it.
       - For each linked issue to close, output:
-        > **About to**: close linked GitHub issue #[number] — [title]
-        > **Why**: this issue was resolved as part of Phase [N]
-        > **Affects**: GitHub Issues (issue will be marked closed)
+        **About to**: close linked GitHub issue #[number] — [title]
+        **Why**: this issue was resolved as part of Phase [N]
+        **Affects**: GitHub Issues (issue will be marked closed)
 
         Then close approved issues via `gh issue close <number>`.
 8. **Check milestone completion** (if `gh` CLI is available and a phase issue was closed):
    - Read the milestone title from Sync Status.
    - Check if all issues are closed: `gh issue list --milestone "TITLE" --state open --json number | jq 'length'`
    - If the count is 0, output:
-     > **About to**: close the GitHub Milestone "[milestone name]"
-     > **Why**: all issues in this milestone are now closed
-     > **Affects**: GitHub Milestones (milestone will be marked closed)
+     **About to**: close the GitHub Milestone "[milestone name]"
+     **Why**: all issues in this milestone are now closed
+     **Affects**: GitHub Milestones (milestone will be marked closed)
 
      Then use `AskUserQuestion` to propose closing the milestone.
    - If approved: find the milestone number via `gh api repos/:owner/:repo/milestones --method GET -F state=all | jq ...` and close it via `gh api repos/:owner/:repo/milestones/N -X PATCH -f state="closed"`.
 9. **Propose commit, push, and merge**: For each action, output the appropriate summary before the `AskUserQuestion` call:
 
    **Commit**:
-   > **About to**: commit the phase close-out changes (POSTMORTEM.md, ROADMAP.md, docs)
-   > **Why**: finalising and recording the phase deliverables
-   > **Affects**: feature branch (new commit)
+   **About to**: commit the phase close-out changes (POSTMORTEM.md, ROADMAP.md, docs)
+   **Why**: finalising and recording the phase deliverables
+   **Affects**: feature branch (new commit)
 
    **Push**:
-   > **About to**: push `[branch-name]` to `origin/[branch-name]`
-   > **Why**: making the phase changes available for merge
-   > **Affects**: remote origin
+   **About to**: push `[branch-name]` to `origin/[branch-name]`
+   **Why**: making the phase changes available for merge
+   **Affects**: remote origin
 
    **Merge**:
-   > **About to**: merge `[branch-name]` into `main`
-   > **Why**: delivering Phase [N] changes to the main branch
-   > **Affects**: `main` branch; feature branch (will be deletable after merge)
+   **About to**: merge `[branch-name]` into `main`
+   **Why**: delivering Phase [N] changes to the main branch
+   **Affects**: `main` branch; feature branch (will be deletable after merge)
 
    Then propose commit, push, and merge for explicit approval. Use `AskUserQuestion` for each.
    - Merge messages: one headline + 2–4 bullet points.
 10. **Propose feature branch deletion**: Output:
-    > **About to**: delete feature branch `[branch-name]` (local and remote)
-    > **Why**: branch has been merged; deleting to keep the repo clean
-    > **Affects**: local git repo and remote origin (branch will be removed from both)
+    **About to**: delete feature branch `[branch-name]` (local and remote)
+    **Why**: branch has been merged; deleting to keep the repo clean
+    **Affects**: local git repo and remote origin (branch will be removed from both)
 
     Then propose feature branch deletion (local + remote) after merge. Use `AskUserQuestion` to confirm.
 11. **Record process notes** in POSTMORTEM.md — any friction or gaps. Do not propose CLAUDE.md changes here; save that for `/retro`.
@@ -192,9 +192,9 @@ When the user chooses "Add more phases to this milestone":
 1. Use `AskUserQuestion` to get the new phase **name**.
 2. Use `AskUserQuestion` to get a one-line **scope and deliverable**.
 3. Output:
-   > **About to**: append a new phase to `ROADMAP.md`
-   > **Why**: user confirmed the phase name and scope
-   > **Affects**: `ROADMAP.md` (new phase entry under current milestone)
+   **About to**: append a new phase to `ROADMAP.md`
+   **Why**: user confirmed the phase name and scope
+   **Affects**: `ROADMAP.md` (new phase entry under current milestone)
 
    Then append the new phase to `ROADMAP.md` under the current milestone heading, with status "Not started" and the next available phase number.
 4. Run the **GitHub Phase Sync** flow from `skills/discuss.md` (label, milestone, issue creation).

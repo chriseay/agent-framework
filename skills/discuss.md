@@ -71,9 +71,9 @@ Before diving into phase requirements, review the roadmap with the user to captu
         - **Fold into existing phase** — if it naturally extends an existing phase's scope.
       - The agent should propose a category (phase or verification) based on context. The user confirms or overrides.
       - After the user confirms, before updating ROADMAP.md, output:
-        > **About to**: update `ROADMAP.md` with the new roadmap item
-        > **Why**: user confirmed the item and its placement
-        > **Affects**: `ROADMAP.md`
+        **About to**: update `ROADMAP.md` with the new roadmap item
+        **Why**: user confirmed the item and its placement
+        **Affects**: `ROADMAP.md`
 
         Then update `ROADMAP.md` immediately using the Edit tool. If the item was placed as a new phase, run the **GitHub Phase Sync** flow for it.
 
@@ -101,9 +101,9 @@ When a new phase is added to the roadmap (via step 3b promote or step 3c new pha
    - If an issue already exists, record it in Sync Status and skip creation.
 
 5. **Propose issue creation**: Output:
-   > **About to**: create a GitHub issue for the new phase
-   > **Why**: syncing the new phase to GitHub Issues for tracking
-   > **Affects**: GitHub Issues, the phase's `planning/phase-XX/CONTEXT.md`
+   **About to**: create a GitHub issue for the new phase
+   **Why**: syncing the new phase to GitHub Issues for tracking
+   **Affects**: GitHub Issues, the phase's `planning/phase-XX/CONTEXT.md`
 
    Then use `AskUserQuestion`: Show the title, body preview, milestone, and label. Wait for approval.
 
@@ -114,9 +114,9 @@ When a new phase is added to the roadmap (via step 3b promote or step 3c new pha
    The body should contain the phase deliverables and verification criteria from ROADMAP.md.
 
 7. **Record in Sync Status**: Output:
-   > **About to**: write the GitHub issue number to `planning/phase-XX/CONTEXT.md`
-   > **Why**: recording the sync so future sessions can find and close the issue
-   > **Affects**: `planning/phase-XX/CONTEXT.md`
+   **About to**: write the GitHub issue number to `planning/phase-XX/CONTEXT.md`
+   **Why**: recording the sync so future sessions can find and close the issue
+   **Affects**: `planning/phase-XX/CONTEXT.md`
 
    Create `planning/phase-XX/` directory if needed. Write or update CONTEXT.md with:
    ```

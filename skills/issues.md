@@ -51,9 +51,9 @@ Use `AskUserQuestion` to gather:
 3. **Label**: One of `bug`, `feature`, `chore`, `deferred`
 
 Then output:
-> **About to**: create a GitHub issue
-> **Why**: user requested issue creation with the details gathered above
-> **Affects**: GitHub Issues
+**About to**: create a GitHub issue
+**Why**: user requested issue creation with the details gathered above
+**Affects**: GitHub Issues
 
 Then show a preview and use `AskUserQuestion` to confirm before running:
 ```
@@ -63,9 +63,9 @@ gh issue create --title "..." --body "..." --label "..."
 ### Edit
 
 Use `AskUserQuestion` to ask for the issue number and what to change (title, body, labels). Then output:
-> **About to**: edit an existing GitHub issue
-> **Why**: user requested the changes described above
-> **Affects**: GitHub issue #[number]
+**About to**: edit an existing GitHub issue
+**Why**: user requested the changes described above
+**Affects**: GitHub issue #[number]
 
 Then show a preview and confirm before running:
 ```
@@ -75,9 +75,9 @@ gh issue edit <number> --title "..." --body "..." --add-label "..."
 ### Close
 
 Output:
-> **About to**: close GitHub issue #[number]
-> **Why**: user requested closing this issue
-> **Affects**: GitHub issue #[number] (will be marked closed)
+**About to**: close GitHub issue #[number]
+**Why**: user requested closing this issue
+**Affects**: GitHub issue #[number] (will be marked closed)
 
 Use `AskUserQuestion` to confirm before running:
 ```
@@ -87,9 +87,9 @@ gh issue close <number>
 ### Reopen
 
 Output:
-> **About to**: reopen GitHub issue #[number]
-> **Why**: user requested reopening this issue
-> **Affects**: GitHub issue #[number] (will be marked open)
+**About to**: reopen GitHub issue #[number]
+**Why**: user requested reopening this issue
+**Affects**: GitHub issue #[number] (will be marked open)
 
 Use `AskUserQuestion` to confirm before running:
 ```
@@ -99,9 +99,9 @@ gh issue reopen <number>
 ### Comment
 
 Use `AskUserQuestion` to gather the comment text. Then output:
-> **About to**: post a comment on GitHub issue #[number]
-> **Why**: user requested adding the comment gathered above
-> **Affects**: GitHub issue #[number]
+**About to**: post a comment on GitHub issue #[number]
+**Why**: user requested adding the comment gathered above
+**Affects**: GitHub issue #[number]
 
 Then confirm before running:
 ```
