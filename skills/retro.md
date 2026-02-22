@@ -10,6 +10,17 @@ Model tier: standard
 - On user request at any natural stopping point
 - If no milestones are defined, suggest after every 3–5 phases via `AskUserQuestion`
 
+## On Start
+
+1. Read `.workflow/state.md` to identify the current milestone and phase.
+2. Note the model tier for this phase: `standard`. Include it in the status block.
+   **Model check**: This phase runs at standard tier — recommended model: Sonnet.
+   Detect the current model from the system prompt ("You are powered by the model named…").
+   If the current model does not match this tier:
+   - State the mismatch clearly (e.g., "This phase needs Sonnet; you're currently on Opus.").
+   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
+   Wait for the user's response before proceeding.
+
 ## Process
 
 1. **Gather inputs**: Read all POSTMORTEM.md files from the milestone's phases. Focus on the **Process Notes** subsections.
@@ -24,14 +35,24 @@ Model tier: standard
    - **Process changes** → update `CLAUDE.md`
    - **Project-specific lessons** → update `PROJECT.md`
    - **Remove or simplify** → rules that added friction without value
-4. **Present proposals** via `AskUserQuestion` — clearly separating CLAUDE.md changes from PROJECT.md changes. Get approval before writing.
+4. **Present proposals**: For each proposed change, output:
+   > **About to**: write changes to `CLAUDE.md` and/or `PROJECT.md`
+   > **Why**: applying the framework improvements identified in this retrospective
+   > **Affects**: `CLAUDE.md` (process rules), `PROJECT.md` (project-specific lessons)
+
+   Then present via `AskUserQuestion` — clearly separating CLAUDE.md changes from PROJECT.md changes. Get approval before writing.
 5. **Create** `planning/milestone-[name]/RETROSPECTIVE.md` with:
    - Phases Reviewed
    - What Worked
    - What Didn't Work
    - What Was Missing
    - Changes Made (CLAUDE.md / PROJECT.md / Removed or Simplified)
-6. **Propose commit and push** for explicit approval. Use `AskUserQuestion` for each.
+6. **Propose commit and push**: Output:
+   > **About to**: commit and push the retrospective changes
+   > **Why**: finalising the retrospective and recording it in the repo
+   > **Affects**: `RETROSPECTIVE.md`, `CLAUDE.md`, `PROJECT.md`, feature branch, remote origin
+
+   Then propose for explicit approval. Use `AskUserQuestion` for each.
    - Commit message: `docs(retro): milestone [name] retrospective`
    - Include all files changed during the retro (RETROSPECTIVE.md, CLAUDE.md, PROJECT.md, any removed/modified files).
 

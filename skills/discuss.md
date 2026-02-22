@@ -8,6 +8,12 @@ Model tier: light
 
 1. Read `.workflow/state.md` to identify the current phase.
 2. Note the model tier for this phase: `light`. Include it in the status block.
+   **Model check**: This phase runs at light tier — recommended model: Haiku.
+   Detect the current model from the system prompt ("You are powered by the model named…").
+   If the current model does not match this tier:
+   - State the mismatch clearly (e.g., "This phase needs Haiku; you're currently on Sonnet.").
+   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
+   Wait for the user's response before proceeding to the next On Start step.
 3. Read `ROADMAP.md` to get the phase deliverables.
 4. Read any existing `planning/phase-XX/CONTEXT.md` (if resuming).
 5. Run the **Roadmap Review** (see section below).
@@ -64,7 +70,12 @@ Before diving into phase requirements, review the roadmap with the user to captu
         - **Deferred verification** — if the item is a check or test to perform later.
         - **Fold into existing phase** — if it naturally extends an existing phase's scope.
       - The agent should propose a category (phase or verification) based on context. The user confirms or overrides.
-      - After the user confirms, update `ROADMAP.md` immediately using the Edit tool. If the item was placed as a new phase, run the **GitHub Phase Sync** flow for it.
+      - After the user confirms, before updating ROADMAP.md, output:
+        > **About to**: update `ROADMAP.md` with the new roadmap item
+        > **Why**: user confirmed the item and its placement
+        > **Affects**: `ROADMAP.md`
+
+        Then update `ROADMAP.md` immediately using the Edit tool. If the item was placed as a new phase, run the **GitHub Phase Sync** flow for it.
 
    d. **Repeat** until the user says they have no more changes.
 
@@ -89,7 +100,12 @@ When a new phase is added to the roadmap (via step 3b promote or step 3c new pha
 4. **Check for duplicate issue**: `gh issue list --state all --json number,title | jq --arg t "Phase N: Name" '.[] | select(.title == $t) | .number'`
    - If an issue already exists, record it in Sync Status and skip creation.
 
-5. **Propose issue creation** via `AskUserQuestion`: Show the title, body preview, milestone, and label. Wait for approval.
+5. **Propose issue creation**: Output:
+   > **About to**: create a GitHub issue for the new phase
+   > **Why**: syncing the new phase to GitHub Issues for tracking
+   > **Affects**: GitHub Issues, the phase's `planning/phase-XX/CONTEXT.md`
+
+   Then use `AskUserQuestion`: Show the title, body preview, milestone, and label. Wait for approval.
 
 6. **Create the issue**:
    ```
@@ -97,7 +113,12 @@ When a new phase is added to the roadmap (via step 3b promote or step 3c new pha
    ```
    The body should contain the phase deliverables and verification criteria from ROADMAP.md.
 
-7. **Record in Sync Status**: Create `planning/phase-XX/` directory if needed. Write or update CONTEXT.md with:
+7. **Record in Sync Status**: Output:
+   > **About to**: write the GitHub issue number to `planning/phase-XX/CONTEXT.md`
+   > **Why**: recording the sync so future sessions can find and close the issue
+   > **Affects**: `planning/phase-XX/CONTEXT.md`
+
+   Create `planning/phase-XX/` directory if needed. Write or update CONTEXT.md with:
    ```
    ## Sync Status
    - GitHub Issue: #NUMBER

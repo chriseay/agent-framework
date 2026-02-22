@@ -8,6 +8,12 @@ Model tier: standard
 
 1. Read `.workflow/state.md` to identify the current phase.
 2. Note the model tier for this phase: `standard`. Include it in the status block.
+   **Model check**: This phase runs at standard tier — recommended model: Sonnet.
+   Detect the current model from the system prompt ("You are powered by the model named…").
+   If the current model does not match this tier:
+   - State the mismatch clearly (e.g., "This phase needs Sonnet; you're currently on Opus.").
+   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
+   Wait for the user's response before proceeding to the next On Start step.
 3. Read `planning/phase-XX/CONTEXT.md` and any test results from the session.
    - Read the **Subphase** field from `.workflow/state.md`.
    - If the field is **absent**: read `planning/phase-XX/PLAN.md` (standard behaviour).
@@ -28,7 +34,12 @@ Model tier: standard
    - **Summary**: what was delivered in this subphase
    - **Issues Encountered**: problems hit and how they were resolved
    - **Decisions and Rationale**: key choices made and why
-3. Propose a commit to the user. Use `AskUserQuestion` to confirm the commit message before committing. Use Conventional Commit format: `feat(phase-XX): subphase N of M — [brief description]`
+3. Output:
+   > **About to**: commit the subphase N of M deliverables
+   > **Why**: closing out this subphase so the next one can begin
+   > **Affects**: feature branch (new commit); `planning/phase-XX/sub-N/POSTMORTEM.md`
+
+   Then propose a commit to the user. Use `AskUserQuestion` to confirm the commit message before committing. Use Conventional Commit format: `feat(phase-XX): subphase N of M — [brief description]`
 4. Update `.workflow/state.md`:
    ```
    - Subphase: [N+1] of M
@@ -52,13 +63,23 @@ Model tier: standard
    - **Process Notes**: Friction, gaps, or observations about the workflow (consumed by `/retro`)
 
    If the phase used subphases, begin by reading all `sub-N/PLAN.md` and `sub-N/POSTMORTEM.md` files. Synthesise them into the main POSTMORTEM.md — the main POSTMORTEM covers the full phase, not just the final subphase.
-4. **Propose lessons learned**: Review both `CLAUDE.md` and `PROJECT.md` to avoid duplication. Use `AskUserQuestion` to confirm additions before writing.
+4. **Propose lessons learned**: Review both `CLAUDE.md` and `PROJECT.md` to avoid duplication. For each proposed addition, output:
+   > **About to**: write a new lesson learned to `PROJECT.md`
+   > **Why**: [one-sentence reason — e.g., "this pattern recurred and should be recorded"]
+   > **Affects**: `PROJECT.md` (Lessons Learned section)
+
+   Then use `AskUserQuestion` to confirm each addition before writing.
 5. **Update** `ROADMAP.md` status for the completed phase.
 6. **Documentation refresh**:
    a. **Discover documentation files**: Scan for common patterns — `README.md`, `CONTRIBUTING.md`, `ARCHITECTURE.md`, `FRAMEWORK-GUIDE.md`, `PROJECT.md`, `CHANGELOG.md` in the repo root, and `docs/*.md` or `doc/*.md` directories. Exclude framework internals: `CLAUDE.md`, `AGENTS.md`, `skills/*.md`, `templates/*.md`, `planning/**/*.md`.
    b. If no documentation files are found, use `AskUserQuestion` to ask the user if there are docs the agent is missing.
    c. **Compare against phase changes**: For each discovered doc, read it and check whether the phase's deliverables introduce new features, change existing behaviour, or make any content stale.
-   d. **Propose updates** via `AskUserQuestion` — additions for new features, updates for changed behaviour (including the README Status section), and removals for stale content. Confirm each proposed change before applying.
+   d. For each proposed doc update, output:
+      > **About to**: update `[doc filename]`
+      > **Why**: [one-sentence reason — e.g., "Phase 18 added model-check blocks; README Status needs updating"]
+      > **Affects**: `[doc filename]`
+
+      Then **propose updates** via `AskUserQuestion` — additions for new features, updates for changed behaviour (including the README Status section), and removals for stale content. Confirm each proposed change before applying.
    e. If no updates are needed for any doc, confirm this to the user: "Documentation reviewed — no updates needed."
 7. **Close GitHub issues** (if `gh` CLI is available):
    a. **Close the phase issue**:
@@ -66,7 +87,12 @@ Model tier: standard
       - If a GitHub Issue number is recorded:
         - Get the merge commit hash(es) from the current branch.
         - Post a summary comment: what was delivered + commit hash(es).
-        - Use `AskUserQuestion` to confirm, then close via `gh issue close <number>`.
+        - Output:
+          > **About to**: close GitHub issue #[number] — Phase [N]: [name]
+          > **Why**: the phase is complete; closing the tracking issue
+          > **Affects**: GitHub Issues (issue will be marked closed)
+
+          Then use `AskUserQuestion` to confirm, then close via `gh issue close <number>`.
       - If Sync Status says "not created":
         - Create the issue (using the Sync flow from /discuss), post the summary comment, and immediately close it.
       - If no Sync Status section exists, search by title: `gh issue list --state all --search "Phase N in:title" --json number,title`
@@ -75,15 +101,47 @@ Model tier: standard
    b. **Close linked issues**: (existing behaviour)
       - Read `planning/phase-XX/CONTEXT.md` for the `## Linked Issues` section.
       - If linked issues exist, for each one: show the issue number, title, and current status. Use `AskUserQuestion` to ask whether to close it.
-      - Close approved issues via `gh issue close <number>`.
+      - For each linked issue to close, output:
+        > **About to**: close linked GitHub issue #[number] — [title]
+        > **Why**: this issue was resolved as part of Phase [N]
+        > **Affects**: GitHub Issues (issue will be marked closed)
+
+        Then close approved issues via `gh issue close <number>`.
 8. **Check milestone completion** (if `gh` CLI is available and a phase issue was closed):
    - Read the milestone title from Sync Status.
    - Check if all issues are closed: `gh issue list --milestone "TITLE" --state open --json number | jq 'length'`
-   - If the count is 0, use `AskUserQuestion` to propose closing the milestone.
+   - If the count is 0, output:
+     > **About to**: close the GitHub Milestone "[milestone name]"
+     > **Why**: all issues in this milestone are now closed
+     > **Affects**: GitHub Milestones (milestone will be marked closed)
+
+     Then use `AskUserQuestion` to propose closing the milestone.
    - If approved: find the milestone number via `gh api repos/:owner/:repo/milestones --method GET -F state=all | jq ...` and close it via `gh api repos/:owner/:repo/milestones/N -X PATCH -f state="closed"`.
-9. **Propose commit, push, and merge** for explicit approval. Use `AskUserQuestion` for each.
+9. **Propose commit, push, and merge**: For each action, output the appropriate summary before the `AskUserQuestion` call:
+
+   **Commit**:
+   > **About to**: commit the phase close-out changes (POSTMORTEM.md, ROADMAP.md, docs)
+   > **Why**: finalising and recording the phase deliverables
+   > **Affects**: feature branch (new commit)
+
+   **Push**:
+   > **About to**: push `[branch-name]` to `origin/[branch-name]`
+   > **Why**: making the phase changes available for merge
+   > **Affects**: remote origin
+
+   **Merge**:
+   > **About to**: merge `[branch-name]` into `main`
+   > **Why**: delivering Phase [N] changes to the main branch
+   > **Affects**: `main` branch; feature branch (will be deletable after merge)
+
+   Then propose commit, push, and merge for explicit approval. Use `AskUserQuestion` for each.
    - Merge messages: one headline + 2–4 bullet points.
-10. **Propose feature branch deletion** (local + remote) after merge.
+10. **Propose feature branch deletion**: Output:
+    > **About to**: delete feature branch `[branch-name]` (local and remote)
+    > **Why**: branch has been merged; deleting to keep the repo clean
+    > **Affects**: local git repo and remote origin (branch will be removed from both)
+
+    Then propose feature branch deletion (local + remote) after merge. Use `AskUserQuestion` to confirm.
 11. **Record process notes** in POSTMORTEM.md — any friction or gaps. Do not propose CLAUDE.md changes here; save that for `/retro`.
 12. **Confirm** planning artifacts (CONTEXT.md, PLAN.md, POSTMORTEM.md) contain enough context for the next session.
 
@@ -133,7 +191,12 @@ When the user chooses "Add more phases to this milestone":
 
 1. Use `AskUserQuestion` to get the new phase **name**.
 2. Use `AskUserQuestion` to get a one-line **scope and deliverable**.
-3. Append the new phase to `ROADMAP.md` under the current milestone heading, with status "Not started" and the next available phase number.
+3. Output:
+   > **About to**: append a new phase to `ROADMAP.md`
+   > **Why**: user confirmed the phase name and scope
+   > **Affects**: `ROADMAP.md` (new phase entry under current milestone)
+
+   Then append the new phase to `ROADMAP.md` under the current milestone heading, with status "Not started" and the next available phase number.
 4. Run the **GitHub Phase Sync** flow from `skills/discuss.md` (label, milestone, issue creation).
 5. Use `AskUserQuestion`: "Add another phase, or done?"
    - If "Add another" → repeat from step 1.
