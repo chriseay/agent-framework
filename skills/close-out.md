@@ -67,9 +67,23 @@ Model tier: standard
 4. **Propose lessons learned**: Review both `CLAUDE.md` and `PROJECT.md` to avoid duplication. For each proposed addition, output:
    **About to**: write a new lesson learned to `PROJECT.md`
    **Why**: [one-sentence reason — e.g., "this pattern recurred and should be recorded"]
-   **Affects**: `PROJECT.md` (Lessons Learned section)
+   **Affects**: `PROJECT.md` (Recent Lessons section)
 
    Then use `AskUserQuestion` to confirm each addition before writing.
+
+   **Write-target rule**: Always write new lessons to PROJECT.md's Section 13 (Recent Lessons). Do not write directly to any `project/lessons-archive.md` subdocument — that file is an archive of older lessons and is managed separately. If PROJECT.md still uses the old heading "Lessons Learned", write there as before; the write-target rule applies once the project adopts the new "Recent Lessons" structure.
+
+4a. **PROJECT.md size check**: After writing lessons, count the lines in PROJECT.md (use `wc -l` or Read and count). If any of the following thresholds are met, surface a suggestion to the user via `AskUserQuestion`:
+   - Total lines exceed ~200
+   - Section 13 (Recent Lessons or Lessons Learned) exceeds ~10 entries
+
+   Suggested message: "PROJECT.md is getting long ([N] lines / [M] lessons). Consider archiving older lessons to `project/lessons-archive.md` or extracting reference sections to subdocuments. See Section 14 (Subdocuments) of PROJECT.md for the pattern, or see FRAMEWORK-GUIDE.md for guidance."
+
+   Options: "Yes, let's archive now" / "Not yet — I'll do it later".
+
+   If the user chooses to archive now: move lessons older than the last 3 from Section 13 into `project/lessons-archive.md` (create from `templates/project/lessons-archive.md` if it doesn't exist), keeping the last 3 inline. Add or update the Subdocuments registry in Section 14 with a row for the archive file. Then commit the archiving as a separate commit from the phase close-out.
+
+   If the user declines or thresholds are not met, continue without action.
 5. **Update** `ROADMAP.md` status for the completed phase.
 6. **Documentation refresh**:
    a. **Discover documentation files**: Scan for common patterns — `README.md`, `CONTRIBUTING.md`, `ARCHITECTURE.md`, `FRAMEWORK-GUIDE.md`, `PROJECT.md`, `CHANGELOG.md` in the repo root, and `docs/*.md` or `doc/*.md` directories. Exclude framework internals: `CLAUDE.md`, `AGENTS.md`, `skills/*.md`, `templates/*.md`, `planning/**/*.md`.

@@ -86,11 +86,60 @@ Next session, the agent reads the state and picks up exactly where you left off.
 |----------|---------|-------------|
 | `CLAUDE.md` | Core rules, always loaded | Rarely — process changes only |
 | `PROJECT.md` | Your project's constraints and lessons | Agent proposes, you approve |
+| `project/` | Optional subdocuments extracted from PROJECT.md (lessons archive, reference guides) | Agent loads on demand; you create when PROJECT.md gets large |
 | `ROADMAP.md` | Phases and status | Agent updates at close-out |
 | `planning/phase-XX/` | Per-phase artifacts | Agent creates these |
 | `.workflow/state.md` | Current position | Never — auto-updated |
 | `skills/` | Rules for each command | Never — framework files |
 | `templates/` | Starting points for artifacts | Never — used by skills |
+
+## When PROJECT.md Gets Large
+
+PROJECT.md is loaded at every session start. As a project matures, it can accumulate content that makes the file unwieldy and fills the agent's context with irrelevant material.
+
+**Three content categories** help you decide what to keep vs. extract:
+
+| Category | Description | Where it lives |
+|----------|-------------|----------------|
+| **Core** | Always needed: overview, tech stack, domain constraints, recent lessons, model routing | PROJECT.md (keep lean) |
+| **Reference** | Phase-specific guides: API docs, deployment procedures, test tooling, security guardrails | `project/<name>.md` (load on demand) |
+| **Archive** | Historical records: lessons from older phases, per-phase addenda | `project/lessons-archive.md` (load rarely) |
+
+### The Subdocuments Registry
+
+When you extract content, list it in Section 14 (Subdocuments) of PROJECT.md:
+
+```markdown
+## 14) Subdocuments
+
+| File | Contents | Load when |
+|------|----------|-----------|
+| `project/lessons-archive.md` | Lessons from phases 1–10 | Phase involves a recurring problem from those phases |
+| `project/deployment.md` | CI/CD, SSH guardrails, deploy steps | Phase involves deployment |
+| `project/api.md` | REST API endpoints, auth tokens | Phase involves API calls |
+```
+
+The agent reads this table at session start and loads subdocuments whose "Load when" condition matches the current phase. Subdocuments live in a `project/` directory alongside PROJECT.md.
+
+### Extraction triggers
+
+These are prompts to consider splitting — not automatic rules:
+
+- Section 13 (Recent Lessons) exceeds ~10 entries → archive older lessons to `project/lessons-archive.md`, keep the last 3 inline
+- Any non-core section exceeds ~50 lines → extract to `project/<section-name>.md`
+- Total PROJECT.md exceeds ~200 lines → review all sections and extract reference/archive content
+
+The agent surfaces these suggestions during `/close-out`. You decide when to act.
+
+### Lessons write-target rule
+
+New lessons are always written to PROJECT.md's Section 13 (Recent Lessons). The archive is managed separately — when Recent Lessons gets long, move older entries to `project/lessons-archive.md` and add it to the registry.
+
+If the archive itself grows large, add a second file (`project/lessons-archive-v2.md`) as a new registry row. The same pattern applies recursively.
+
+### Backward compatibility
+
+Projects without a Subdocuments section continue to work unchanged. The pattern is opt-in.
 
 ## Milestones
 
