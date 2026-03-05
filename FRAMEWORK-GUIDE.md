@@ -37,6 +37,8 @@ You can type `/status` at any time to see where you are.
 | `/close-out` | Write postmortem, propose lessons, commit, merge |
 | `/retro` | Milestone retrospective — review and improve the process |
 | `/status` | Show current position and next command |
+| `/pause` | Pause the current phase and switch to another |
+| `/resume` | Resume a previously paused phase |
 | `/issues` | List, create, and manage GitHub issues |
 
 ### State Tracking
@@ -46,6 +48,7 @@ You can type `/status` at any time to see where you are.
 - Current workflow step
 - Current subphase (N of M) — only when the phase is split into subphases
 - Implementation progress (which plan step)
+- Paused phases — a `## Paused Phases` section listing any phases paused via `/pause`
 - The next command to run
 
 Every command updates this file. When you open a new session, the agent reads it and immediately shows you where you are and what to do next.
@@ -190,7 +193,7 @@ Each workflow phase has a recommended **model tier** to balance cost and capabil
 |------|---------|
 | heavy | Architecture, code generation, complex reasoning (`/plan`, `/implement`) |
 | standard | Investigation, testing, summarisation (`/research`, `/test`, `/close-out`) |
-| light | Conversational Q&A, simple lookups (`/discuss`, `/status`, `/issues`) |
+| light | Conversational Q&A, simple lookups (`/discuss`, `/status`, `/pause`, `/resume`, `/issues`) |
 | codex | Mechanical subtasks dispatched via `codex-dispatch.sh` |
 
 The agent shows the recommended tier in the status block. You can override to a different tier if needed, or set `auto-routing: yes` in `PROJECT.md` to skip confirmation.

@@ -168,7 +168,12 @@ echo "  skills/                Workflow commands"
 echo "  templates/             Artifact templates"
 echo ""
 echo "Commands available: /new-project, /onboard, /discuss, /research,"
-echo "  /plan, /implement, /test, /close-out, /retro, /status, /issues, /help"
+echo "  /plan, /implement, /test, /close-out, /retro, /status, /issues,"
+echo "  /pause, /resume, /help"
+echo ""
+echo "Upgrading an existing project?"
+echo "  Re-run this script on your project directory to get new skill files"
+echo "  and commands. The plugin is re-registered automatically."
 echo ""
 
 # Detect existing codebase

@@ -26,12 +26,14 @@ Step:        [current workflow step]
 Model:       [tier] ([model name])
 Plan step:   [N of M] (if implementing)
 Subphase:    [N of M] (if in a subphase cycle)
+Paused:      [N phase(s) — Phase X: Name, ...] (if any paused phases exist)
 Milestone:   [name] (if defined)
 Issues:      [N open] ([M linked to phase]) (if gh available)
 Next:        type `/[command]` to continue
 ```
 
 Only show the `Subphase` line when the **Subphase** field is set in `.workflow/state.md`. Omit it entirely otherwise.
+Only show the `Paused` line when the `## Paused Phases` section exists in `.workflow/state.md` and has at least one entry. Omit it entirely otherwise.
 
 Then show a brief progress summary:
 - Phases complete: [N of total]
