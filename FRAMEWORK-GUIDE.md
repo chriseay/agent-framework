@@ -86,6 +86,7 @@ Next session, the agent reads the state and picks up exactly where you left off.
 |----------|---------|-------------|
 | `CLAUDE.md` | Core rules, always loaded | Rarely — process changes only |
 | `PROJECT.md` | Your project's constraints and lessons | Agent proposes, you approve |
+| `project/` | Optional subdocuments extracted from PROJECT.md (lessons archive, reference guides) | Agent loads on demand; you create when PROJECT.md gets large |
 | `ROADMAP.md` | Phases and status | Agent updates at close-out |
 | `planning/phase-XX/` | Per-phase artifacts | Agent creates these |
 | `.workflow/state.md` | Current position | Never — auto-updated |
