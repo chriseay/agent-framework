@@ -6,7 +6,7 @@ This file is automatically loaded at the start of every Codex CLI session. Detai
 
 **On every new session**, immediately:
 1. Read `.workflow/state.md`
-2. Read `PROJECT.md` and `ROADMAP.md` (if they exist)
+2. Read `PROJECT.md` and `ROADMAP.md` (if they exist). If `PROJECT.md` has a `## Subdocuments` section, read each listed subdocument whose "Load when" condition says "Always" or clearly matches the current phase context (e.g., the phase involves deployment, API calls, or testing). Skip subdocuments whose condition does not apply to the current phase.
 3. If mid-phase, read the relevant `planning/phase-XX/` artifacts
 4. Present this status block to the user:
 
@@ -98,6 +98,7 @@ If `PROJECT.md` sets `auto-routing: yes`, skip confirmation and proceed with the
 |----------|---------|
 | `AGENTS.md` | Core rules, always loaded |
 | `PROJECT.md` | Project-specific constraints, tech stack, lessons learned |
+| `project/` | Optional subdocuments extracted from PROJECT.md (lessons archive, reference guides) — listed in PROJECT.md's Subdocuments section |
 | `ROADMAP.md` | Phases, deliverables, status, deferred phases/verifications |
 | `planning/phase-XX/` | Per-phase artifacts (CONTEXT, RESEARCH, PLAN, POSTMORTEM) |
 | `.workflow/state.md` | Current position in the workflow (auto-updated by commands) |
