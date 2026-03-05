@@ -30,6 +30,8 @@ Workflow (run in order for each phase):
 
 Other:
   /status           Show current position and next command
+  /pause            Pause the current phase and switch to another
+  /resume           Resume a previously paused phase
   /issues           List, create, and manage GitHub issues
   /retro            Milestone retrospective
   /help             This message

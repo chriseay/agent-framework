@@ -8,19 +8,22 @@ This file is automatically loaded at the start of every session. Detailed step-b
 1. Read `.workflow/state.md`
 2. Read `PROJECT.md` and `ROADMAP.md` (if they exist). If `PROJECT.md` has a `## Subdocuments` section, read each listed subdocument whose "Load when" condition says "Always" or clearly matches the current phase context (e.g., the phase involves deployment, API calls, or testing). Skip subdocuments whose condition does not apply to the current phase.
 3. If mid-phase, read the relevant `planning/phase-XX/` artifacts
-4. Present this status block to the user:
+4. Check for a `## Paused Phases` section in `.workflow/state.md`. If any paused entries exist, include a `Paused:` line in the status block.
+5. Present this status block to the user:
 
 ```
 Phase:    [number] — [name]
 Step:     [current workflow step]
 Subphase: N of M (only if in a subphase cycle)
+Paused:   [N phase(s) — Phase X: Name, ...] (only if paused phases exist)
 Model:    [tier] ([model name])
 Next:     type `/[next command]` to continue
 ```
 
 Omit the `Subphase` line entirely when not in a subphase cycle.
+Omit the `Paused` line entirely when no phases are paused.
 
-5. Use `AskUserQuestion` to confirm the status is accurate before proceeding.
+6. Use `AskUserQuestion` to confirm the status is accurate before proceeding.
 
 If `.workflow/state.md` says the next command is `/new-project`, check whether the project already has code:
 - **No existing code**: Tell the user: "No project set up yet. Type `/new-project` to get started."

@@ -15,15 +15,22 @@ Model tier: light
    - Tell the user how to switch: "To switch, type `/model haiku` in Claude Code (conversation history is preserved)."
    - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
    Wait for the user's response before proceeding to the next On Start step.
-3. Read `ROADMAP.md` to get the phase deliverables.
-4. Read any existing `planning/phase-XX/CONTEXT.md` (if resuming).
-5. Run the **Roadmap Review** (see section below).
-6. Present the phase goal to the user.
-7. **Check for unsynced phases** (if `gh` CLI is available):
+3. **Check for paused phases** (before anything else after model check):
+   - Check `.workflow/state.md` for a `## Paused Phases` section.
+   - If paused phases exist, list them: "You have [N] paused phase(s): Phase X — [Name] (paused [date], step: [step]), ..."
+   - Use `AskUserQuestion`: "Resume a paused phase, or continue with Phase [M] (current)?"
+     - Options: each paused phase as "Resume Phase N — [Name]", plus "Continue with Phase [M] (current)"
+   - If the user selects a paused phase: read `skills/resume.md` and execute the resume flow for that phase. After resume completes, the session is now working on the resumed phase — present its phase goal and continue /discuss for that phase.
+   - If the user continues: proceed normally with steps 4–8 below.
+4. Read `ROADMAP.md` to get the phase deliverables.
+5. Read any existing `planning/phase-XX/CONTEXT.md` (if resuming).
+6. Run the **Roadmap Review** (see section below).
+7. Present the phase goal to the user.
+8. **Check for unsynced phases** (if `gh` CLI is available):
    - Scan `planning/phase-*/CONTEXT.md` files for `## Sync Status` sections containing "not created".
    - If any are found and `gh` is available, use `AskUserQuestion` to offer creating the missing issues now (run the Sync flow for each).
    - If any are found and `gh` is NOT available, show a prominent warning: "GitHub sync is behind: N phase(s) have no matching issue. Run `gh auth login` to authenticate, then the next /discuss will catch up."
-8. **Surface GitHub issues** (if `gh` CLI is available):
+9. **Surface GitHub issues** (if `gh` CLI is available):
    - Run `gh issue list --limit 10` and show a summary of open issues to the user.
    - If there are open issues, use `AskUserQuestion` to ask whether any should be linked to this phase.
    - If the user selects issues to link, record them in the `## Linked Issues` section of CONTEXT.md (format: `- #<number> — <title>`).
