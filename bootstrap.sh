@@ -141,6 +141,9 @@ cp "$FRAMEWORK_DIR/templates/"*.md "$TARGET_DIR/templates/"
 cp "$FRAMEWORK_DIR/templates/planning/"*.md "$TARGET_DIR/templates/planning/"
 cp "$FRAMEWORK_DIR/templates/gitignore.template" "$TARGET_DIR/templates/gitignore.template"
 
+mkdir -p "$TARGET_DIR/templates/project"
+cp "$FRAMEWORK_DIR/templates/project/"*.md "$TARGET_DIR/templates/project/"
+
 # Set up .gitignore
 MARKER="# Agent Framework"
 if [ -f "$TARGET_DIR/.gitignore" ]; then
