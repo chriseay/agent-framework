@@ -71,17 +71,28 @@ Model tier: standard
 
    Then use `AskUserQuestion` to confirm each addition before writing.
 
-   **Write-target rule**: Always write new lessons to PROJECT.md's Section 13 (Recent Lessons). Do not write directly to any `project/lessons-archive.md` subdocument — that file is an archive of older lessons and is managed separately. If PROJECT.md still uses the old heading "Lessons Learned", write there as before; the write-target rule applies once the project adopts the new "Recent Lessons" structure.
+   **Lesson format**: Each lesson must be a single sentence in actionable form — "when doing X, do Y because Z." Tag it with the current phase number in brackets: `[PhN]` (e.g., `[Ph22]`). This tag lets the agent look up full context in `planning/phase-NN/POSTMORTEM.md` on demand without loading the postmortem into every session.
+
+   Example: `- **Descriptive title** [Ph22]: When compressing lessons, strip to a single actionable sentence and tag with [PhN] so postmortems are findable on demand.`
+
+   **Header note**: After writing the first lesson of a phase, confirm that PROJECT.md's Recent Lessons section has this header note (add it if absent):
+   `> Full detail for any lesson: planning/phase-NN/POSTMORTEM.md`
+
+   **Write-target rule**: Always write new lessons to PROJECT.md's Section 13 (Recent Lessons). Do not write directly to any `project/lessons-archive.md` subdocument — that file is an archive of older lessons and is managed separately. If PROJECT.md still uses the old heading "Lessons Learned", write there as before; the write-target rule and [PhN] format apply regardless of the heading name.
 
 4a. **PROJECT.md size check**: After writing lessons, count the lines in PROJECT.md (use `wc -l` or Read and count). If any of the following thresholds are met, surface a suggestion to the user via `AskUserQuestion`:
    - Total lines exceed ~200
    - Section 13 (Recent Lessons or Lessons Learned) exceeds ~10 entries
 
-   Suggested message: "PROJECT.md is getting long ([N] lines / [M] lessons). Consider archiving older lessons to `project/lessons-archive.md` or extracting reference sections to subdocuments. See Section 14 (Subdocuments) of PROJECT.md for the pattern, or see FRAMEWORK-GUIDE.md for guidance."
+   **Compression first**: Before suggesting archiving, check whether existing lessons are already in single-sentence [PhN] format. If any lessons are multi-line, recommend compressing them first — strip each to its single actionable insight and add a [PhN] tag. Compression keeps all lessons in session-start context (no discoverability problem) and typically reduces a 150-line section to ~40 lines.
 
-   Options: "Yes, let's archive now" / "Not yet — I'll do it later".
+   Suggested message (compression): "PROJECT.md is getting long ([N] lines / [M] lessons). I can compress the lessons to single sentences with [PhN] tags — this usually cuts the section by 60–70% while keeping everything in context. Alternatively, I can archive older entries to `project/lessons-archive.md`."
 
-   If the user chooses to archive now: move lessons older than the last 3 from Section 13 into `project/lessons-archive.md` (create from `templates/project/lessons-archive.md` if it doesn't exist), keeping the last 3 inline. Add or update the Subdocuments registry in Section 14 with a row for the archive file. Then commit the archiving as a separate commit from the phase close-out.
+   Options: "Compress lessons inline" / "Archive older lessons" / "Not yet — I'll do it later".
+
+   If the user chooses **compression**: strip each multi-line lesson to a single actionable sentence and add its [PhN] tag. Ensure the header note is present. Commit as a separate commit.
+
+   If the user chooses **archive**: move lessons older than the last 3 from Section 13 into `project/lessons-archive.md` (create from `templates/project/lessons-archive.md` if it doesn't exist), keeping the last 3 inline. Add or update the Subdocuments registry in Section 14 with a row for the archive file. Then commit the archiving as a separate commit from the phase close-out.
 
    If the user declines or thresholds are not met, continue without action.
 5. **Update** `ROADMAP.md` status for the completed phase.
