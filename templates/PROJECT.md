@@ -97,9 +97,15 @@ For details, see Anthropic's [extended thinking documentation](https://docs.anth
 
 ## 13) Recent Lessons (Project-Specific)
 
-[Add entries at phase close-out when new constraints or patterns are discovered. Each entry should be actionable — not just "X was hard" but "when doing X, do Y because Z."]
+> Full detail for any lesson: `planning/phase-NN/POSTMORTEM.md`
 
-**Keep this section lean** — hold only the last 1–2 phases of lessons here (the "active window"). When this section exceeds ~10 entries, archive older lessons to `project/lessons-archive.md` (see Section 14) and add it to the Subdocuments registry. This keeps session-start context focused on recent, relevant lessons.
+[Add entries at phase close-out when new constraints or patterns are discovered. Each entry must be a single actionable sentence tagged with its phase number.]
+
+**Format**: `- **Descriptive title** [PhN]: When doing X, do Y because Z.`
+
+**Example**: `- **Always anchor gitignore top-level dirs** [Ph10]: Prefix project-root entries with `/` (e.g., `/project/`) — unanchored patterns match at any depth and can gitignore unintended nested directories.`
+
+**Keep this section lean** — the [PhN] tag means you can strip each lesson to one sentence and still find full context in the postmortem on demand. When this section exceeds ~10 entries, compress multi-line entries first; if it's still too large, archive older entries to `project/lessons-archive.md` (see Section 14).
 
 ## 14) Subdocuments
 
