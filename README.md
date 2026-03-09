@@ -183,9 +183,11 @@ In progress — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 18: Model Change Instructions (complete)
 - Phase 19: Model Updates Process (complete)
 - Phase 20: PROJECT.md Structure Refactoring (complete)
-- Phase 21: Phase Pause/Resume (not started)
-- Phase 22: Sub-Agent & Agent Team Research (not started)
-- Phase 23: Sub-Agent Implementation (not started)
+- Phase 21: Phase Pause/Resume (complete)
+- Phase 22: PROJECT.md Lessons Compression (complete)
+- Phase 23: Phase Numbering System (not started)
+- Phase 24: Sub-Agent & Agent Team Research (not started)
+- Phase 25: Sub-Agent Implementation (not started)
 
 Previously completed — **v1.4 — Polish & Onboarding**:
 - Phase 8: Documentation Refresh Process (complete)

@@ -128,7 +128,7 @@ The agent reads this table at session start and loads subdocuments whose "Load w
 
 These are prompts to consider splitting — not automatic rules:
 
-- Section 13 (Recent Lessons) exceeds ~10 entries → archive older lessons to `project/lessons-archive.md`, keep the last 3 inline
+- Section 13 (Recent Lessons) exceeds ~10 entries → **compress first** (see below), then archive if still too large
 - Any non-core section exceeds ~50 lines → extract to `project/<section-name>.md`
 - Total PROJECT.md exceeds ~200 lines → review all sections and extract reference/archive content
 
@@ -136,7 +136,16 @@ The agent surfaces these suggestions during `/close-out`. You decide when to act
 
 ### Lessons write-target rule
 
-New lessons are always written to PROJECT.md's Section 13 (Recent Lessons). The archive is managed separately — when Recent Lessons gets long, move older entries to `project/lessons-archive.md` and add it to the registry.
+New lessons are always written to PROJECT.md's Section 13 (Recent Lessons) in **[PhN] format**: a single actionable sentence tagged with the phase number (e.g., `[Ph22]`). The tag lets the agent look up full context in `planning/phase-NN/POSTMORTEM.md` on demand.
+
+**Format**: `- **Descriptive title** [PhN]: When doing X, do Y because Z.`
+
+The section should open with a header note:
+```
+> Full detail for any lesson: planning/phase-NN/POSTMORTEM.md
+```
+
+**When the section gets long**: compress multi-line entries to single sentences with [PhN] tags first — this typically reduces a 150-line section to ~40 lines without losing any information. If the section is still too large after compression, move older entries to `project/lessons-archive.md` and add it to the registry.
 
 If the archive itself grows large, add a second file (`project/lessons-archive-v2.md`) as a new registry row. The same pattern applies recursively.
 
