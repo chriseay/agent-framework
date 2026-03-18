@@ -99,14 +99,18 @@ Model tier: standard
 6. **Documentation refresh**:
    a. **Discover documentation files**: Scan for common patterns — `README.md`, `CONTRIBUTING.md`, `ARCHITECTURE.md`, `FRAMEWORK-GUIDE.md`, `PROJECT.md`, `CHANGELOG.md` in the repo root, and `docs/*.md` or `doc/*.md` directories. Exclude framework internals: `CLAUDE.md`, `AGENTS.md`, `skills/*.md`, `templates/*.md`, `planning/**/*.md`.
    b. If no documentation files are found, use `AskUserQuestion` to ask the user if there are docs the agent is missing.
-   c. **Compare against phase changes**: For each discovered doc, read it and check whether the phase's deliverables introduce new features, change existing behaviour, or make any content stale.
-   d. For each proposed doc update, output:
+   c. **Build a change summary**: Before dispatching, compile a concise list of what the phase delivered — what was added (new features, new files), what was changed (behaviour updates), and what was removed (deleted files or deprecated behaviour). This is the context the doc-reviewer needs.
+   d. **Dispatch to `doc-reviewer`**: Use the Agent tool with `subagent_type: doc-reviewer`. The prompt must include:
+      - The change summary from step c
+      - The list of discovered doc file paths
+   e. **Wait for the agent's proposals to return** before proceeding.
+   f. For each proposed change the agent returns, output:
       **About to**: update `[doc filename]`
-      **Why**: [one-sentence reason — e.g., "Phase 18 added model-check blocks; README Status needs updating"]
+      **Why**: [one-sentence reason from the agent's proposal]
       **Affects**: `[doc filename]`
 
-      Then **propose updates** via `AskUserQuestion` — additions for new features, updates for changed behaviour (including the README Status section), and removals for stale content. Confirm each proposed change before applying.
-   e. If no updates are needed for any doc, confirm this to the user: "Documentation reviewed — no updates needed."
+      Then use `AskUserQuestion` to confirm before applying each change.
+   g. If the agent reports no changes needed for any doc, confirm this to the user: "Documentation reviewed — no updates needed."
 7. **Close GitHub issues** (if `gh` CLI is available):
    a. **Close the phase issue**:
       - Read `planning/phase-XX/CONTEXT.md` for the `## Sync Status` section.

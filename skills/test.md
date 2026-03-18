@@ -19,12 +19,17 @@ Model tier: standard
 
 ## Process
 
-1. **Automated verification**: Output:
-   **About to**: run automated builds/tests
-   **Why**: verifying the phase's implementation meets the plan's verification criteria
-   **Affects**: local build environment; may produce output, artefacts, or failures
+1. **Automated verification**:
+   a. **Dispatch to `test-runner`**: Use the Agent tool with `subagent_type: test-runner`. The agent will read PROJECT.md independently to find test commands, run them, and return a structured pass/fail summary.
+   b. **Wait for the agent's summary to return** before proceeding.
+   c. **If the agent returns `NO_TEST_COMMANDS`**: Fall back to the inline approach — output:
+      **About to**: run automated builds/tests
+      **Why**: verifying the phase's implementation meets the plan's verification criteria
+      **Affects**: local build environment; may produce output, artefacts, or failures
 
-   Then propose running builds/tests. Requires user approval each time.
+      Then use `AskUserQuestion` to ask the user what test commands to run and confirm before running them.
+   d. **If the agent returns a structured summary**: Present it to the user via `AskUserQuestion` showing pass/fail status, counts, and any failing test names.
+   e. If tests fail: follow the Recovery rules from `/implement` — one fix attempt, then escalate.
 2. **Manual verification**: Output:
    **About to**: request manual verification steps from the user
    **Why**: some checks require local environment access (simulators, devices, browser) the agent cannot perform
