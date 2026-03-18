@@ -186,7 +186,7 @@ In progress — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 21: Phase Pause/Resume (complete)
 - Phase 22: PROJECT.md Lessons Compression (complete)
 - Phase 23: Phase Numbering System (complete)
-- Phase 24: Sub-Agent & Agent Team Research (not started)
+- Phase 24: Sub-Agent & Agent Team Research (complete)
 - Phase 25: Sub-Agent Implementation (not started)
 
 Previously completed — **v1.4 — Polish & Onboarding**:
