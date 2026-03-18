@@ -51,6 +51,14 @@ if ! command -v codex &> /dev/null; then
     exit 1
 fi
 
+# Check for known-broken versions
+CODEX_VERSION=$(codex --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+if [ "$CODEX_VERSION" = "0.115.0" ]; then
+    echo "Warning: Codex v0.115.0 has an approval-mode regression (issue #15074)." >&2
+    echo "Full-auto dispatch may stall waiting for approvals." >&2
+    echo "Consider upgrading: codex update" >&2
+fi
+
 # Build the prompt with safety preamble
 PROMPT="Do NOT modify .workflow/state.md or any files in planning/. Only modify the files directly relevant to the task.
 
@@ -71,7 +79,7 @@ CMD+=("$PROMPT")
 
 # Run codex
 echo "Dispatching to Codex CLI..." >&2
-if "${CMD[@]}"; then
+if timeout 120 "${CMD[@]}"; then
     if [ -f "$RESULT_FILE" ]; then
         cat "$RESULT_FILE"
         rm -f "$RESULT_FILE"
@@ -81,6 +89,9 @@ if "${CMD[@]}"; then
 else
     EXIT_CODE=$?
     echo "Error: Codex exited with code $EXIT_CODE" >&2
+    if [ $EXIT_CODE -eq 124 ]; then
+        echo "Error: Codex dispatch timed out after 120 seconds." >&2
+    fi
     rm -f "$RESULT_FILE"
     exit $EXIT_CODE
 fi

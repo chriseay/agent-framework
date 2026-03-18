@@ -76,10 +76,10 @@ The framework uses **model tiers** to route phases to appropriately-sized models
 
 | Tier | Claude Model | Codex Model | Purpose |
 |------|-------------|-------------|---------|
-| heavy | Opus | gpt-5.3-codex | Architecture, code generation, complex reasoning |
-| standard | Sonnet | gpt-5-codex-mini | Investigation, testing, summarisation |
-| light | Haiku | gpt-5-codex-mini | Conversational Q&A, simple lookups |
-| codex | — | gpt-5.3-codex | Mechanical subtasks (via `codex-dispatch.sh`) |
+| heavy | Opus | o4-mini | Architecture, code generation, complex reasoning |
+| standard | Sonnet | o4-mini | Investigation, testing, summarisation |
+| light | Haiku | o4-mini | Conversational Q&A, simple lookups |
+| codex | — | o4-mini | Mechanical subtasks (via `codex-dispatch.sh`) |
 
 Each skill file declares its tier in its On Start section. The agent resolves the tier as follows:
 

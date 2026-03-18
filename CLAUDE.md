@@ -73,8 +73,9 @@ The framework uses **model tiers** to route phases to appropriately-sized models
 |------|-------------|----------|---------|
 | heavy | Opus 4.6 | `claude-opus-4-6` | Architecture, code generation, complex reasoning |
 | standard | Sonnet 4.6 | `claude-sonnet-4-6` | Investigation, testing, summarisation |
-| light | Haiku 4.5 | `claude-haiku-4-5` | Conversational Q&A, simple lookups |
+| light | Haiku 4.5 | `claude-haiku-4-5-20251001` | Conversational Q&A, simple lookups |
 | codex | Codex CLI | — | Mechanical subtasks (via `codex-dispatch.sh`) |
+| claude | Claude Code CLI | `claude-haiku-4-5-20251001` | Mechanical subtasks dispatched headlessly via `claude-dispatch.sh` (Claude alternative to codex-dispatch.sh; no Codex required) |
 
 **`opusplan` alias**: Claude Code offers an `opusplan` model alias that uses Opus during planning and Sonnet during execution. This matches the framework's heavy/standard tier intent and may be a convenient default for users on Max or Team plans.
 
@@ -92,7 +93,7 @@ Each skill file declares its tier in its On Start section. The agent resolves th
 
 If `PROJECT.md` sets `auto-routing: yes`, skip confirmation and proceed with the recommended tier automatically.
 
-When dispatching to a lighter model via the Task tool, always set the `model` parameter explicitly (e.g. `model: haiku`). Do not rely on model inheritance.
+When dispatching to a lighter model via the Task tool, always set the `model` parameter explicitly (e.g. `model: claude-haiku-4-5-20251001`). Do not rely on model inheritance.
 
 ### Updating Model Tiers
 

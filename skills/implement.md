@@ -73,10 +73,10 @@ After the checkpoint:
 
 1. **If the tier matches the current model** (or the step has no annotation), execute the step normally.
 2. **If the tier is lighter** (`standard`, `light`), dispatch to a subagent:
-   - Use the `Task` tool with `subagent_type: general-purpose` and the `model` parameter set explicitly (`haiku` for light, `sonnet` for standard). Never rely on model inheritance.
+   - Use the `Agent` tool with `subagent_type: general-purpose` and the `model` parameter set explicitly (`claude-haiku-4-5-20251001` for light, `claude-sonnet-4-6` for standard). Never rely on model inheritance.
    - The prompt must be **self-contained**: include the full step description, relevant file paths, the content of any files the subagent needs to read or edit, and success criteria. The subagent does not have session context.
 3. **If the tier is `codex`**, use Codex dispatch (see below). Do not execute codex-tier steps locally.
-4. **Wait for the subagent's Task result to return fully before reviewing or continuing.** Do not advance to the next step until the dispatched Task has completed. Then review the output — if it looks wrong or incomplete, escalate via `AskUserQuestion`.
+4. **Wait for the subagent's Agent result to return fully before reviewing or continuing.** Do not advance to the next step until the dispatched Agent has completed. Then review the output — if it looks wrong or incomplete, escalate via `AskUserQuestion`.
 5. **Graceful degradation**: If dispatch fails (model parameter error, subagent crash), log the failure and execute the step locally. Do not crash the workflow.
 
 ### Intuition-based tier override
