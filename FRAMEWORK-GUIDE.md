@@ -220,6 +220,21 @@ Phases sync automatically to GitHub Issues and Milestones:
 
 Use `/issues` to list, create, and manage issues outside the normal workflow.
 
+### Phase Renumbering
+
+When you insert a new phase _between_ two existing phases during `/discuss`, the agent automatically renumbers all subsequent not-started and in-progress phases to keep the sequence contiguous.
+
+What gets updated:
+- ROADMAP.md phase headings
+- `planning/phase-XX/` directory names (in-progress phases only)
+- GitHub issue titles (updated in-place — issue numbers and state are unchanged)
+
+What does **not** change:
+- Completed phases — their artifacts and closed issues keep their original numbers to preserve history
+- Issue numbers, milestones, or any other GitHub metadata
+
+How it works: the agent builds a rename map (e.g., Phase 13→14, Phase 14→15), shows it to you as an approval gate, and executes all updates atomically after you confirm. The procedure runs once per insertion — if you add two phases in one session, you'll see two sequential approval gates.
+
 ## File Structure
 
 ```
