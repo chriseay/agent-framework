@@ -73,7 +73,7 @@ Before diving into phase requirements, review the roadmap with the user to captu
    c. **New items**: Ask the user what they'd like to add. For each new item:
       - Ask clarifying questions (one at a time) to define scope, deliverable, and verification criteria.
       - Recommend placement using `AskUserQuestion`:
-        - **New phase** — recommend where it fits best (between existing phases, at the end of the current milestone, or in a future milestone). If inserting between existing phases, renumber subsequent phases.
+        - **New phase** — recommend where it fits best (between existing phases, at the end of the current milestone, or in a future milestone). If inserting between existing phases, run the **Phase Renumbering** procedure (see below).
         - **Deferred phase** — if the item needs its own phase cycle but isn't urgent or well-defined enough yet.
         - **Deferred verification** — if the item is a check or test to perform later.
         - **Fold into existing phase** — if it naturally extends an existing phase's scope.
@@ -132,6 +132,62 @@ When a new phase is added to the roadmap (via step 3b promote or step 3c new pha
    - GitHub Issue: #NUMBER
    - GitHub Milestone: MILESTONE_TITLE
    ```
+
+## Phase Renumbering
+
+When a new phase is inserted _between_ two existing phases during Roadmap Review (step 3c), renumber all subsequent not-started and in-progress phases by +1. Completed phases keep their original numbers to preserve history.
+
+**Trigger**: User confirms placement of a new phase between existing Phase N and Phase N+1. (Appending after the last phase never triggers renumbering — there is nothing to shift.)
+
+### Renumbering procedure
+
+1. **Identify affected phases**: Scan ROADMAP.md for all phases with numbers greater than N. For each, note:
+   - Current number, name, and status (read the `Status:` line — Complete vs. anything else)
+   - Whether `planning/phase-XX/` directory exists (presence = in-progress; absence = not-started)
+   - GitHub issue number from that phase's `planning/phase-XX/CONTEXT.md` Sync Status section (if present)
+   - **Skip** any phase whose Status is Complete.
+
+2. **Build the rename map**: For each affected phase (ascending order), record old-number → old-number + 1. Note whether each is in-progress (has planning/ dir) or not-started (no dir).
+
+3. **Approval gate**: Output:
+   **About to**: renumber [N] phase(s) to accommodate the insertion
+   **Why**: a new phase was inserted at position [N+1]; all subsequent not-started and in-progress phases must shift up by 1
+   **Affects**: ROADMAP.md phase headings, `.workflow/state.md` (if the current phase is in the affected range), `planning/phase-XX/` directories (in-progress phases only), GitHub issue titles (open issues only)
+
+   Show the rename map, for example:
+   ```
+   Phase 13 → Phase 14  (not-started)
+   Phase 14 → Phase 15  (in-progress — will rename planning/phase-14/ → planning/phase-15/)
+   Phase 15 → Phase 16  (not-started)
+   ```
+
+   Use `AskUserQuestion` with options: "Confirm renumbering" / "Cancel — do not renumber".
+   - If the user cancels: note that the inserted phase was added to ROADMAP.md but no renumbering was performed. Continue Roadmap Review normally.
+
+4. **Execute in order** (after user confirms):
+
+   **a. Update ROADMAP.md headings**: Process affected phases in _descending_ number order (highest first) to prevent edit collisions. For each, change `### Phase X: Name` to `### Phase X+1: Name`. Edit only the `###` heading lines — do not alter body prose.
+
+   **b. Update `.workflow/state.md`**: Check the current `Phase:` number. If it is within the affected range, increment the `Phase:` field by 1. The `Phase Name:` field does not change.
+
+   **c. Rename `planning/` directories**: Process in-progress phases in _descending_ number order to prevent collision. For each, output:
+   **About to**: rename `planning/phase-XX/` to `planning/phase-YY/`
+   **Why**: phase number changed from XX to YY during renumbering
+   **Affects**: `planning/phase-XX/` (directory rename only — content is preserved)
+
+   Then execute: `mv "planning/phase-XX" "planning/phase-YY"` (using the full path).
+
+   **d. Update artifact headers**: For each renamed directory, update the `# Phase N: Name` header line in `CONTEXT.md`, and in `RESEARCH.md` and `PLAN.md` if they exist. Change only the phase number in the header; leave Sync Status, Linked Issues, and all other content unchanged.
+
+   **e. Update GitHub issue titles**: For each affected phase (not-started or in-progress) that has a GitHub issue number recorded in its CONTEXT.md Sync Status:
+   - Check `gh` CLI availability: `command -v gh`. If unavailable, skip all GitHub updates and warn the user.
+   - Run: `gh issue edit <issue_number> --title "Phase N+1: Name"`
+   - Wait 1 second between edits to respect GitHub's secondary rate limit.
+   - If no issue number is found in CONTEXT.md (sync was never run), skip that phase and note it in the completion summary.
+
+5. **Confirm completion**: List all changes made. Note any skipped steps (e.g., phases with no GitHub issue, gh CLI unavailable).
+
+**Constraint**: This procedure handles one insertion at a time. If the user inserts two phases during the same Roadmap Review, run the renumbering procedure once per insertion, sequentially — each with its own approval gate.
 
 ## Process
 
