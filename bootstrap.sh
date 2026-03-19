@@ -144,6 +144,16 @@ cp "$FRAMEWORK_DIR/templates/gitignore.template" "$TARGET_DIR/templates/gitignor
 mkdir -p "$TARGET_DIR/templates/project"
 cp "$FRAMEWORK_DIR/templates/project/"*.md "$TARGET_DIR/templates/project/"
 
+# Copy custom agent definitions
+mkdir -p "$TARGET_DIR/.claude/agents"
+if ls "$FRAMEWORK_DIR/.claude/agents/"*.md > /dev/null 2>&1; then
+    cp "$FRAMEWORK_DIR/.claude/agents/"*.md "$TARGET_DIR/.claude/agents/"
+fi
+
+# Copy Claude dispatch script
+cp "$FRAMEWORK_DIR/claude-dispatch.sh" "$TARGET_DIR/claude-dispatch.sh"
+chmod +x "$TARGET_DIR/claude-dispatch.sh"
+
 # Set up .gitignore
 MARKER="# Agent Framework"
 if [ -f "$TARGET_DIR/.gitignore" ]; then
@@ -166,6 +176,8 @@ echo "  .workflow/state.md     Position tracker"
 echo "  .gitignore             Git ignore rules"
 echo "  skills/                Workflow commands"
 echo "  templates/             Artifact templates"
+echo "  .claude/agents/        Custom sub-agent definitions"
+echo "  claude-dispatch.sh     Claude headless dispatch (Claude alternative to codex-dispatch.sh)"
 echo ""
 echo "Commands available: /new-project, /onboard, /discuss, /research,"
 echo "  /plan, /implement, /test, /close-out, /retro, /status, /issues,"
