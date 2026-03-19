@@ -22,7 +22,7 @@ Each command loads the right rules, does the work, and tells you what to type ne
 curl -sL https://raw.githubusercontent.com/chriseay/agent-framework/main/bootstrap.sh | bash -s -- /path/to/your/project
 ```
 
-This clones the framework to `~/.agent-framework`, registers the Claude Code plugin, and copies framework files (`CLAUDE.md`, `.workflow/`, `skills/`, `templates/`, `.gitignore`) into your project. It detects whether you have existing code and tells you which command to run:
+This clones the framework to `~/.agent-framework`, registers the Claude Code plugin, and copies framework files (`CLAUDE.md`, `.workflow/`, `skills/`, `templates/`, `.gitignore`, `.claude/agents/`, `claude-dispatch.sh`) into your project. It detects whether you have existing code and tells you which command to run:
 
 - **New project (no code yet)**: Open in Claude Code, type `/new-project`
 - **Existing codebase**: Open in Claude Code, type `/onboard`
@@ -128,6 +128,17 @@ bash codex-dispatch.sh "rename all instances of oldName to newName in lib/" --mo
 
 Codex runs in a sandbox and returns the result. Best for mechanical tasks — renaming, formatting, adding documentation. Don't dispatch tasks that need complex reasoning or multi-file coordination.
 
+> **Note**: `codex-dispatch.sh` warns if Codex v0.115.0 is detected (approval-mode regression) and applies a 120-second timeout to prevent silent stalls.
+
+### Dispatch without Codex
+
+If you don't have Codex CLI, use `claude-dispatch.sh` instead — it dispatches tasks headlessly to the Claude Code CLI:
+
+```bash
+bash claude-dispatch.sh "add docstrings to src/utils.js"
+bash claude-dispatch.sh "rename all instances of oldName to newName in lib/" --model claude-sonnet-4-6
+```
+
 Setup copies both `CLAUDE.md` and `AGENTS.md` into your project. Codex CLI is optional — the framework works fine with Claude Code alone.
 
 ## Model Routing
@@ -140,6 +151,7 @@ Each workflow phase has a recommended **model tier** to balance cost and capabil
 | standard | Sonnet 4.6 | `claude-sonnet-4-6` | `/research`, `/test`, `/close-out`, `/retro` — investigation and summarisation |
 | light | Haiku 4.5 | `claude-haiku-4-5-20251001` | `/discuss`, `/status`, `/pause`, `/resume`, `/issues`, `/help`, `/new-project` — conversational and lookups |
 | codex | Codex CLI | — | Mechanical subtasks dispatched during `/implement` |
+| claude | Claude Code CLI | `claude-haiku-4-5-20251001` | Mechanical subtasks dispatched headlessly via `claude-dispatch.sh` (no Codex required) |
 
 The agent shows the recommended tier in the status block at the start of each phase. By default it asks for confirmation — you can override to a different tier if needed.
 
@@ -187,7 +199,7 @@ In progress — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 22: PROJECT.md Lessons Compression (complete)
 - Phase 23: Phase Numbering System (complete)
 - Phase 24: Sub-Agent & Agent Team Research (complete)
-- Phase 25: Sub-Agent Implementation (not started)
+- Phase 25: Sub-Agent Implementation (complete)
 
 Previously completed — **v1.4 — Polish & Onboarding**:
 - Phase 8: Documentation Refresh Process (complete)

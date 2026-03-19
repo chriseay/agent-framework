@@ -73,7 +73,8 @@ After the checkpoint:
 
 1. **If the tier matches the current model** (or the step has no annotation), execute the step normally.
 2. **If the tier is lighter** (`standard`, `light`), dispatch to a subagent:
-   - Use the `Agent` tool with `subagent_type: general-purpose` and the `model` parameter set explicitly (`claude-haiku-4-5-20251001` for light, `claude-sonnet-4-6` for standard). Never rely on model inheritance.
+   - For `standard` tier steps: Use the `Agent` tool with `subagent_type: implement-step` (model `claude-sonnet-4-6` is defined in the agent file).
+   - For `light` tier steps: Use the `Agent` tool with `subagent_type: general-purpose` and `model: claude-haiku-4-5-20251001` explicitly. Never rely on model inheritance.
    - The prompt must be **self-contained**: include the full step description, relevant file paths, the content of any files the subagent needs to read or edit, and success criteria. The subagent does not have session context.
 3. **If the tier is `codex`**, use Codex dispatch (see below). Do not execute codex-tier steps locally.
 4. **Wait for the subagent's Agent result to return fully before reviewing or continuing.** Do not advance to the next step until the dispatched Agent has completed. Then review the output — if it looks wrong or incomplete, escalate via `AskUserQuestion`.

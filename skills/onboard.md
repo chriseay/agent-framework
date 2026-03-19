@@ -24,7 +24,7 @@ Use `/onboard` instead of `/new-project` when:
 
 ## Phase 1: Scan
 
-Run parallel `Explore` subagents (via `Agent` tool) to map the codebase. Each agent focuses on one area:
+Run parallel `Agent` tool calls with `subagent_type: explore-codebase` to map the codebase. Each agent focuses on one area:
 
 **Agent 1 — Tech & Dependencies**:
 - Languages, frameworks, libraries

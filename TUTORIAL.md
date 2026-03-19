@@ -344,12 +344,12 @@ The agent executed the plan, step by step, committing as it went. You approved e
 
 Type `/test`.
 
-The agent runs any automated tests (if you'd written them) and then asks you to manually verify the core functionality:
+The agent dispatches a `test-runner` sub-agent, which reads your `PROJECT.md` to find test commands, runs them, and returns a structured pass/fail summary. If no test commands are defined, it reports `NO_TEST_COMMANDS` and the main agent falls back to asking you what to run. It then asks you to manually verify the core functionality:
 
 **Agent:**
-> Running tests...
+> Dispatching test-runner agent...
 >
-> No test suite found (expected for Phase 0). Proceeding to manual verification.
+> No test commands found in PROJECT.md (expected for Phase 0). Proceeding to manual verification.
 >
 > **Manual verification checklist:**
 >

@@ -37,7 +37,7 @@ Use `AskUserQuestion` to propose a tier with a brief rationale and get confirmat
 
 1. Execute research according to the tier scope:
    - Use `Grep` and `Glob` for targeted codebase searches.
-   - Use `Explore` subagents (via `Agent` tool) for broader investigation.
+   - Use the `Agent` tool with `subagent_type: explore-codebase` for broader codebase investigation.
    - **Wait for all subagent results to return before proceeding.** Do not write RESEARCH.md or advance to the next step until every dispatched Agent has completed and its output has been incorporated.
    - For Standard and Deep tiers, include online research.
 2. **Escalation rule**: If Standard research surfaces significant unknowns, platform-dependent risks, or unfamiliar technology, output:
