@@ -41,6 +41,8 @@ These are always active regardless of which workflow step you're in.
 
 Do not skip steps. Each command loads its own rules from `skills/`.
 
+**Abbreviated cycles**: Some phases skip steps (e.g. research-only phases skip `/plan`, `/implement`, `/test`). When steps are skipped, manually update `state.md` after each completed step to avoid session-break drift. Write the `Next Command` as the actual next step in the abbreviated sequence, not the next step in the full cycle.
+
 ### Always Apply
 
 - Use `AskUserQuestion` to ask **one question at a time** — never batch questions.
