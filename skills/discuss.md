@@ -21,20 +21,40 @@ Model tier: light
    - Use `AskUserQuestion`: "Resume a paused phase, or continue with Phase [M] (current)?"
      - Options: each paused phase as "Resume Phase N — [Name]", plus "Continue with Phase [M] (current)"
    - If the user selects a paused phase: read `skills/resume.md` and execute the resume flow for that phase. After resume completes, the session is now working on the resumed phase — present its phase goal and continue /discuss for that phase.
-   - If the user continues: proceed normally with steps 4–8 below.
-4. Read `ROADMAP.md` to get the phase deliverables.
-5. Read any existing `planning/phase-XX/CONTEXT.md` (if resuming).
-6. Run the **Roadmap Review** (see section below).
-7. Present the phase goal to the user.
-8. **Check for unsynced phases** (if `gh` CLI is available):
+   - If the user continues: proceed normally with steps 5–10 below.
+4. **Check for CI failures on the default branch** (if `gh` CLI is available):
+   - Run `command -v gh` and `gh auth status`. If either fails, show: "CI check skipped — run `gh auth login` to enable CI surfacing." Then continue to step 5.
+   - Run: `DEFAULT_BRANCH=$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')`
+   - Run:
+     ```
+     gh run list --branch "$DEFAULT_BRANCH" --limit 50 \
+       --json workflowName,conclusion,url,databaseId \
+       --jq '[.[] | select(.conclusion == "failure" or .conclusion == "timed_out")]
+              | group_by(.workflowName)
+              | map(sort_by(.databaseId) | reverse | .[0])'
+     ```
+   - If the result is an empty array (no failures, or no workflows): proceed silently to step 5.
+   - If failures are found: display a warning banner:
+     ```
+     ⚠ CI FAILURES on [DEFAULT_BRANCH]:
+     - [WorkflowName]: [url]
+     - [WorkflowName]: [url]
+     ```
+     Then use `AskUserQuestion` to require acknowledgement before continuing:
+     - "Acknowledged — continue with /discuss"
+5. Read `ROADMAP.md` to get the phase deliverables.
+6. Read any existing `planning/phase-XX/CONTEXT.md` (if resuming).
+7. Run the **Roadmap Review** (see section below).
+8. Present the phase goal to the user.
+9. **Check for unsynced phases** (if `gh` CLI is available):
    - Scan `planning/phase-*/CONTEXT.md` files for `## Sync Status` sections containing "not created".
    - If any are found and `gh` is available, use `AskUserQuestion` to offer creating the missing issues now (run the Sync flow for each).
    - If any are found and `gh` is NOT available, show a prominent warning: "GitHub sync is behind: N phase(s) have no matching issue. Run `gh auth login` to authenticate, then the next /discuss will catch up."
-9. **Surface GitHub issues** (if `gh` CLI is available):
-   - Run `gh issue list --limit 10` and show a summary of open issues to the user.
-   - If there are open issues, use `AskUserQuestion` to ask whether any should be linked to this phase.
-   - If the user selects issues to link, record them in the `## Linked Issues` section of CONTEXT.md (format: `- #<number> — <title>`).
-   - If `gh` is not available, skip this step silently.
+10. **Surface GitHub issues** (if `gh` CLI is available):
+    - Run `gh issue list --limit 10` and show a summary of open issues to the user.
+    - If there are open issues, use `AskUserQuestion` to ask whether any should be linked to this phase.
+    - If the user selects issues to link, record them in the `## Linked Issues` section of CONTEXT.md (format: `- #<number> — <title>`).
+    - If `gh` is not available, skip this step silently.
 
 ## Roadmap Review
 
