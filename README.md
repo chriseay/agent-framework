@@ -171,6 +171,8 @@ Requires the [GitHub CLI](https://cli.github.com/) (`gh`) installed and authenti
 
 Phases sync automatically to GitHub Issues and Milestones. When `/discuss` adds a new phase to the roadmap, it creates a corresponding GitHub Issue (and Milestone if needed). When `/close-out` completes a phase, it closes the issue. Use `/issues` to manage issues outside the normal workflow.
 
+When the `gh` CLI is available, `/discuss` automatically checks for CI failures on the default branch before the Roadmap Review and displays a warning banner if any are found, requiring acknowledgement before continuing. `/issues` surfaces recent CI failures (most recent run per workflow, across all branches) on load and provides a "CI Runs" operation to re-surface them on demand.
+
 ## Documentation
 
 - **[TUTORIAL.md](TUTORIAL.md)** — Step-by-step walkthrough for first-time users
@@ -251,6 +253,8 @@ In progress — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 23: Phase Numbering System (complete)
 - Phase 24: Sub-Agent & Agent Team Research (complete)
 - Phase 25: Sub-Agent Implementation (complete)
+- Phase 26: Framework Update Safety (complete)
+- Phase 27: CI Failure Surfacing (complete)
 
 Previously completed — **v1.4 — Polish & Onboarding**:
 - Phase 8: Documentation Refresh Process (complete)

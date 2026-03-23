@@ -250,6 +250,8 @@ Phases sync automatically to GitHub Issues and Milestones:
 
 Use `/issues` to list, create, and manage issues outside the normal workflow.
 
+When the `gh` CLI is available, `/discuss` automatically checks for CI failures on the default branch before the Roadmap Review and displays a warning banner if any are found, requiring acknowledgement before continuing. `/issues` surfaces recent CI failures (most recent run per workflow, across all branches) on load and provides a "CI Runs" operation to re-surface them on demand.
+
 ### Phase Renumbering
 
 When you insert a new phase _between_ two existing phases during `/discuss`, the agent automatically renumbers all subsequent not-started and in-progress phases to keep the sequence contiguous.

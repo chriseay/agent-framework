@@ -20,6 +20,18 @@ Model tier: light
    - Run `gh auth status`. If not authenticated, tell the user: "GitHub CLI is not authenticated. Run `gh auth login` to set up access." Then stop.
 4. Ensure framework labels exist. For each of `bug`, `feature`, `chore`, `deferred`, `phase`:
    - Run `gh label create <name> --force`. If it fails (permission error), warn the user: "Could not create label `<name>` — you may not have write access to this repo. Continuing without label enforcement." Do not stop.
+5. **Surface CI run failures**:
+   - Run:
+     ```
+     gh run list --limit 50 \
+       --json workflowName,conclusion,url,databaseId \
+       --jq '[.[] | select(.conclusion == "failure" or .conclusion == "timed_out")]
+              | group_by(.workflowName)
+              | map(sort_by(.databaseId) | reverse | .[0])'
+     ```
+   - If failures found: display them as a numbered list with workflow name and run URL.
+   - If no failures: show "CI: all workflows passing (or no workflows found)."
+   - If `gh` is not available or not authenticated: show "CI check skipped — run `gh auth login` to enable."
 
 ## Operations
 
@@ -108,6 +120,24 @@ Then confirm before running:
 ```
 gh issue comment <number> --body "..."
 ```
+
+### CI Runs
+
+Re-surface CI run failures on demand:
+
+```
+gh run list --limit 50 \
+  --json workflowName,conclusion,url,databaseId \
+  --jq '[.[] | select(.conclusion == "failure" or .conclusion == "timed_out")]
+         | group_by(.workflowName)
+         | map(sort_by(.databaseId) | reverse | .[0])'
+```
+
+Display each failure as:
+- **[WorkflowName]** — [url]
+
+If no failures: "No failed CI runs found."
+If no workflows: "No CI workflows found for this repository."
 
 ## On Completion
 
