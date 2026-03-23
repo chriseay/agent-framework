@@ -180,11 +180,62 @@ Phases sync automatically to GitHub Issues and Milestones. When `/discuss` adds 
 
 ## Updating
 
-Run the same install command again — it pulls the latest version and re-copies files:
+Run the same install command again — it pulls the latest version and updates framework files:
 
 ```bash
 curl -sL https://raw.githubusercontent.com/chriseay/agent-framework/main/bootstrap.sh | bash -s -- /path/to/your/project
 ```
+
+The script checks each framework file for local edits before overwriting. Files you've modified are shown with a diff and you're asked to skip or overwrite individually. Project-owned files (`.claude/rules/`, `.workflow/state.md`) are never touched on upgrade.
+
+## Customising
+
+Agent Framework has a clean separation between framework-owned and project-owned files.
+
+### Framework-owned (updated by bootstrap.sh)
+
+| File/Directory | Purpose |
+|---|---|
+| `CLAUDE.md` | Core workflow rules — auto-loaded by Claude Code |
+| `AGENTS.md` | Core workflow rules — auto-loaded by Codex CLI |
+| `skills/` | Workflow command definitions |
+| `.claude/agents/` | Framework sub-agents (doc-reviewer, test-runner, etc.) |
+| `claude-dispatch.sh` | Headless dispatch script |
+| `templates/` | Artifact scaffolding |
+
+Don't edit these directly — changes will be overwritten on the next `bootstrap.sh` run.
+
+### Project-owned (never touched by bootstrap.sh)
+
+| File/Directory | Purpose |
+|---|---|
+| `.claude/rules/project-overrides.md` | Project-specific Claude behaviour — auto-loaded every session |
+| `.claude/agents/your-agent.md` | Bespoke sub-agents (use unique names not matching framework agents) |
+| `PROJECT.md` | Project knowledge: tech stack, decisions, lessons learned |
+| `ROADMAP.md` | Phase plan and roadmap |
+| `.workflow/state.md` | Current workflow position |
+| `planning/` | Phase artifacts (context, research, plans, postmortems) |
+
+### Where to put project customisations
+
+**Project-specific Claude instructions** (style, conventions, tech context, behaviour):
+→ `.claude/rules/project-overrides.md`
+This file is created automatically by `bootstrap.sh` and auto-loaded by Claude Code at every session start. Fill in any conventions or context you want Claude to follow throughout your project.
+
+**Bespoke sub-agents** (custom agent definitions for your project):
+→ `.claude/agents/your-agent-name.md`
+Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`). Your agents are never overwritten.
+
+**Project facts** (tech stack, architecture, lessons learned):
+→ `PROJECT.md` — the knowledge document Claude reads for context.
+
+### Migrating existing CLAUDE.md edits
+
+If you have a project with edits already in `CLAUDE.md` or skill files:
+
+1. Copy your additions into `.claude/rules/project-overrides.md`
+2. Re-run `bootstrap.sh` — it will show a diff for each edited file and ask whether to overwrite
+3. Choose to overwrite once your additions are safely in `project-overrides.md`
 
 ## Status
 
