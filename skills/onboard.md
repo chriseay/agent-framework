@@ -99,6 +99,7 @@ Use `AskUserQuestion` — one question at a time — to fill in what the scan co
 - Whether phases should be grouped into milestones
 - Whether planning artifacts should be tracked in git (default: yes). If no, `planning/` will be added to `.gitignore`.
 - Whether `.workflow/state.md` should be tracked in git (default: no). Explain: "Workflow state tracks your current phase and step. Tracking it in git lets collaborators see where you are; ignoring it keeps your git history cleaner. Most solo projects leave it untracked." If no (default), `.workflow/` will be added to `.gitignore`.
+   - Whether there are project-specific conventions or context Claude should always follow that the scan may have missed (style, naming, behaviour preferences, tech quirks). If yes: note them down — a reminder to add them to `.claude/rules/project-overrides.md` will appear at the end of onboarding.
 
 **Only ask about things the scan didn't already answer.** If the README already describes the goals, don't re-ask.
 
@@ -177,3 +178,7 @@ Tell the user:
 **Onboarding complete.** PROJECT.md, ROADMAP.md, and .workflow/state.md created.
 
 Next → type `/discuss` to start **Phase 0: [name]**.
+
+Also remind the user about `.claude/rules/project-overrides.md`:
+
+"Your project includes `.claude/rules/project-overrides.md` — this is where project-specific Claude instructions live. If the scan found coding style information, the *tool config* (linter name, formatter) belongs in PROJECT.md Section 4, but *how you want Claude to write code* (style preferences, naming habits, things to avoid) belongs in `.claude/rules/project-overrides.md`. It auto-loads at every session start and is never overwritten by `bootstrap.sh`."
