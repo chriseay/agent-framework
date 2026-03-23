@@ -18,6 +18,46 @@ FRAMEWORK_DIR="$HOME/.agent-framework"
 INTERACTIVE=false
 [ -t 0 ] && INTERACTIVE=true
 
+# --- Per-file safe copy (skips or prompts on local edits) ---
+SKIPPED_FILES=""
+
+safe_copy() {
+    local src="$1"
+    local dst="$2"
+    local label="$3"
+
+    if [ ! -f "$dst" ]; then
+        cp "$src" "$dst"
+        return
+    fi
+
+    if diff -q "$src" "$dst" > /dev/null 2>&1; then
+        cp "$src" "$dst"
+        return
+    fi
+
+    # Local edits detected
+    if [ "$INTERACTIVE" = false ]; then
+        echo "  SKIPPED (local edits): $label"
+        SKIPPED_FILES="${SKIPPED_FILES}  - ${label}\n"
+        return
+    fi
+
+    echo ""
+    echo "Local edits detected: $label"
+    diff "$src" "$dst" | head -50
+    echo ""
+    read -p "Overwrite $label? (y/N) " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        cp "$src" "$dst"
+        echo "  Overwritten: $label"
+    else
+        echo "  Skipped: $label"
+        SKIPPED_FILES="${SKIPPED_FILES}  - ${label}\n"
+    fi
+}
+
 # --- Argument parsing ---
 if [ -z "$1" ]; then
     echo "Error: Target project directory is required."
@@ -109,32 +149,21 @@ fi
 echo "Target: $TARGET_DIR"
 echo ""
 
-# Overwrite handling
-if [ -f "$TARGET_DIR/CLAUDE.md" ] && [ -d "$TARGET_DIR/skills" ]; then
-    if [ "$INTERACTIVE" = true ]; then
-        echo "Warning: Framework files already exist in this directory."
-        read -p "Overwrite? (y/N) " -n 1 -r
-        echo ""
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            echo "Aborted."
-            exit 0
-        fi
-    else
-        echo "Updating existing framework files..."
-    fi
-fi
-
 # Copy framework files
 echo "Copying framework files..."
 
-cp "$FRAMEWORK_DIR/CLAUDE.md" "$TARGET_DIR/CLAUDE.md"
-cp "$FRAMEWORK_DIR/AGENTS.md" "$TARGET_DIR/AGENTS.md"
+safe_copy "$FRAMEWORK_DIR/CLAUDE.md" "$TARGET_DIR/CLAUDE.md" "CLAUDE.md"
+safe_copy "$FRAMEWORK_DIR/AGENTS.md" "$TARGET_DIR/AGENTS.md" "AGENTS.md"
 
 mkdir -p "$TARGET_DIR/.workflow"
-cp "$FRAMEWORK_DIR/templates/state.md" "$TARGET_DIR/.workflow/state.md"
+if [ ! -f "$TARGET_DIR/.workflow/state.md" ]; then
+    cp "$FRAMEWORK_DIR/templates/state.md" "$TARGET_DIR/.workflow/state.md"
+fi
 
 mkdir -p "$TARGET_DIR/skills"
-cp "$FRAMEWORK_DIR/skills/"*.md "$TARGET_DIR/skills/"
+for f in "$FRAMEWORK_DIR/skills/"*.md; do
+    safe_copy "$f" "$TARGET_DIR/skills/$(basename "$f")" "skills/$(basename "$f")"
+done
 
 mkdir -p "$TARGET_DIR/templates/planning"
 cp "$FRAMEWORK_DIR/templates/"*.md "$TARGET_DIR/templates/"
@@ -147,12 +176,20 @@ cp "$FRAMEWORK_DIR/templates/project/"*.md "$TARGET_DIR/templates/project/"
 # Copy custom agent definitions
 mkdir -p "$TARGET_DIR/.claude/agents"
 if ls "$FRAMEWORK_DIR/.claude/agents/"*.md > /dev/null 2>&1; then
-    cp "$FRAMEWORK_DIR/.claude/agents/"*.md "$TARGET_DIR/.claude/agents/"
+    for f in "$FRAMEWORK_DIR/.claude/agents/"*.md; do
+        safe_copy "$f" "$TARGET_DIR/.claude/agents/$(basename "$f")" ".claude/agents/$(basename "$f")"
+    done
 fi
 
 # Copy Claude dispatch script
-cp "$FRAMEWORK_DIR/claude-dispatch.sh" "$TARGET_DIR/claude-dispatch.sh"
+safe_copy "$FRAMEWORK_DIR/claude-dispatch.sh" "$TARGET_DIR/claude-dispatch.sh" "claude-dispatch.sh"
 chmod +x "$TARGET_DIR/claude-dispatch.sh"
+
+# Set up .claude/rules/ with project overrides starter (never overwrite existing)
+mkdir -p "$TARGET_DIR/.claude/rules"
+if [ ! -f "$TARGET_DIR/.claude/rules/project-overrides.md" ]; then
+    cp "$FRAMEWORK_DIR/templates/project-overrides.md" "$TARGET_DIR/.claude/rules/project-overrides.md"
+fi
 
 # Set up .gitignore
 MARKER="# Agent Framework"
@@ -170,14 +207,15 @@ echo ""
 echo "Done! Framework installed."
 echo ""
 echo "Files added:"
-echo "  CLAUDE.md              Core rules (auto-loaded by Claude Code)"
-echo "  AGENTS.md              Core rules (auto-loaded by Codex CLI)"
-echo "  .workflow/state.md     Position tracker"
-echo "  .gitignore             Git ignore rules"
-echo "  skills/                Workflow commands"
-echo "  templates/             Artifact templates"
-echo "  .claude/agents/        Custom sub-agent definitions"
-echo "  claude-dispatch.sh     Claude headless dispatch (Claude alternative to codex-dispatch.sh)"
+echo "  CLAUDE.md                            Core rules (auto-loaded by Claude Code)"
+echo "  AGENTS.md                            Core rules (auto-loaded by Codex CLI)"
+echo "  .workflow/state.md                   Position tracker"
+echo "  .gitignore                           Git ignore rules"
+echo "  skills/                              Workflow commands"
+echo "  templates/                           Artifact templates"
+echo "  .claude/agents/                      Framework sub-agent definitions"
+echo "  .claude/rules/project-overrides.md   Project-specific Claude behaviour (auto-loaded)"
+echo "  claude-dispatch.sh                   Claude headless dispatch"
 echo ""
 echo "Commands available: /new-project, /onboard, /discuss, /research,"
 echo "  /plan, /implement, /test, /close-out, /retro, /status, /issues,"
@@ -187,6 +225,15 @@ echo "Upgrading an existing project?"
 echo "  Re-run this script on your project directory to get new skill files"
 echo "  and commands. The plugin is re-registered automatically."
 echo ""
+
+if [ -n "$SKIPPED_FILES" ]; then
+    echo "Files skipped (local edits preserved):"
+    printf "$SKIPPED_FILES"
+    echo ""
+    echo "  To update skipped files: migrate your edits to"
+    echo "  .claude/rules/project-overrides.md, then re-run bootstrap.sh."
+    echo ""
+fi
 
 # Detect existing codebase
 HAS_CODE=false
