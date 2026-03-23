@@ -29,6 +29,7 @@ Run when `.workflow/state.md` shows "Next Command: /new-project" or when the use
    - Whether phases should be grouped into **milestones** (e.g., "MVP", "Beta"). Milestones are optional but enable structured retrospectives.
    - Whether planning artifacts should be tracked in git (default: yes). If no, `planning/` will be added to `.gitignore`.
    - Whether `.workflow/state.md` should be tracked in git (default: no). Explain: "Workflow state tracks your current phase and step. Tracking it in git lets collaborators see where you are; ignoring it keeps your git history cleaner. Most solo projects leave it untracked." If no (default), `.workflow/` will be added to `.gitignore`.
+   - Whether there are project-specific conventions or context Claude should always know (style, language, tech quirks, behaviour preferences). If yes: note them down — a reminder to add them to `.claude/rules/project-overrides.md` will appear at the end of setup.
 
 2. **Research**: Review any existing files or context. List unknowns and risks.
 
@@ -100,6 +101,10 @@ Update `.workflow/state.md`:
 - Research Tier: —
 - Next Command: /discuss
 ```
+
+Remind the user about `.claude/rules/project-overrides.md`:
+
+"Your project includes `.claude/rules/project-overrides.md` — this is where project-specific Claude instructions live (style preferences, tech context, behaviour overrides). It's auto-loaded at every session start and is never overwritten by `bootstrap.sh`. Open it and fill in any conventions you noted during setup."
 
 Tell the user:
 

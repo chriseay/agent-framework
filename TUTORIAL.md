@@ -82,11 +82,18 @@ The agent will ask you a series of questions — **one at a time** (this is deli
 **You:**
 > Core CLI — add, list, and delete bookmarks
 
-The agent processes your answers and creates three files:
+**Agent:**
+> Any conventions or preferences you'd like Claude to follow throughout the project? (style, language, commit format, testing approach — or leave blank and fill in `.claude/rules/project-overrides.md` later)
+
+**You:**
+> Use New Zealand English. Prefer functional-style code where reasonable.
+
+The agent processes your answers and creates three files plus a conventions starter:
 
 - **PROJECT.md** — Your tech stack, constraints, and lessons learned (grows over time)
 - **ROADMAP.md** — All your phases, what's done, what's next, what's deferred
 - **.workflow/state.md** — Where you are in the workflow (auto-updated by each command)
+- **.claude/rules/project-overrides.md** — Project-specific Claude instructions (auto-loaded every session)
 
 Then you'll see this status block:
 
@@ -101,7 +108,7 @@ The **Model** line shows which AI model is handling this step. The framework pic
 
 And a transition message:
 
-> **Project setup complete.** PROJECT.md, ROADMAP.md, and .workflow/state.md created. Next → type `/discuss` to start **Phase 0: Core CLI**.
+> **Project setup complete.** PROJECT.md, ROADMAP.md, and .workflow/state.md created. Your `.claude/rules/project-overrides.md` is ready for any project-specific conventions. Next → type `/discuss` to start **Phase 0: Core CLI**.
 
 **What just happened?**
 

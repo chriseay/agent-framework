@@ -2,7 +2,11 @@
 
 ## Document Ownership
 
-Project-specific rules and lessons live here. Update `PROJECT.md` at phase close-out if new constraints or lessons are discovered.
+PROJECT.md holds project *knowledge*: tech stack, architecture, decisions, lessons learned, and structural configuration.
+
+For Claude *behaviour* instructions (style preferences, naming conventions, how you want Claude to write code), use `.claude/rules/project-overrides.md` instead. That file is auto-loaded by Claude Code at every session start and is never overwritten by `bootstrap.sh`.
+
+Update PROJECT.md at phase close-out when new constraints, architectural decisions, or lessons are discovered.
 
 ## 1) Project Overview
 
@@ -19,9 +23,12 @@ Project-specific rules and lessons live here. Update `PROJECT.md` at phase close
 
 ## 4) Coding Style & Naming Conventions
 
-- [Indentation, formatting, naming patterns]
-- [File naming conventions]
-- [If a formatter/linter is used, name it here]
+Record the *tools and structural conventions* used in this project:
+- Formatter/linter name and version (e.g., "Prettier 3.x", "Black", "SwiftFormat")
+- File naming conventions (e.g., "kebab-case for components, PascalCase for classes")
+- Language version (e.g., "Python 3.12", "Swift 5.9")
+
+For *how you want Claude to write code* (style preferences, variable naming, comment style), use `.claude/rules/project-overrides.md` — those are behaviour instructions, not project facts.
 
 ## 5) Domain & Product Constraints
 

@@ -88,13 +88,43 @@ Next session, the agent reads the state and picks up exactly where you left off.
 | Document | Purpose | You Edit It? |
 |----------|---------|-------------|
 | `CLAUDE.md` | Core rules, always loaded | Rarely — process changes only |
-| `PROJECT.md` | Your project's constraints and lessons | Agent proposes, you approve |
+| `.claude/rules/project-overrides.md` | Project-specific Claude behaviour (style, conventions, behaviour instructions) — auto-loaded every session | Yes — fill in your project's conventions |
+| `PROJECT.md` | Project knowledge: tech stack, decisions, lessons learned | Agent proposes, you approve |
 | `project/` | Optional subdocuments extracted from PROJECT.md (lessons archive, reference guides) | Agent loads on demand; you create when PROJECT.md gets large |
 | `ROADMAP.md` | Phases and status | Agent updates at close-out |
 | `planning/phase-XX/` | Per-phase artifacts | Agent creates these |
 | `.workflow/state.md` | Current position | Never — auto-updated |
 | `skills/` | Rules for each command | Never — framework files |
 | `templates/` | Starting points for artifacts | Never — used by skills |
+
+## Customising
+
+Agent Framework separates framework-owned files (updated by `bootstrap.sh` on upgrade) from project-owned files (never touched on upgrade).
+
+**Framework-owned** — updated by `bootstrap.sh`: `CLAUDE.md`, `AGENTS.md`, `skills/`, `templates/`, `.claude/agents/` (framework agents only)
+
+**Project-owned** — never overwritten: `.claude/rules/project-overrides.md`, `.workflow/state.md`, `PROJECT.md`, `ROADMAP.md`, `planning/`
+
+### Where to put project customisations
+
+**Project-specific Claude instructions** (style, conventions, tech context, behaviour):
+→ `.claude/rules/project-overrides.md`
+Created automatically by `bootstrap.sh` on fresh install. Auto-loaded by Claude Code at every session start — no approval dialog. Add any conventions or context you want Claude to follow throughout your project.
+
+**Project knowledge** (tech stack, decisions, constraints, lessons):
+→ `PROJECT.md`
+Loaded at session start. Keep it focused on facts and context about what you're building — not Claude behaviour instructions (those go in `project-overrides.md`).
+
+**Bespoke sub-agents**:
+→ `.claude/agents/your-agent-name.md`
+Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`). Your agents are safe on upgrade.
+
+### Migrating existing edits
+
+If you have edits already in `CLAUDE.md` or skill files:
+1. Copy your additions into `.claude/rules/project-overrides.md`
+2. Re-run `bootstrap.sh` — it shows a diff for each edited file and asks skip or overwrite individually
+3. Choose to overwrite once your additions are safely in `project-overrides.md`
 
 ## When PROJECT.md Gets Large
 
@@ -243,6 +273,10 @@ your-project/
 ├── PROJECT.md                   (created by /new-project)
 ├── ROADMAP.md                   (created by /new-project)
 ├── README.md                    (created by /new-project)
+├── .claude/
+│   ├── agents/                  (framework sub-agents + your bespoke agents)
+│   └── rules/
+│       └── project-overrides.md (project-specific Claude behaviour — edit this)
 ├── .workflow/
 │   └── state.md                 (auto-updated position tracker)
 ├── skills/
@@ -263,6 +297,7 @@ your-project/
 │   ├── ROADMAP.md
 │   ├── README.md
 │   ├── gitignore.template
+│   ├── project-overrides.md     (boilerplate for .claude/rules/project-overrides.md)
 │   └── planning/
 │       ├── CONTEXT.md
 │       ├── RESEARCH-light.md
