@@ -79,7 +79,7 @@ safe_copy() {
     if [ "$INTERACTIVE" = false ]; then
         echo "  SKIPPED (local edits): $label"
         SKIPPED_FILES="${SKIPPED_FILES}  - ${label}\n"
-        cp "$src" "$base"   # save base so next run can merge
+        cp "$dst" "$base"   # save base so next run can merge
         return
     fi
 
@@ -96,7 +96,7 @@ safe_copy() {
     else
         echo "  Skipped: $label"
         SKIPPED_FILES="${SKIPPED_FILES}  - ${label}\n"
-        cp "$src" "$base"   # save base so next run can merge
+        cp "$dst" "$base"   # save base so next run can merge
     fi
 }
 
