@@ -188,11 +188,16 @@ Run the same install command again — it pulls the latest version and updates f
 curl -sL https://raw.githubusercontent.com/chriseay/agent-framework/main/bootstrap.sh | bash -s -- /path/to/your/project
 ```
 
-The script performs a **3-way merge** for each framework file. Your local edits are preserved and new framework content is applied on top. A `.framework-base/` directory (gitignored) is created in your project to store the previously installed versions, which serve as the merge base on subsequent upgrades.
+The script performs a **3-way merge** for each framework file. Your local edits are preserved and new framework content is applied on top. A `.framework-base/` directory (gitignored) is created in your project to store the last version _actually installed_ for each file, which serves as the merge base on subsequent upgrades.
+
+If `.framework-base/` has fallen out of sync (e.g., a file was skipped in a previous upgrade), the script detects this before merging:
+- **No user edits in the project file**: the base is reset automatically and the merge proceeds normally.
+- **User edits present with no valid common ancestor**: the framework version is applied directly and a `Files updated from stale base` summary is printed at the end — re-apply your local additions to those files and move them into `.claude/rules/project-overrides.md`.
 
 After running, the script reports:
 - `Merged: <file>` — local and framework changes were combined cleanly
 - `CONFLICT: <file>` — overlapping changes could not be auto-resolved; standard conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`) are written into the file for you to resolve manually
+- `Updated (stale base — N edit(s) need re-checking): <file>` — framework applied; review your local edits
 
 Project-owned files (`.claude/rules/`, `.workflow/state.md`) are never touched on upgrade.
 
@@ -263,6 +268,7 @@ In progress — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 27: CI Failure Surfacing (complete)
 - Phase 28: 3-Way Merge Upgrades (complete)
 - Phase 29: Plugin Cache Refresh on Upgrade (complete)
+- Phase 30: Bootstrap Safe-Copy Fixes (complete)
 
 Previously completed — **v1.4 — Polish & Onboarding**:
 - Phase 8: Documentation Refresh Process (complete)

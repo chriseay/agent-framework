@@ -103,7 +103,7 @@ Agent Framework separates framework-owned files (updated by `bootstrap.sh` on up
 
 **Framework-owned** — updated by `bootstrap.sh`: `CLAUDE.md`, `AGENTS.md`, `skills/`, `templates/`, `.claude/agents/` (framework agents only)
 
-`.framework-base/` is also managed automatically by `bootstrap.sh` — it stores merge base snapshots used during upgrades and is gitignored. You do not need to edit or commit it.
+`.framework-base/` is also managed automatically by `bootstrap.sh` — it stores the last version _actually installed_ for each framework file, used as the merge base on subsequent upgrades. It is gitignored; you do not need to edit or commit it.
 
 **Project-owned** — never overwritten: `.claude/rules/project-overrides.md`, `.workflow/state.md`, `PROJECT.md`, `ROADMAP.md`, `planning/`
 
@@ -125,7 +125,7 @@ Use a unique filename that doesn't match framework agents (`doc-reviewer`, `expl
 
 If you have edits already in `CLAUDE.md` or skill files:
 1. Copy your additions into `.claude/rules/project-overrides.md`
-2. Re-run `bootstrap.sh` — it 3-way merges each framework file, preserving your edits and applying new framework content automatically. If changes overlap, conflict markers are written into the file for you to resolve.
+2. Re-run `bootstrap.sh` — it 3-way merges each framework file, preserving your edits and applying new framework content automatically. If changes overlap, conflict markers are written into the file for you to resolve. If `.framework-base/` is out of sync with no valid common ancestor, the framework version is applied directly and a `Files updated from stale base` summary is printed — re-apply your edits to those files.
 3. Your additions in `project-overrides.md` are safe; the merged framework files will include both your edits and the latest framework content
 
 ## When PROJECT.md Gets Large
@@ -310,7 +310,7 @@ your-project/
 │       ├── PLAN.md
 │       ├── POSTMORTEM.md
 │       └── RETROSPECTIVE.md
-├── .framework-base/             (merge base snapshots — gitignored, managed by bootstrap.sh)
+├── .framework-base/             (last installed versions — gitignored, managed by bootstrap.sh)
 └── planning/
     ├── phase-00/
     ├── phase-01/
