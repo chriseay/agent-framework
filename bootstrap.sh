@@ -193,6 +193,7 @@ echo ""
 
 # --- Phase 3: Plugin registration ---
 echo "Registering Claude Code plugin..."
+claude plugin remove agent-framework 2>&1 || true
 claude plugin marketplace add chriseay/agent-framework 2>&1 || true
 claude plugin install agent-framework@agent-framework 2>&1
 
