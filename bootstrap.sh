@@ -55,6 +55,16 @@ safe_copy() {
     fi
 
     if [ -n "$merge_base" ]; then
+        # Stale base correction: if base is strictly ahead of local with no user
+        # additions, the base was set to a newer version than what was actually
+        # installed (Phase 28 bug). Reset base to local so the merge is correct.
+        local user_adds base_surplus
+        user_adds=$(diff "$merge_base" "$dst" 2>/dev/null | grep "^>" | wc -l | tr -d ' ')
+        base_surplus=$(diff "$merge_base" "$dst" 2>/dev/null | grep "^<" | wc -l | tr -d ' ')
+        if [ "$user_adds" -eq 0 ] && [ "$base_surplus" -gt 0 ]; then
+            cp "$dst" "$merge_base"
+        fi
+
         # Attempt 3-way merge
         local tmp
         tmp=$(mktemp)
