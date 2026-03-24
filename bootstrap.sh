@@ -59,9 +59,9 @@ safe_copy() {
         local tmp
         tmp=$(mktemp)
         cp "$dst" "$tmp"
+        local merge_exit=0
         git merge-file -L "local" -L "base" -L "framework" \
-            "$tmp" "$merge_base" "$src"
-        local merge_exit=$?
+            "$tmp" "$merge_base" "$src" || merge_exit=$?
         cp "$tmp" "$dst"
         rm -f "$tmp"
         cp "$src" "$base"   # update base to new framework version
