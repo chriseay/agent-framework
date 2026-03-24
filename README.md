@@ -262,6 +262,7 @@ In progress — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 26: Framework Update Safety (complete)
 - Phase 27: CI Failure Surfacing (complete)
 - Phase 28: 3-Way Merge Upgrades (complete)
+- Phase 29: Plugin Cache Refresh on Upgrade (complete)
 
 Previously completed — **v1.4 — Polish & Onboarding**:
 - Phase 8: Documentation Refresh Process (complete)
