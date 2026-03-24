@@ -21,6 +21,7 @@ INTERACTIVE=false
 # --- Per-file safe copy (skips or prompts on local edits) ---
 SKIPPED_FILES=""
 CONFLICTS=""
+STALE_FILES=""
 
 safe_copy() {
     local src="$1"
@@ -61,8 +62,19 @@ safe_copy() {
         local user_adds base_surplus
         user_adds=$(diff "$merge_base" "$dst" 2>/dev/null | grep "^>" | wc -l | tr -d ' ')
         base_surplus=$(diff "$merge_base" "$dst" 2>/dev/null | grep "^<" | wc -l | tr -d ' ')
-        if [ "$user_adds" -eq 0 ] && [ "$base_surplus" -gt 0 ]; then
-            cp "$dst" "$merge_base"
+        if [ "$base_surplus" -gt 0 ]; then
+            if [ "$user_adds" -eq 0 ]; then
+                # No user edits — reset base to local so merge applies framework cleanly
+                cp "$dst" "$merge_base"
+            else
+                # Base ahead AND local has user edits — no valid common ancestor.
+                # Apply framework directly; user must re-check their edits.
+                cp "$src" "$dst"
+                cp "$src" "$base"
+                echo "  Updated (stale base — $user_adds local edit(s) need re-checking): $label"
+                STALE_FILES="${STALE_FILES}  - ${label} ($user_adds edit(s))\\n"
+                return
+            fi
         fi
 
         # Attempt 3-way merge
@@ -327,6 +339,18 @@ if [ -n "$CONFLICTS" ]; then
     echo "  1. Open the file and resolve each conflict region."
     echo "  2. Remove all conflict markers."
     echo "  3. Re-run bootstrap.sh to verify the merge is clean."
+    echo ""
+fi
+
+if [ -n "$STALE_FILES" ]; then
+    echo "Files updated from stale base (framework applied; re-check local edits):"
+    printf "$STALE_FILES"
+    echo ""
+    echo "  These files had a stale .framework-base/ entry AND local edits."
+    echo "  The latest framework version has been applied. Review each file"
+    echo "  and re-apply any project-specific additions you need."
+    echo "  Going forward, migrate custom behaviour to .claude/rules/project-overrides.md"
+    echo "  to avoid this situation on future upgrades."
     echo ""
 fi
 
