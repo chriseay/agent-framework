@@ -188,7 +188,13 @@ Run the same install command again — it pulls the latest version and updates f
 curl -sL https://raw.githubusercontent.com/chriseay/agent-framework/main/bootstrap.sh | bash -s -- /path/to/your/project
 ```
 
-The script checks each framework file for local edits before overwriting. Files you've modified are shown with a diff and you're asked to skip or overwrite individually. Project-owned files (`.claude/rules/`, `.workflow/state.md`) are never touched on upgrade.
+The script performs a **3-way merge** for each framework file. Your local edits are preserved and new framework content is applied on top. A `.framework-base/` directory (gitignored) is created in your project to store the previously installed versions, which serve as the merge base on subsequent upgrades.
+
+After running, the script reports:
+- `Merged: <file>` — local and framework changes were combined cleanly
+- `CONFLICT: <file>` — overlapping changes could not be auto-resolved; standard conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`) are written into the file for you to resolve manually
+
+Project-owned files (`.claude/rules/`, `.workflow/state.md`) are never touched on upgrade.
 
 ## Customising
 
@@ -236,8 +242,8 @@ Use a unique filename that doesn't match framework agents (`doc-reviewer`, `expl
 If you have a project with edits already in `CLAUDE.md` or skill files:
 
 1. Copy your additions into `.claude/rules/project-overrides.md`
-2. Re-run `bootstrap.sh` — it will show a diff for each edited file and ask whether to overwrite
-3. Choose to overwrite once your additions are safely in `project-overrides.md`
+2. Re-run `bootstrap.sh` — it will 3-way merge each framework file, preserving your local changes and applying new framework content automatically
+3. Your additions in `project-overrides.md` are safe; the merged framework files will include both your edits and the latest framework content
 
 ## Status
 
@@ -255,6 +261,7 @@ In progress — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 25: Sub-Agent Implementation (complete)
 - Phase 26: Framework Update Safety (complete)
 - Phase 27: CI Failure Surfacing (complete)
+- Phase 28: 3-Way Merge Upgrades (complete)
 
 Previously completed — **v1.4 — Polish & Onboarding**:
 - Phase 8: Documentation Refresh Process (complete)
