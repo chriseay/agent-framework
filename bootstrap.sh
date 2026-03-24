@@ -20,26 +20,66 @@ INTERACTIVE=false
 
 # --- Per-file safe copy (skips or prompts on local edits) ---
 SKIPPED_FILES=""
+CONFLICTS=""
 
 safe_copy() {
     local src="$1"
     local dst="$2"
     local label="$3"
 
+    # Derive relative path and base snapshot location
+    local relative="${src#$FRAMEWORK_DIR/}"
+    local base="$TARGET_DIR/.framework-base/$relative"
+    mkdir -p "$(dirname "$base")"
+
+    # Case 1: Destination doesn't exist yet (fresh install)
     if [ ! -f "$dst" ]; then
         cp "$src" "$dst"
+        cp "$src" "$base"
         return
     fi
 
+    # Case 2: No local edits vs new framework version
     if diff -q "$src" "$dst" > /dev/null 2>&1; then
         cp "$src" "$dst"
+        cp "$src" "$base"
         return
     fi
 
-    # Local edits detected
+    # Case 3: Local edits exist — determine merge base
+    local merge_base=""
+    if [ -f "$base" ]; then
+        merge_base="$base"                          # subsequent upgrade
+    elif [ -f "$PRE_PULL_TMP/$relative" ]; then
+        merge_base="$PRE_PULL_TMP/$relative"        # first upgrade (pre-pull snapshot)
+    fi
+
+    if [ -n "$merge_base" ]; then
+        # Attempt 3-way merge
+        local tmp
+        tmp=$(mktemp)
+        cp "$dst" "$tmp"
+        local merge_exit=0
+        git merge-file -L "local" -L "base" -L "framework" \
+            "$tmp" "$merge_base" "$src" || merge_exit=$?
+        cp "$tmp" "$dst"
+        rm -f "$tmp"
+        cp "$src" "$base"   # update base to new framework version
+
+        if [ "$merge_exit" -eq 0 ]; then
+            echo "  Merged: $label"
+        else
+            echo "  CONFLICT: $label (contains conflict markers — resolve manually)"
+            CONFLICTS="${CONFLICTS}  - ${label}\n"
+        fi
+        return
+    fi
+
+    # Case 4: No merge base available — fall back to safe_copy behaviour
     if [ "$INTERACTIVE" = false ]; then
         echo "  SKIPPED (local edits): $label"
         SKIPPED_FILES="${SKIPPED_FILES}  - ${label}\n"
+        cp "$src" "$base"   # save base so next run can merge
         return
     fi
 
@@ -51,10 +91,12 @@ safe_copy() {
     echo ""
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         cp "$src" "$dst"
+        cp "$src" "$base"
         echo "  Overwritten: $label"
     else
         echo "  Skipped: $label"
         SKIPPED_FILES="${SKIPPED_FILES}  - ${label}\n"
+        cp "$src" "$base"   # save base so next run can merge
     fi
 }
 
@@ -96,9 +138,32 @@ if [ -n "$MISSING" ]; then
 fi
 
 # --- Phase 2: Clone or update ~/.agent-framework ---
+
+# Snapshot framework files before pull (used as merge base on first upgrade)
+PRE_PULL_TMP=$(mktemp -d)
+_snapshot_framework_files() {
+    local src_dir="$1" dst_dir="$2"
+    [ -f "$src_dir/CLAUDE.md" ]          && cp "$src_dir/CLAUDE.md" "$dst_dir/CLAUDE.md"
+    [ -f "$src_dir/AGENTS.md" ]          && cp "$src_dir/AGENTS.md" "$dst_dir/AGENTS.md"
+    [ -f "$src_dir/claude-dispatch.sh" ] && cp "$src_dir/claude-dispatch.sh" "$dst_dir/claude-dispatch.sh"
+    if [ -d "$src_dir/skills" ]; then
+        mkdir -p "$dst_dir/skills"
+        for f in "$src_dir/skills/"*.md; do
+            [ -f "$f" ] && cp "$f" "$dst_dir/skills/$(basename "$f")"
+        done
+    fi
+    if [ -d "$src_dir/.claude/agents" ]; then
+        mkdir -p "$dst_dir/.claude/agents"
+        for f in "$src_dir/.claude/agents/"*.md; do
+            [ -f "$f" ] && cp "$f" "$dst_dir/.claude/agents/$(basename "$f")"
+        done
+    fi
+}
+
 if [ -d "$FRAMEWORK_DIR" ]; then
     if [ -d "$FRAMEWORK_DIR/.git" ]; then
         echo "Updating framework in $FRAMEWORK_DIR..."
+        _snapshot_framework_files "$FRAMEWORK_DIR" "$PRE_PULL_TMP"
         if ! git -C "$FRAMEWORK_DIR" pull --ff-only 2>&1; then
             echo ""
             echo "Error: Could not update $FRAMEWORK_DIR (pull --ff-only failed)."
@@ -202,6 +267,14 @@ else
     cp "$FRAMEWORK_DIR/templates/gitignore.template" "$TARGET_DIR/.gitignore"
 fi
 
+# Ensure .framework-base/ is gitignored (added separately for existing installs)
+if [ -f "$TARGET_DIR/.gitignore" ]; then
+    if ! grep -q "\.framework-base" "$TARGET_DIR/.gitignore"; then
+        printf "\n# Agent Framework merge base (local bootstrap artifact)\n.framework-base/\n" \
+            >> "$TARGET_DIR/.gitignore"
+    fi
+fi
+
 # --- Phase 5: Output ---
 echo ""
 echo "Done! Framework installed."
@@ -232,6 +305,17 @@ if [ -n "$SKIPPED_FILES" ]; then
     echo ""
     echo "  To update skipped files: migrate your edits to"
     echo "  .claude/rules/project-overrides.md, then re-run bootstrap.sh."
+    echo ""
+fi
+
+if [ -n "$CONFLICTS" ]; then
+    echo "Files with merge conflicts (resolve manually):"
+    printf "$CONFLICTS"
+    echo ""
+    echo "  Each file contains conflict markers: <<<<<<<, =======, >>>>>>>"
+    echo "  1. Open the file and resolve each conflict region."
+    echo "  2. Remove all conflict markers."
+    echo "  3. Re-run bootstrap.sh to verify the merge is clean."
     echo ""
 fi
 
@@ -287,3 +371,6 @@ else
     echo "Tip: Install Codex CLI to use it as an alternative agent backend."
     echo "See: https://openai.com/codex"
 fi
+
+# Clean up pre-pull temp snapshot
+rm -rf "$PRE_PULL_TMP"

@@ -2,6 +2,7 @@
 PROJECT.md
 ROADMAP.md
 .workflow/
+.framework-base/
 
 # OS
 .DS_Store
