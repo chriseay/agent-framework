@@ -63,6 +63,12 @@ Subphases share a single `/discuss` and `/research` cycle. Each subphase then ru
 
 `.workflow/state.md` gains a `Subphase: N of M` line that shows your position within the cycle. Type `/status` to see it at any time.
 
+### Mid-Phase Scope Discovery
+
+Sometimes real new scope surfaces mid-implementation — not a vague idea, but something concrete enough to act on now (e.g. "this repo has no automated tests" discovered while running `/test`, or a follow-up request that only makes sense once the current work is nearly done). The default rule still applies — don't add it to the current step — but instead of always deferring to `ROADMAP.md` for a future phase, you have a second option when the scope is well-defined and the user wants it addressed now: run a compressed `/discuss`-through-`/plan` mini-cycle for just that scope, then insert the result as a new subphase (renumbering any subphases after the insertion point).
+
+This only applies with explicit user direction — the agent shouldn't unilaterally decide new scope belongs in the current phase instead of `ROADMAP.md`. When the user does want it handled now, the mini-cycle still needs real scoping: clarifying questions, a placement decision, and an actual plan with tiered steps — it's a smaller `/discuss → /plan`, not a shortcut around one.
+
 ### Research-Only Phases
 
 Not every phase requires implementation. When a phase's goal is to investigate, audit, or produce a recommendation document rather than ship code, it can run an abbreviated cycle: `/discuss` → `/research` → `/close-out`, skipping `/plan`, `/implement`, and `/test`.
