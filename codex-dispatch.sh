@@ -51,6 +51,19 @@ if ! command -v codex &> /dev/null; then
     exit 1
 fi
 
+# Resolve a timeout command — macOS has no `timeout` by default (it's a
+# GNU coreutils tool). Fall back to `gtimeout` (Homebrew coreutils), or run
+# without a timeout wrapper and warn if neither is available.
+TIMEOUT_CMD=""
+if command -v timeout &> /dev/null; then
+    TIMEOUT_CMD="timeout"
+elif command -v gtimeout &> /dev/null; then
+    TIMEOUT_CMD="gtimeout"
+else
+    echo "Warning: no 'timeout' or 'gtimeout' command found — running without a timeout." >&2
+    echo "Install GNU coreutils (e.g. 'brew install coreutils') to enable the 120s timeout." >&2
+fi
+
 # Check for known-broken versions
 CODEX_VERSION=$(codex --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
 if [ "$CODEX_VERSION" = "0.115.0" ]; then
@@ -79,7 +92,15 @@ CMD+=("$PROMPT")
 
 # Run codex
 echo "Dispatching to Codex CLI..." >&2
-if timeout 120 "${CMD[@]}"; then
+if [ -n "$TIMEOUT_CMD" ]; then
+    RUN_RESULT=0
+    "$TIMEOUT_CMD" 120 "${CMD[@]}" || RUN_RESULT=$?
+else
+    RUN_RESULT=0
+    "${CMD[@]}" || RUN_RESULT=$?
+fi
+
+if [ "$RUN_RESULT" -eq 0 ]; then
     if [ -f "$RESULT_FILE" ]; then
         cat "$RESULT_FILE"
         rm -f "$RESULT_FILE"
@@ -87,9 +108,9 @@ if timeout 120 "${CMD[@]}"; then
         echo "(No output file generated)" >&2
     fi
 else
-    EXIT_CODE=$?
+    EXIT_CODE=$RUN_RESULT
     echo "Error: Codex exited with code $EXIT_CODE" >&2
-    if [ $EXIT_CODE -eq 124 ]; then
+    if [ "$EXIT_CODE" -eq 124 ] && [ -n "$TIMEOUT_CMD" ]; then
         echo "Error: Codex dispatch timed out after 120 seconds." >&2
     fi
     rm -f "$RESULT_FILE"
