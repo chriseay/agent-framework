@@ -43,9 +43,20 @@ Do not skip steps. Each command loads its own rules from `skills/`.
 
 **Abbreviated cycles**: Some phases skip steps (e.g. research-only phases skip `/plan`, `/implement`, `/test`). When steps are skipped, manually update `state.md` after each completed step to avoid session-break drift. Write the `Next Command` as the actual next step in the abbreviated sequence, not the next step in the full cycle.
 
+**Hotfix path**: An optional, tightly-scoped bypass of the full cycle for changes that meet **every** one of these objective criteria — not a judgment call:
+- Fixes a single, already-fully-specified defect (known root cause, file, and fix — e.g. a deferred verification or a bug reported with exact reproduction steps), or applies content that was already fully decided elsewhere and only needs mechanical application.
+- Touches no more than 2 files.
+- Introduces no new files, no new entities, no new user-facing behaviour, and requires no design decisions.
+- Is fully reversible with a single revert commit.
+
+If a change meets all four, skip straight to `/implement`. Before doing so, output an About to/Why/Affects block that states explicitly how the change satisfies each of the four criteria, then use `AskUserQuestion` to get explicit approval — "Yes, treat as hotfix" / "No, run the full cycle". Never self-assess and proceed silently; if any criterion is even arguable, run the full cycle instead.
+
+On approval: implement the change, then commit and push as normal (each still requires its own approval per Git Rules). Log the hotfix in `ROADMAP.md`'s `## Hotfix Log` section — date, one-sentence description, commit hash. Hotfixes are out-of-band from phase numbering; don't update `.workflow/state.md`'s phase tracking for one.
+
 ### Always Apply
 
 - Use `AskUserQuestion` to ask **one question at a time** — never batch questions.
+- Once the user responds to an `AskUserQuestion`, proceed immediately to the next step — don't wait for a separate follow-up message to confirm the answer was understood.
 - Never add scope during implementation — defer new requirements to `ROADMAP.md`.
 - Try **one fix** then escalate — never brute-force through repeated failures.
 - When in doubt, **ask the user** via `AskUserQuestion`.
@@ -57,7 +68,7 @@ Do not skip steps. Each command loads its own rules from `skills/`.
 
 These actions **always require explicit user approval**: commits, pushes, merges, branch creation/deletion, builds/tests, edits to `CLAUDE.md`, phase transitions, destructive actions. Reading files does not require approval.
 
-Before requesting approval, show a brief summary of what will happen and why.
+Before requesting approval, show a brief summary of what will happen and why. Always request approval via `AskUserQuestion` using the About to/Why/Affects format — never collect approval through inline text. If `project/bash-permission-rules.md` exists in this project, read and follow it — it documents which Bash command shapes trigger Claude Code's permission checker and how to restructure them to avoid unnecessary approval prompts.
 
 ### Git Safety
 
@@ -73,15 +84,15 @@ The framework uses **model tiers** to route phases to appropriately-sized models
 
 | Tier | Claude Model | Model ID | Purpose |
 |------|-------------|----------|---------|
-| heavy | Opus 4.6 | `claude-opus-4-6` | Architecture, code generation, complex reasoning |
-| standard | Sonnet 4.6 | `claude-sonnet-4-6` | Investigation, testing, summarisation |
+| heavy | Opus 5 | `claude-opus-5` | Architecture, code generation, complex reasoning |
+| standard | Sonnet 5 | `claude-sonnet-5` | Investigation, testing, summarisation |
 | light | Haiku 4.5 | `claude-haiku-4-5-20251001` | Conversational Q&A, simple lookups |
 | codex | Codex CLI | — | Mechanical subtasks (via `codex-dispatch.sh`) |
 | claude | Claude Code CLI | `claude-haiku-4-5-20251001` | Mechanical subtasks dispatched headlessly via `claude-dispatch.sh` (Claude alternative to codex-dispatch.sh; no Codex required) |
 
 **`opusplan` alias**: Claude Code offers an `opusplan` model alias that uses Opus during planning and Sonnet during execution. This matches the framework's heavy/standard tier intent and may be a convenient default for users on Max or Team plans.
 
-**Adaptive thinking**: Sonnet 4.6 with adaptive thinking (`effort: "high"`) can match Opus performance on many complex tasks at lower cost. Consider this as an alternative to Opus for cost-sensitive projects. Only Opus supports `effort: "max"` for unconstrained reasoning depth. Haiku 4.5 does not support adaptive thinking.
+**Adaptive thinking**: Sonnet 5 with adaptive thinking (`effort: "high"`) can match Opus 5 performance on many complex tasks at lower cost. Consider this as an alternative to Opus 5 for cost-sensitive projects. Only Opus 5 supports `effort: "max"` for unconstrained reasoning depth. Haiku 4.5 does not support adaptive thinking.
 
 Each skill file declares its tier in its On Start section. The agent resolves the tier as follows:
 
@@ -96,6 +107,8 @@ Each skill file declares its tier in its On Start section. The agent resolves th
 If `PROJECT.md` sets `auto-routing: yes`, skip confirmation and proceed with the recommended tier automatically.
 
 When dispatching to a lighter model via the Task tool, always set the `model` parameter explicitly (e.g. `model: claude-haiku-4-5-20251001`). Do not rely on model inheritance.
+
+**Haiku dispatch scope**: Haiku is appropriate for mechanical steps only — file writes, package installs, directory creation, simple lookups, formatting. It is not appropriate for interpreting raw command or infrastructure output, where subtle field semantics require judgment (e.g. parsing `systemctl status`, `df`, or other tool output for meaning, not just presence) — handle those at the dispatching step's own tier instead.
 
 ### Updating Model Tiers
 
