@@ -134,7 +134,8 @@ This section is optional. Use it when PROJECT.md grows too large to be useful �
 
 | File | Contents | Load when |
 |------|----------|-----------|
-| *(empty — add rows here as you extract content)* | | |
+| `project/bash-permission-rules.md` | Which Bash command shapes trigger Claude Code's permission checker and how to restructure them (framework-maintained) | Always |
+| `project/approved-commands.md` | Three-tier command approval model — no-approval / approval-required / never-without-explicit-instruction (project-customized) | Always |
 
 **Example rows** (delete before use):
 

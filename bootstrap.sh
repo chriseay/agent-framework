@@ -29,7 +29,7 @@ safe_copy() {
     local label="$3"
 
     # Derive relative path and base snapshot location
-    local relative="${src#$FRAMEWORK_DIR/}"
+    local relative="${src#"$FRAMEWORK_DIR"/}"
     local base="$TARGET_DIR/.framework-base/$relative"
     mkdir -p "$(dirname "$base")"
 
@@ -60,8 +60,8 @@ safe_copy() {
         # additions, the base was set to a newer version than what was actually
         # installed (Phase 28 bug). Reset base to local so the merge is correct.
         local user_adds base_surplus
-        user_adds=$(diff "$merge_base" "$dst" 2>/dev/null | grep "^>" | wc -l | tr -d ' ')
-        base_surplus=$(diff "$merge_base" "$dst" 2>/dev/null | grep "^<" | wc -l | tr -d ' ')
+        user_adds=$(diff "$merge_base" "$dst" 2>/dev/null | grep -c "^>" | tr -d ' ')
+        base_surplus=$(diff "$merge_base" "$dst" 2>/dev/null | grep -c "^<" | tr -d ' ')
         if [ "$base_surplus" -gt 0 ]; then
             if [ "$user_adds" -eq 0 ]; then
                 # No user edits — reset base to local so merge applies framework cleanly
@@ -121,6 +121,11 @@ safe_copy() {
         cp "$dst" "$base"   # save base so next run can merge
     fi
 }
+
+# --- Main install/upgrade flow ---
+# Wrapped in a function so this script can be sourced (e.g. by test/fixtures/
+# tooling, to call safe_copy() directly) without running the full install.
+main() {
 
 # --- Argument parsing ---
 if [ -z "$1" ]; then
@@ -324,7 +329,7 @@ echo ""
 
 if [ -n "$SKIPPED_FILES" ]; then
     echo "Files skipped (local edits preserved):"
-    printf "$SKIPPED_FILES"
+    printf '%s' "$SKIPPED_FILES"
     echo ""
     echo "  To update skipped files: migrate your edits to"
     echo "  .claude/rules/project-overrides.md, then re-run bootstrap.sh."
@@ -333,7 +338,7 @@ fi
 
 if [ -n "$CONFLICTS" ]; then
     echo "Files with merge conflicts (resolve manually):"
-    printf "$CONFLICTS"
+    printf '%s' "$CONFLICTS"
     echo ""
     echo "  Each file contains conflict markers: <<<<<<<, =======, >>>>>>>"
     echo "  1. Open the file and resolve each conflict region."
@@ -344,7 +349,7 @@ fi
 
 if [ -n "$STALE_FILES" ]; then
     echo "Files updated from stale base (framework applied; re-check local edits):"
-    printf "$STALE_FILES"
+    printf '%s' "$STALE_FILES"
     echo ""
     echo "  These files had a stale .framework-base/ entry AND local edits."
     echo "  The latest framework version has been applied. Review each file"
@@ -409,3 +414,12 @@ fi
 
 # Clean up pre-pull temp snapshot
 rm -rf "$PRE_PULL_TMP"
+
+}
+# --- End main() ---
+
+# Only run main() when executed directly, not when sourced (e.g. by test
+# tooling that needs safe_copy() without the full install/plugin flow).
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+    main "$@"
+fi

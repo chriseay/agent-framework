@@ -457,6 +457,8 @@ You've just completed a full workflow cycle. Here's what you should know:
 
 **Going deeper:** This tutorial showed the experience of using the framework. For reference material — what each command does under the hood, how to customise behaviour, advanced features — check out [FRAMEWORK-GUIDE.md](FRAMEWORK-GUIDE.md).
 
+**Hotfix path:** For genuinely trivial fixes — single known defect, two files or fewer, no new behaviour, fully reversible — the framework offers a way to skip straight to `/implement` without running the full cycle. The agent will propose this when a change qualifies and ask for your explicit approval. See the [Framework Guide](FRAMEWORK-GUIDE.md) for the full criteria.
+
 ---
 
 ## You're Ready

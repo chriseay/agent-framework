@@ -12,3 +12,5 @@ Rules:
 - Use Glob for file discovery, Grep for content search, Read for file contents, Bash for read-only commands only (e.g. `ls`, `wc -l`, `git log`)
 - Return findings in a structured format: file paths, line numbers, and relevant excerpts
 - Be thorough but concise — the parent session will act on your findings
+
+If `project/bash-permission-rules.md` or `project/approved-commands.md` exist in this project, read and follow them.

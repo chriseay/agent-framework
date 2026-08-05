@@ -100,6 +100,12 @@ The agent always pauses and asks before:
 
 You approve plans before implementation starts. You approve lessons learned before they're recorded. You approve every commit message. Reading files never requires approval.
 
+## Hotfix Path
+
+For changes that are trivial by objective criteria — a single known defect, touching no more than 2 files, no new behaviour, fully reversible — you can skip straight to `/implement` without running the full `/discuss → /close-out` cycle. The agent shows an explicit About to/Why/Affects block confirming the change meets all four criteria and asks for your approval before proceeding. Hotfixes are logged to `ROADMAP.md`'s `## Hotfix Log` section and aren't numbered as phases.
+
+If any criterion is even arguable, the agent runs the full cycle instead — this is a guard, not a shortcut.
+
 ## Session Breaks
 
 Close the terminal whenever you want. Nothing is lost:
@@ -147,8 +153,8 @@ Each workflow phase has a recommended **model tier** to balance cost and capabil
 
 | Tier | Claude Model | Model ID | When Used |
 |------|-------------|----------|-----------|
-| heavy | Opus 4.6 | `claude-opus-4-6` | `/plan`, `/implement`, `/onboard` — architecture and code generation |
-| standard | Sonnet 4.6 | `claude-sonnet-4-6` | `/research`, `/test`, `/close-out`, `/retro` — investigation and summarisation |
+| heavy | Opus 5 | `claude-opus-5` | `/plan`, `/implement`, `/onboard` — architecture and code generation |
+| standard | Sonnet 5 | `claude-sonnet-5` | `/research`, `/test`, `/close-out`, `/retro` — investigation and summarisation |
 | light | Haiku 4.5 | `claude-haiku-4-5-20251001` | `/discuss`, `/status`, `/pause`, `/resume`, `/issues`, `/help`, `/new-project` — conversational and lookups |
 | codex | Codex CLI | — | Mechanical subtasks dispatched during `/implement` |
 | claude | Claude Code CLI | `claude-haiku-4-5-20251001` | Mechanical subtasks dispatched headlessly via `claude-dispatch.sh` (no Codex required) |
@@ -237,7 +243,7 @@ This file is created automatically by `bootstrap.sh` and auto-loaded by Claude C
 
 **Bespoke sub-agents** (custom agent definitions for your project):
 → `.claude/agents/your-agent-name.md`
-Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`). Your agents are never overwritten.
+Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`, `stale-phase-issue-closer`). Your agents are never overwritten.
 
 **Project facts** (tech stack, architecture, lessons learned):
 → `PROJECT.md` — the knowledge document Claude reads for context.
@@ -252,8 +258,9 @@ If you have a project with edits already in `CLAUDE.md` or skill files:
 
 ## Status
 
-In progress — **v1.7 — Field-Tested Improvements**:
+Previously completed — **v1.7 — Field-Tested Improvements**:
 - Phase 31: Real-World Usage Audit (complete)
+- Phase 32: Backport Field-Tested Improvements (complete)
 
 Previously completed — **v1.6 — Framework Durability**:
 - Phase 26: Framework Update Safety (complete)

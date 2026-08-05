@@ -1,0 +1,15 @@
+name: Bootstrap Smoke Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  safe-copy-scenarios:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run safe_copy() scenario tests
+        run: bash test/run-safe-copy-tests.sh

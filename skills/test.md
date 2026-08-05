@@ -49,6 +49,11 @@ Model tier: standard
 - Do not propose commits or lessons learned until verification is complete.
 - If manual checks are deferred (e.g., device-only features), record the deferral in `ROADMAP.md` under `## Deferred Verifications`. Note the originating phase.
 
+## Verification Principles
+
+- **Real trigger-path verification**: when a feature is reachable through multiple paths (a direct call and an indirect/simulated one), verify via the actual real-world path the user will exercise, not only a simulated or programmatic trigger — a simulated trigger can pass while the real path is broken or bypasses the logic entirely.
+- **Natural-frequency verification**: for anything that recomputes or re-fires on its own cycle (a scheduled check, a recurring value, a polling loop), observe at least one full natural cycle before considering it verified — a single forced/manual trigger can't catch repeat-fire or timing bugs.
+
 ## On Completion
 
 Update `.workflow/state.md`:
