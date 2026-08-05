@@ -80,6 +80,8 @@ Model tier: standard
 
    **Write-target rule**: Always write new lessons to PROJECT.md's Section 13 (Recent Lessons). Do not write directly to any `project/lessons-archive.md` subdocument — that file is an archive of older lessons and is managed separately. If PROJECT.md still uses the old heading "Lessons Learned", write there as before; the write-target rule and [PhN] format apply regardless of the heading name.
 
+   **Lesson routing to subdocuments**: Before writing a lesson to Section 13, check whether PROJECT.md has a Subdocuments registry (Section 14) with an entry whose "Contents" column topically matches the lesson (e.g. a deployment-pipeline lesson matching a `project/deployment.md` row). If a clear match exists, propose routing the lesson there instead — same `AskUserQuestion` confirmation pattern as any other lesson proposal, just naming the target subdoc instead of Section 13. This is a simple keyword/topic match, not a scoring system — if no registry exists, or nothing obviously matches, fall back to the default (write to Section 13). This doesn't apply to `project/lessons-archive.md`, which stays governed by the write-target rule above.
+
 4a. **PROJECT.md size check**: After writing lessons, count the lines in PROJECT.md (use `wc -l` or Read and count). If any of the following thresholds are met, surface a suggestion to the user via `AskUserQuestion`:
    - Total lines exceed ~200
    - Section 13 (Recent Lessons or Lessons Learned) exceeds ~10 entries
@@ -123,6 +125,7 @@ Model tier: standard
           **Affects**: GitHub Issues (issue will be marked closed)
 
           Then use `AskUserQuestion` to confirm, then close via `gh issue close <number>`.
+        - **Verify the close actually landed**: re-query with `gh issue view <number> --json state --jq .state` and confirm it returns `CLOSED`. A non-error exit code from `gh issue close` is not sufficient confirmation — issues have been observed staying open despite the close command appearing to succeed. If the re-query doesn't show `CLOSED`, surface this to the user explicitly rather than silently moving on to the next step.
       - If Sync Status says "not created":
         - Create the issue (using the Sync flow from /discuss), post the summary comment, and immediately close it.
       - If no Sync Status section exists, search by title: `gh issue list --state all --search "Phase N in:title" --json number,title`

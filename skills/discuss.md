@@ -50,6 +50,7 @@ Model tier: light
    - Scan `planning/phase-*/CONTEXT.md` files for `## Sync Status` sections containing "not created".
    - If any are found and `gh` is available, use `AskUserQuestion` to offer creating the missing issues now (run the Sync flow for each).
    - If any are found and `gh` is NOT available, show a prominent warning: "GitHub sync is behind: N phase(s) have no matching issue. Run `gh auth login` to authenticate, then the next /discuss will catch up."
+   - **Optional defense-in-depth sweep**: if the user mentions suspecting GitHub state has drifted from ROADMAP.md, or periodically (e.g. it hasn't been run in a while), use `AskUserQuestion` to offer dispatching the `stale-phase-issue-closer` agent — it catches phases marked Complete whose GitHub issue never actually closed, which the checks above don't cover (those only catch issues that were never created, not issues that were created but silently failed to close). Not run automatically every `/discuss` — it's a periodic check, not a required one. If the user accepts and the agent finds drift, propose closing each stale issue via `AskUserQuestion`, same as any other GitHub issue closure.
 10. **Surface GitHub issues** (if `gh` CLI is available):
     - Run `gh issue list --limit 10` and show a summary of open issues to the user.
     - If there are open issues, use `AskUserQuestion` to ask whether any should be linked to this phase.
@@ -65,6 +66,7 @@ Before diving into phase requirements, review the roadmap with the user to captu
    - Each phase: number, name, and status (one line per phase)
    - Deferred phases: count and brief labels (or "none")
    - Deferred verifications: count and brief labels (or "none")
+   - Deferred subagents: count and brief labels (or "none")
 
    Example format:
    ```
@@ -73,6 +75,7 @@ Before diving into phase requirements, review the roadmap with the user to captu
      Phase 4: Roadmap Scoping in /discuss — Not started
    Deferred phases: 1 item (API rate limiting)
    Deferred verifications: 1 item (load test under concurrency)
+   Deferred subagents: 1 item (data validation agent)
    ```
 
 2. **Gate question**: Use `AskUserQuestion` to ask: "Any roadmap changes — new items to add, or deferred items to address?" with options:
@@ -90,12 +93,18 @@ Before diving into phase requirements, review the roadmap with the user to captu
       - "Promote to numbered phase" — add it as a new phase in the roadmap (use existing placement logic). After adding the phase to the roadmap, run the **GitHub Phase Sync** flow for the new phase.
       - "Keep deferred" — leave it in Deferred Phases.
 
-   c. **New items**: Ask the user what they'd like to add. For each new item:
+   c. **Deferred Subagents**: List each deferred subagent suggestion by name. For each, use `AskUserQuestion` to ask:
+      - "Create it now" — create the `.claude/agents/*.md` definition and wire it into the relevant skill file's `subagent_type` reference in the same step. Do not defer the wiring to a later step — an agent definition with nothing dispatching it is dead weight.
+      - "Keep deferred" — leave it in Deferred Subagents.
+      - "Discard — no longer needed" — remove it from the list.
+
+   d. **New items**: Ask the user what they'd like to add. For each new item:
       - Ask clarifying questions (one at a time) to define scope, deliverable, and verification criteria.
       - Recommend placement using `AskUserQuestion`:
         - **New phase** — recommend where it fits best (between existing phases, at the end of the current milestone, or in a future milestone). If inserting between existing phases, run the **Phase Renumbering** procedure (see below).
         - **Deferred phase** — if the item needs its own phase cycle but isn't urgent or well-defined enough yet.
         - **Deferred verification** — if the item is a check or test to perform later.
+        - **Deferred subagent** — if the item is a subagent worth building but not needed immediately.
         - **Fold into existing phase** — if it naturally extends an existing phase's scope.
       - The agent should propose a category (phase or verification) based on context. The user confirms or overrides.
       - After the user confirms, before updating ROADMAP.md, output:
@@ -105,7 +114,7 @@ Before diving into phase requirements, review the roadmap with the user to captu
 
         Then update `ROADMAP.md` immediately using the Edit tool. If the item was placed as a new phase, run the **GitHub Phase Sync** flow for it.
 
-   d. **Repeat** until the user says they have no more changes.
+   e. **Repeat** until the user says they have no more changes.
 
 4. After the review (or skip), continue with On Start step 6.
 

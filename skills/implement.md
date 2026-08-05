@@ -52,6 +52,10 @@ Model tier: heavy
   Then propose the target branch. Pushes require explicit approval.
 - All source-control actions involving local and remote state must be performed together once approved.
 
+## Worktree Rules
+
+When dispatching a step with `isolation: worktree`, ensure all prior work in this session is committed and pushed to a remote ref first. Worktrees check out from refs, not uncommitted working-tree state — dispatching against unpushed local work fails silently into a stale checkout rather than erroring.
+
 ## Model-Aware Dispatch
 
 Plan steps may include a tier annotation in the heading: `### Step N: Description (Tier: heavy/standard/light/codex)`. Steps without an annotation inherit the phase's default tier.

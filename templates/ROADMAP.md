@@ -46,6 +46,14 @@
 - **Load test under concurrency**: Verify the API handles 100 concurrent users. Deferred from Phase 3 — needs staging environment.
 -->
 
+## Deferred Subagents
+
+<!-- Subagent creation suggestions raised during a phase but not acted on immediately. Reviewed during /discuss's Roadmap Review — create the agent, keep deferring, or discard. -->
+
+<!-- Example:
+- **Data validation agent**: Check incoming data format. Deferred from Phase 2 — can be built after core pipeline is stable.
+-->
+
 ## Hotfix Log
 
 <!-- Record of changes made via CLAUDE.md's Hotfix path (skipping the full /discuss → /close-out cycle). Each entry: date, one-sentence description, commit hash. This log is the only record of hotfix work — it isn't tracked as a numbered phase. -->
