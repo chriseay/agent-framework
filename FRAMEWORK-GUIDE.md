@@ -76,6 +76,23 @@ The research-only phase and its implementation partner follow a natural split: t
 
 When skipping steps, update `state.md` manually after each completed step, and write the `Next Command` as the actual next step in the abbreviated sequence (not the next step in the full cycle).
 
+### Hub-and-Satellite Multi-Project Pattern
+
+Sometimes several related projects end up sharing a single active development cadence — one is clearly the primary focus, and the others are smaller or slower-moving. Rather than running a full, independent phase-tracking cycle in each project, one repo can act as a **hub**: it holds the live `ROADMAP.md` and `planning/` for work that spans or primarily concerns the group, while the other **satellite** repos keep Agent Framework installed but mark their own tracking as vestigial and point to the hub instead.
+
+This is an emergent pattern, not a built-in framework feature — there's no dedicated tooling for it. If it fits your situation, set it up manually:
+
+- In each satellite repo's `CLAUDE.md`, add a short note that active workflow tracking has moved to the hub repo, and that the satellite's own `ROADMAP.md`/`skills/` are historical record only.
+- In the hub repo, use `PROJECT.md`'s Subdocuments registry (Section 14) to hold cross-project reference material — architecture notes or API references for the satellite projects that the hub's own phases need to know about.
+
+This pattern only makes sense when the projects genuinely share one active development rhythm — don't adopt it just to reduce the number of `ROADMAP.md` files you maintain. It's descriptive of something that can happen naturally as projects evolve, not a structure to impose upfront.
+
+### macOS FUSE-Safe Git Operations
+
+If a project's working directory sits on a FUSE-mounted or network filesystem on macOS, you may hit lock-file errors when committing directly (the filesystem's locking semantics don't always match what git expects). One optional workaround, if you hit this: instead of committing in place, clone the repo fresh into `/tmp`, overlay your local file changes onto that clean clone, commit and push from there, then discard the `/tmp` clone. This avoids ever taking a git lock on the FUSE-mounted directory itself.
+
+This isn't a recommended default — most projects never need it. It's worth trying only if you're actually seeing lock-file errors on commit and suspect a mounted filesystem is the cause.
+
 ## What the User Does
 
 You don't need to read CLAUDE.md or memorise rules. Just follow the commands:
