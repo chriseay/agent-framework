@@ -76,6 +76,19 @@ The research-only phase and its implementation partner follow a natural split: t
 
 When skipping steps, update `state.md` manually after each completed step, and write the `Next Command` as the actual next step in the abbreviated sequence (not the next step in the full cycle).
 
+### Hotfix Path
+
+An optional bypass of the full `/discuss → /close-out` cycle for changes that meet every one of these objective criteria:
+
+- Fixes a single, already-fully-specified defect (known root cause, file, and fix), or applies content that was already fully decided elsewhere and only needs mechanical application.
+- Touches no more than 2 files.
+- Introduces no new files, no new entities, no new user-facing behaviour, and requires no design decisions.
+- Is fully reversible with a single revert commit.
+
+If a change meets all four, the agent skips straight to `/implement`. Before doing so, it outputs an About to/Why/Affects block explicitly confirming each criterion and asks for your approval via `AskUserQuestion`. If you approve, the change is implemented, committed, and logged to `ROADMAP.md`'s `## Hotfix Log` section. Hotfixes are not numbered as phases and do not update `.workflow/state.md`.
+
+If any criterion is even arguable, the agent runs the full cycle instead. This is a guard, not a shortcut you request — the agent proposes it when a change qualifies.
+
 ### Hub-and-Satellite Multi-Project Pattern
 
 Sometimes several related projects end up sharing a single active development cadence — one is clearly the primary focus, and the others are smaller or slower-moving. Rather than running a full, independent phase-tracking cycle in each project, one repo can act as a **hub**: it holds the live `ROADMAP.md` and `planning/` for work that spans or primarily concerns the group, while the other **satellite** repos keep Agent Framework installed but mark their own tracking as vestigial and point to the hub instead.
@@ -149,7 +162,7 @@ Loaded at session start. Keep it focused on facts and context about what you're 
 
 **Bespoke sub-agents**:
 → `.claude/agents/your-agent-name.md`
-Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`). Your agents are safe on upgrade.
+Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`, `stale-phase-issue-closer`). Your agents are safe on upgrade.
 
 ### Migrating existing edits
 
@@ -239,9 +252,10 @@ Reading files never requires approval.
 
 **Skipping `/research`**: Plans built without codebase understanding fail during implementation. Even Light research catches issues.
 
-**Adding scope during `/implement`**: New requirements get deferred to ROADMAP.md, not added to the current phase. Deferrals come in two flavours:
+**Adding scope during `/implement`**: New requirements get deferred to ROADMAP.md, not added to the current phase. Deferrals come in three flavours:
 - **Deferred Phases** need their own full `/discuss` → `/close-out` cycle.
 - **Deferred Verifications** are checks postponed from earlier phases — they get reviewed during `/discuss` and ticked off when satisfied.
+- **Deferred Subagents** are suggestions to create a new sub-agent that weren't acted on immediately — they surface during `/discuss`'s Roadmap Review for a create/keep-deferred/discard decision.
 
 **Ignoring the verification in `/plan`**: The plan is checked against your docs before you approve it. If something contradicts CONTEXT.md or RESEARCH.md, it gets flagged.
 
@@ -332,6 +346,9 @@ your-project/
 │   ├── README.md
 │   ├── gitignore.template
 │   ├── project-overrides.md     (boilerplate for .claude/rules/project-overrides.md)
+│   ├── project/
+│   │   ├── bash-permission-rules.md  (which Bash shapes trigger permission prompts)
+│   │   └── approved-commands.md      (three-tier command approval model)
 │   └── planning/
 │       ├── CONTEXT.md
 │       ├── RESEARCH-light.md
