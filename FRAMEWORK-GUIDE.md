@@ -63,6 +63,19 @@ Subphases share a single `/discuss` and `/research` cycle. Each subphase then ru
 
 `.workflow/state.md` gains a `Subphase: N of M` line that shows your position within the cycle. Type `/status` to see it at any time.
 
+### Research-Only Phases
+
+Not every phase requires implementation. When a phase's goal is to investigate, audit, or produce a recommendation document rather than ship code, it can run an abbreviated cycle: `/discuss` → `/research` → `/close-out`, skipping `/plan`, `/implement`, and `/test`.
+
+This pattern is useful for:
+- **Audits** — reviewing external projects for patterns worth backporting (e.g., Phase 31: Real-World Usage Audit)
+- **Feasibility studies** — investigating whether an approach is viable before committing to implementation (e.g., Phase 24: Sub-Agent Research)
+- **Recommendation reports** — producing a prioritised finding that seeds a later implementation phase
+
+The research-only phase and its implementation partner follow a natural split: the research phase produces a `RESEARCH.md` with findings and recommendations; the implementation phase consumes it as its CONTEXT, skipping a fresh `/discuss` and `/research` cycle.
+
+When skipping steps, update `state.md` manually after each completed step, and write the `Next Command` as the actual next step in the abbreviated sequence (not the next step in the full cycle).
+
 ## What the User Does
 
 You don't need to read CLAUDE.md or memorise rules. Just follow the commands:

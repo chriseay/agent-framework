@@ -252,7 +252,17 @@ If you have a project with edits already in `CLAUDE.md` or skill files:
 
 ## Status
 
-In progress — **v1.5 — Sub-Agents & Housekeeping**:
+In progress — **v1.7 — Field-Tested Improvements**:
+- Phase 31: Real-World Usage Audit (complete)
+
+Previously completed — **v1.6 — Framework Durability**:
+- Phase 26: Framework Update Safety (complete)
+- Phase 27: CI Failure Surfacing (complete)
+- Phase 28: 3-Way Merge Upgrades (complete)
+- Phase 29: Plugin Cache Refresh on Upgrade (complete)
+- Phase 30: Bootstrap Safe-Copy Fixes (complete)
+
+Previously completed — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 15: State Tracking Configuration (complete)
 - Phase 16: Framework Polish (complete)
 - Phase 17: Subphases (complete)
@@ -264,11 +274,6 @@ In progress — **v1.5 — Sub-Agents & Housekeeping**:
 - Phase 23: Phase Numbering System (complete)
 - Phase 24: Sub-Agent & Agent Team Research (complete)
 - Phase 25: Sub-Agent Implementation (complete)
-- Phase 26: Framework Update Safety (complete)
-- Phase 27: CI Failure Surfacing (complete)
-- Phase 28: 3-Way Merge Upgrades (complete)
-- Phase 29: Plugin Cache Refresh on Upgrade (complete)
-- Phase 30: Bootstrap Safe-Copy Fixes (complete)
 
 Previously completed — **v1.4 — Polish & Onboarding**:
 - Phase 8: Documentation Refresh Process (complete)
