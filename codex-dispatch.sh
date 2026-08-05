@@ -80,7 +80,7 @@ Task: $TASK"
 # Run from /tmp to avoid loading AGENTS.md (which triggers workflow rules
 # and blocks non-interactive execution). Grant write access to the project
 # directory via --add-dir.
-CMD=(codex exec --full-auto -C /tmp --add-dir "$DIR" --skip-git-repo-check)
+CMD=(codex exec --sandbox workspace-write -C /tmp --add-dir "$DIR" --skip-git-repo-check)
 
 if [ -n "$MODEL" ]; then
     CMD+=(-m "$MODEL")

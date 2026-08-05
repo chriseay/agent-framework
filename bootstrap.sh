@@ -420,6 +420,12 @@ rm -rf "$PRE_PULL_TMP"
 
 # Only run main() when executed directly, not when sourced (e.g. by test
 # tooling that needs safe_copy() without the full install/plugin flow).
+#
+# Note for anyone sourcing this file: the `set -e` near the top of this
+# script (line 12) persists into whatever sources it. If you extend a test
+# harness that sources bootstrap.sh with assertion patterns not already
+# protected from errexit (e.g. a bare failing command outside an if/&&/||
+# context), add `set +e` right after the `source` line.
 if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
     main "$@"
 fi
