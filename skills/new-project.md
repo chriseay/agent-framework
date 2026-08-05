@@ -30,6 +30,7 @@ Run when `.workflow/state.md` shows "Next Command: /new-project" or when the use
    - Whether planning artifacts should be tracked in git (default: yes). If no, `planning/` will be added to `.gitignore`.
    - Whether `.workflow/state.md` should be tracked in git (default: no). Explain: "Workflow state tracks your current phase and step. Tracking it in git lets collaborators see where you are; ignoring it keeps your git history cleaner. Most solo projects leave it untracked." If no (default), `.workflow/` will be added to `.gitignore`.
    - Whether there are project-specific conventions or context Claude should always know (style, language, tech quirks, behaviour preferences). If yes: note them down — a reminder to add them to `.claude/rules/project-overrides.md` will appear at the end of setup.
+   - Whether to set up `project/approved-commands.md` — a three-tier command-approval guide (no-approval / approval-required / never-without-explicit-instruction) the project can customise with its own domain examples. Optional, since it needs tailoring. (`project/bash-permission-rules.md` is installed automatically regardless — it's framework-maintained and needs no project-specific customisation.)
 
 2. **Research**: Review any existing files or context. List unknowns and risks.
 
@@ -62,6 +63,14 @@ Then provide the document outline and get explicit approval via `AskUserQuestion
 - Observability & Performance (or "N/A")
 - Lessons Learned (empty until populated)
 - Phase Addenda (if roadmap-driven; else "N/A")
+
+### Subdocument Setup
+
+Alongside writing PROJECT.md, set up its starting subdocuments (bootstrap.sh has already staged both templates at `templates/project/bash-permission-rules.md` and `templates/project/approved-commands.md`):
+
+1. Create `project/bash-permission-rules.md` by copying `templates/project/bash-permission-rules.md` — always, no confirmation needed.
+2. If the user opted in during Discuss, create `project/approved-commands.md` by copying `templates/project/approved-commands.md` — the user fills in the `[placeholder]` rows with project-specific examples later; the template's generic tier structure works as-is in the meantime.
+3. Add both to PROJECT.md's Subdocuments registry (Section 14) with `Load when: Always` for `bash-permission-rules.md`, and the same for `approved-commands.md` if created.
 
 ### ROADMAP.md Required Sections
 - Milestone groupings (optional — phases grouped under named goals with success criteria)
@@ -105,6 +114,8 @@ Update `.workflow/state.md`:
 Remind the user about `.claude/rules/project-overrides.md`:
 
 "Your project includes `.claude/rules/project-overrides.md` — this is where project-specific Claude instructions live (style preferences, tech context, behaviour overrides). It's auto-loaded at every session start and is never overwritten by `bootstrap.sh`. Open it and fill in any conventions you noted during setup."
+
+If `project/approved-commands.md` was created, remind the user: "Your project includes `project/approved-commands.md` — fill in the `[placeholder]` rows with your project's actual command examples when you get a chance; the tier structure works as-is until then."
 
 Tell the user:
 

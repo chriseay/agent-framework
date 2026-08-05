@@ -14,3 +14,5 @@ Rules:
 - You do not have session context — all information you need is in the prompt
 - Report what you did: files changed, lines added/removed, and whether you encountered any issues
 - If you hit a blocker that prevents completing the step, stop and describe the blocker clearly
+
+If `project/bash-permission-rules.md` or `project/approved-commands.md` exist in this project, read and follow them.

@@ -100,6 +100,7 @@ Use `AskUserQuestion` — one question at a time — to fill in what the scan co
 - Whether planning artifacts should be tracked in git (default: yes). If no, `planning/` will be added to `.gitignore`.
 - Whether `.workflow/state.md` should be tracked in git (default: no). Explain: "Workflow state tracks your current phase and step. Tracking it in git lets collaborators see where you are; ignoring it keeps your git history cleaner. Most solo projects leave it untracked." If no (default), `.workflow/` will be added to `.gitignore`.
    - Whether there are project-specific conventions or context Claude should always follow that the scan may have missed (style, naming, behaviour preferences, tech quirks). If yes: note them down — a reminder to add them to `.claude/rules/project-overrides.md` will appear at the end of onboarding.
+   - Whether to set up `project/approved-commands.md` — a three-tier command-approval guide (no-approval / approval-required / never-without-explicit-instruction) the project can customise with its own domain examples, informed by what the scan already found (CI/CD config, deployment scripts, etc.). Optional. (`project/bash-permission-rules.md` is installed automatically regardless.)
 
 **Only ask about things the scan didn't already answer.** If the README already describes the goals, don't re-ask.
 
@@ -116,6 +117,8 @@ Output:
 **Affects**: project root (new file `PROJECT.md`)
 
 Present outline to user and get approval via `AskUserQuestion` before writing.
+
+**Subdocument setup**: bootstrap.sh has already staged both templates at `templates/project/bash-permission-rules.md` and `templates/project/approved-commands.md`. Create `project/bash-permission-rules.md` by copying the staged template — always, no confirmation needed. If the user opted in during Phase 3, create `project/approved-commands.md` the same way; pre-fill its `[placeholder]` rows with whatever the scan already found (deployment scripts, CI/CD commands, etc.) rather than leaving them generic. Add both to PROJECT.md's Subdocuments registry (Section 14) with `Load when: Always`.
 
 ### ROADMAP.md
 Build from the user's priorities + scanned issues:
@@ -182,3 +185,5 @@ Next → type `/discuss` to start **Phase 0: [name]**.
 Also remind the user about `.claude/rules/project-overrides.md`:
 
 "Your project includes `.claude/rules/project-overrides.md` — this is where project-specific Claude instructions live. If the scan found coding style information, the *tool config* (linter name, formatter) belongs in PROJECT.md Section 4, but *how you want Claude to write code* (style preferences, naming habits, things to avoid) belongs in `.claude/rules/project-overrides.md`. It auto-loads at every session start and is never overwritten by `bootstrap.sh`."
+
+If `project/approved-commands.md` was created, remind the user: "Your project includes `project/approved-commands.md`, pre-filled from what the scan found — review the `[placeholder]` rows that couldn't be inferred and fill them in when you get a chance."

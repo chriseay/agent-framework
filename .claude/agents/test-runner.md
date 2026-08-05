@@ -17,3 +17,5 @@ Process:
    - Names of failing tests (if any)
    - Any setup errors (missing dependencies, build failures)
 5. Do NOT return raw test output — return the structured summary only
+
+If `project/bash-permission-rules.md` or `project/approved-commands.md` exist in this project, read and follow them.

@@ -17,3 +17,5 @@ Rules:
 - Return proposals only — do not write or edit files
 - Format proposals clearly: one section per doc, with specific proposed text for each change
 - If a doc needs no changes, say so explicitly
+
+If `project/bash-permission-rules.md` or `project/approved-commands.md` exist in this project, read and follow them.
