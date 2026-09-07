@@ -105,6 +105,8 @@ Use `AskUserQuestion` — one question at a time — to fill in what the scan co
 ### PROJECT.md
 Pre-populate from scan results + gap-filling answers. Use the template from `templates/PROJECT.md` but fill in discovered values instead of placeholders.
 
+Before finalizing the scaffold, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
+
 Output:
 **About to**: write `PROJECT.md` from the codebase scan and gap-filling answers
 **Why**: creating the primary project constraints document for the workflow

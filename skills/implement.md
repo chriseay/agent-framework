@@ -117,6 +117,7 @@ Dispatch report: N local, M dispatched (X to Haiku, Y to Sonnet, Z to Codex)
 
 - Follow the plan steps in order.
 - After completing each step, **update the Current Step marker** in PLAN.md.
+- Before declaring a step — or the whole implementation — done, call `advisor` per CLAUDE.md's Advisor Guidance. This is a floor, not the only point it may be called.
 - If deviation is needed, output:
   **About to**: deviate from the approved plan
   **Why**: [explain what was discovered and why the plan step cannot be followed as written]

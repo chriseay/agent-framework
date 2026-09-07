@@ -238,6 +238,8 @@ Create `planning/phase-XX/CONTEXT.md` with:
 
 **Research-derived phases**: if this phase's scope comes from a prior phase's `RESEARCH.md` (the research-then-implement pattern — see FRAMEWORK-GUIDE.md's Research-Only Phases), before confirming CONTEXT.md, explicitly walk through every finding in that RESEARCH.md's recommendation table and verify each one traces to either a CONTEXT.md item or a documented rejection. A finding with neither is a gap, not a decision — surface it to the user rather than letting it silently drop between the research phase and this one. [Ph32]
 
+Before presenting the summary, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
+
 Show the user the CONTEXT.md summary and use `AskUserQuestion` to confirm it's accurate.
 
 ## On Completion

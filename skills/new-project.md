@@ -31,6 +31,7 @@ Run when `.workflow/state.md` shows "Next Command: /new-project" or when the use
 3. **Plan**: Present a short outline for each document with assumptions called out.
 
 4. **Verify**: Use `AskUserQuestion` to confirm outlines before writing.
+5. Before finalizing the outlines and writing any document, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
 
 ## Document Creation
 

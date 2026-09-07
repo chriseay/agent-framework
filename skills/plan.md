@@ -91,6 +91,8 @@ Before presenting the plan to the user, run this check:
 
 If verification fails, revise the plan before presenting it.
 
+Also call `advisor` per CLAUDE.md's Advisor Guidance before presenting the plan — this is a floor, not the only point it may be called.
+
 ## Present to User
 
 Present the plan summary **inline** — key steps + verification approach. Do not ask the user to open the file.

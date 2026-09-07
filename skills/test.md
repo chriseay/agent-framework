@@ -31,7 +31,8 @@ Model tier: standard
 
    Use `AskUserQuestion` to ask the user to perform checks that require local environment access (simulators, devices, browser). Be specific about what to do and what to expect.
 3. **Collect results**: Record what passed and what failed.
-4. If tests fail, output:
+4. Before declaring verification complete, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
+5. If tests fail, output:
    **About to**: attempt one fix for the test failure, then escalate if it doesn't work
    **Why**: following the Recovery rule — one fix attempt before escalating to user
    **Affects**: source files related to the failing test

@@ -29,7 +29,7 @@ Model tier: light
 
 ## Operations
 
-Use `AskUserQuestion` to determine which operation the user wants, then follow the relevant section below. All mutation operations (create, edit, close, reopen, comment) require explicit user approval before executing.
+Use `AskUserQuestion` to determine which operation the user wants, then follow the relevant section below. All mutation operations (create, edit, close, reopen, comment) require explicit user approval before executing. Before finalizing any such action, call `advisor` per CLAUDE.md's Advisor Guidance if the action's impact is in doubt — this is a floor, not the only point it may be called.
 
 ### List
 

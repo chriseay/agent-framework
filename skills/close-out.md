@@ -29,6 +29,7 @@ Model tier: standard
    - **Summary**: what was delivered in this subphase
    - **Issues Encountered**: problems hit and how they were resolved
    - **Decisions and Rationale**: key choices made and why
+2a. Before proposing the commit in step 3, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
 3. Output:
    **About to**: commit the subphase N of M deliverables
    **Why**: closing out this subphase so the next one can begin
@@ -58,6 +59,8 @@ Model tier: standard
    - **Process Notes**: Friction, gaps, or observations about the workflow (consumed by `/retro`)
 
    If the phase used subphases, begin by reading all `sub-N/PLAN.md` and `sub-N/POSTMORTEM.md` files. Synthesise them into the main POSTMORTEM.md — the main POSTMORTEM covers the full phase, not just the final subphase.
+
+   Before finalizing POSTMORTEM.md / declaring the phase closed, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
 4. **Propose lessons learned**: Review both `CLAUDE.md` and `PROJECT.md` to avoid duplication. For each proposed addition, output:
    **About to**: write a new lesson learned to `PROJECT.md`
    **Why**: [one-sentence reason — e.g., "this pattern recurred and should be recorded"]

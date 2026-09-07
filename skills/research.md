@@ -47,6 +47,7 @@ Use `AskUserQuestion` to propose a tier with a brief rationale and get confirmat
    - The task turns out to be clearly mechanical (e.g., a simple status lookup) and the annotated tier feels excessive.
    When triggered: output a one-line justification (e.g., "This research turned out to involve 3 unfamiliar subsystems — Opus recommended.") and use `AskUserQuestion` with options: "Switch to [recommended model] — ready to continue" / "Continue on current model."
 4. After research, use `AskUserQuestion` for any remaining clarifying questions — one at a time.
+5. Before finalizing RESEARCH.md, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
 
 ## Artifact
 

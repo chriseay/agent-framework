@@ -36,13 +36,14 @@ Model tier: standard
    **Affects**: `CLAUDE.md` (process rules), `PROJECT.md` (project-specific lessons)
 
    Then present via `AskUserQuestion` — clearly separating CLAUDE.md changes from PROJECT.md changes. Get approval before writing.
-5. **Create** `planning/milestone-[name]/RETROSPECTIVE.md` with:
+5. Before finalizing RETROSPECTIVE.md, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
+6. **Create** `planning/milestone-[name]/RETROSPECTIVE.md` with:
    - Phases Reviewed
    - What Worked
    - What Didn't Work
    - What Was Missing
    - Changes Made (CLAUDE.md / PROJECT.md / Removed or Simplified)
-6. **Propose commit and push**: Output:
+7. **Propose commit and push**: Output:
    **About to**: commit and push the retrospective changes
    **Why**: finalising the retrospective and recording it in the repo
    **Affects**: `RETROSPECTIVE.md`, `CLAUDE.md`, `PROJECT.md`, feature branch, remote origin
