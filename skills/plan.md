@@ -51,6 +51,7 @@ Assign tiers to plan steps based on what the step involves. The phase's default 
 | Write tests for an existing module | standard | Single-concern work following established patterns |
 | Redesign the authentication middleware | heavy | Multi-file changes, architectural decisions, complex reasoning |
 | Design new instructional language for a skill file | heavy | Requires careful wording that shapes future agent behaviour |
+| Any check/gate/guard/monitor/suppression/redaction, or unattended action on a live system, or security-sensitive boundary | heavy | Route to Opus regardless of the phase's own default tier — this is the category CLAUDE.md's Advisor Guidance always-consult rule covers; per-step dispatch is the mechanism for getting heavy-model judgment onto specific steps without a session-wide switch |
 | Rename `oldFunc` to `newFunc` across the codebase | codex | Mechanical find-and-replace, no reasoning needed |
 | Reformat a file to match a style guide | codex | Mechanical transform, deterministic output |
 
