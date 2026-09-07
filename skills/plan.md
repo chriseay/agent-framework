@@ -28,7 +28,7 @@ Model tier: heavy
    - The plan is growing significantly more complex than the phase's default tier can handle reliably (e.g., many interdependent architectural decisions emerging).
    - A specific plan step clearly requires a lighter touch (e.g., a pure doc update or rename) and the current model is wasteful for it.
    - Cross-cutting concerns emerge that weren't visible during research.
-   When triggered: output a one-line justification and use `AskUserQuestion` with options: "Switch to [recommended model] — ready to continue" / "Continue on current model."
+   When triggered: output a one-line justification, then call `advisor` per CLAUDE.md's Advisor Guidance and/or route the affected step(s) to a different tier via the Tier Assignment Guide above — do not prompt to switch the current session's model.
 
 ## Tier Assignment Guide
 

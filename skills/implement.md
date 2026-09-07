@@ -93,7 +93,7 @@ During any step, if you detect any of the following signals, stop and recommend 
 - A code generation step is producing interdependent changes where one error could cascade.
 - The step turns out to be clearly mechanical and repetitive (rename, reformat, status update) but is annotated at `standard` or `heavy`.
 
-When triggered: output a one-line justification (e.g., "This step involves 12 files — Opus recommended.") and use `AskUserQuestion` with options: "Switch to [recommended model] — ready to continue" / "Continue on current model."
+When triggered: output a one-line justification (e.g., "This step involves 12 files — Opus recommended."), then call `advisor` per CLAUDE.md's Advisor Guidance and/or re-dispatch the remaining work at a different tier via Model-Aware Dispatch above — do not prompt to switch the current session's model.
 
 ### Codex dispatch
 
