@@ -274,6 +274,71 @@ if ls "$FRAMEWORK_DIR/.claude/agents/"*.md > /dev/null 2>&1; then
     done
 fi
 
+# Set up .claude/settings.json (worktree.baseRef + compound-bash PreToolUse hook).
+# This is a JSON-aware merge, distinct from safe_copy's text-based 3-way merge above —
+# different semantics (key presence/absence vs. line diffing). Never overwrites an
+# existing conflicting key or attempts an additive array merge; skips and warns instead.
+HOOK_SRC="$FRAMEWORK_DIR/templates/hooks/block-compound-bash.py"
+HOOK_COPIED=false
+if [ -f "$HOOK_SRC" ]; then
+    mkdir -p "$TARGET_DIR/.claude/hooks"
+    cp "$HOOK_SRC" "$TARGET_DIR/.claude/hooks/block-compound-bash.py"
+    chmod +x "$TARGET_DIR/.claude/hooks/block-compound-bash.py"
+    HOOK_COPIED=true
+else
+    echo "Warning: $HOOK_SRC not found in framework source — skipping compound-bash hook and settings.json setup."
+    echo "  Re-run bootstrap.sh after updating \$FRAMEWORK_DIR (\$HOME/.agent-framework)."
+fi
+
+if [ "$HOOK_COPIED" = true ]; then
+    if ! command -v jq &> /dev/null; then
+        echo "Warning: jq not found — skipping .claude/settings.json setup (worktree.baseRef, compound-bash hook)."
+        echo "  Install jq and re-run bootstrap.sh to enable this."
+    else
+        SETTINGS_FILE="$TARGET_DIR/.claude/settings.json"
+        HOOK_ENTRY='{"matcher":"Bash","hooks":[{"type":"command","command":"python3 .claude/hooks/block-compound-bash.py"}]}'
+
+        if [ ! -f "$SETTINGS_FILE" ]; then
+            jq -n --argjson hook "$HOOK_ENTRY" \
+                '{worktree: {baseRef: "head"}, hooks: {PreToolUse: [$hook]}}' \
+                > "$SETTINGS_FILE"
+            echo "Created .claude/settings.json (worktree.baseRef: head, compound-bash hook)."
+        elif ! jq empty "$SETTINGS_FILE" > /dev/null 2>&1; then
+            echo "Warning: $SETTINGS_FILE is not valid JSON — skipping settings.json setup entirely."
+        else
+            TMP_SETTINGS=$(mktemp)
+            cp "$SETTINGS_FILE" "$TMP_SETTINGS"
+            CHANGED=false
+
+            EXISTING_BASEREF=$(jq -r '.worktree.baseRef // empty' "$TMP_SETTINGS")
+            if [ -z "$EXISTING_BASEREF" ]; then
+                jq '.worktree.baseRef = "head"' "$TMP_SETTINGS" > "$TMP_SETTINGS.new" && mv "$TMP_SETTINGS.new" "$TMP_SETTINGS"
+                CHANGED=true
+            elif [ "$EXISTING_BASEREF" != "head" ]; then
+                echo "Warning: $SETTINGS_FILE already has worktree.baseRef=\"$EXISTING_BASEREF\" — skipping (recommended: \"head\", see skills/implement.md)."
+            fi
+
+            HOOK_PRESENT=$(jq --argjson hook "$HOOK_ENTRY" '[.hooks.PreToolUse[]? == $hook] | any' "$TMP_SETTINGS" 2>/dev/null || echo "false")
+            HOOK_COUNT=$(jq '(.hooks.PreToolUse // []) | length' "$TMP_SETTINGS")
+            if [ "$HOOK_PRESENT" != "true" ]; then
+                if [ "$HOOK_COUNT" = "0" ]; then
+                    jq --argjson hook "$HOOK_ENTRY" '.hooks.PreToolUse = [$hook]' "$TMP_SETTINGS" > "$TMP_SETTINGS.new" && mv "$TMP_SETTINGS.new" "$TMP_SETTINGS"
+                    CHANGED=true
+                else
+                    echo "Warning: $SETTINGS_FILE already has hooks.PreToolUse entries — skipping compound-bash hook registration (add manually: reference .claude/hooks/block-compound-bash.py, already copied into this project)."
+                fi
+            fi
+
+            if [ "$CHANGED" = true ]; then
+                mv "$TMP_SETTINGS" "$SETTINGS_FILE"
+                echo "Updated .claude/settings.json."
+            else
+                rm -f "$TMP_SETTINGS"
+            fi
+        fi
+    fi
+fi
+
 # Copy Claude dispatch script
 safe_copy "$FRAMEWORK_DIR/claude-dispatch.sh" "$TARGET_DIR/claude-dispatch.sh" "claude-dispatch.sh"
 chmod +x "$TARGET_DIR/claude-dispatch.sh"
