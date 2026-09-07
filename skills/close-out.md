@@ -97,6 +97,8 @@ Model tier: standard
 5. **Update** `ROADMAP.md` status for the completed phase.
 6. **Documentation refresh**:
    a. **Discover documentation files**: Scan for common patterns — `README.md`, `CONTRIBUTING.md`, `ARCHITECTURE.md`, `FRAMEWORK-GUIDE.md`, `PROJECT.md`, `CHANGELOG.md` in the repo root, and `docs/*.md` or `doc/*.md` directories. Exclude framework internals: `CLAUDE.md`, `AGENTS.md`, `skills/*.md`, `templates/*.md`, `planning/**/*.md`.
+
+      **`CLAUDE.md`/`AGENTS.md` parity check** [Ph34]: both are excluded above, but they describe parallel/overlapping mechanisms for two different agent CLIs (Claude Code vs Codex). If this phase edited `CLAUDE.md`'s Core Rules, Model Routing, or workflow-path content, check whether `AGENTS.md` needs the equivalent edit before considering documentation complete — this gap has already caused one near-miss (Phase 34).
    b. If no documentation files are found, use `AskUserQuestion` to ask the user if there are docs the agent is missing.
    c. **Build a change summary**: Before dispatching, compile a concise list of what the phase delivered — what was added (new features, new files), what was changed (behaviour updates), and what was removed (deleted files or deprecated behaviour). This is the context the doc-reviewer needs.
    d. **Dispatch to `doc-reviewer`**: Use the Agent tool with `subagent_type: doc-reviewer`. The prompt must include:
@@ -114,8 +116,8 @@ Model tier: standard
    a. **Close the phase issue**:
       - Read `planning/phase-XX/CONTEXT.md` for the `## Sync Status` section.
       - If a GitHub Issue number is recorded:
-        - Get the merge commit hash(es) from the current branch.
-        - Post a summary comment: what was delivered + commit hash(es).
+        - **This step runs before the merge (step 9), so no merge commit exists yet** [Ph34]: get the feature branch's name and its commit count/range from the current branch instead of a merge SHA — do not wait for step 9 to close the issue, and do not invent a merge commit hash that doesn't exist yet.
+        - Post a summary comment: what was delivered + the branch name and commit range gathered above.
         - Output:
           **About to**: close GitHub issue #[number] — Phase [N]: [name]
           **Why**: the phase is complete; closing the tracking issue

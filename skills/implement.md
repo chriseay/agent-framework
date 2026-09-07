@@ -84,6 +84,7 @@ After the checkpoint:
 3. **If the tier is `codex`**, use Codex dispatch (see below). Do not execute codex-tier steps locally.
 4. **Wait for the subagent's Agent result to return fully before reviewing or continuing.** Do not advance to the next step until the dispatched Agent has completed. Then review the output — if it looks wrong or incomplete, escalate via `AskUserQuestion`.
 5. **Graceful degradation**: If dispatch fails (model parameter error, subagent crash), log the failure and execute the step locally. Do not crash the workflow.
+6. **Batch mechanical multi-file steps into one dispatch, not one per file** [Ph34]: if a plan step (or several adjacent same-tier steps) applies the same well-defined edit across multiple files with the exact replacement content already known, dispatch all of them in a single subagent call rather than one dispatch per file — per-dispatch overhead can exceed local-execution cost for small, fully-specified edits, inverting the tier-routing rule's own cost rationale.
 
 ### Intuition-based tier override
 

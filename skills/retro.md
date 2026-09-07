@@ -62,6 +62,8 @@ Update `.workflow/state.md` to point to the next milestone's first phase:
 - Next Command: /discuss
 ```
 
+**If no next milestone's first phase exists yet in `ROADMAP.md`** [Ph34]: keep the current phase number/name as-is (don't invent a phase entry to satisfy this field) and set `Next Command: /discuss` — the next `/discuss` scopes the new milestone/phase through its own Roadmap Review. Mirrors `close-out.md`'s equivalent "keep current if no next milestone exists" escape hatch.
+
 Tell the user:
 
 **Retrospective complete.** RETROSPECTIVE.md created.
