@@ -8,13 +8,7 @@ Model tier: light
 
 1. Read `.workflow/state.md` to identify the current phase.
 2. Note the model tier for this phase: `light`. Include it in the status block.
-   **Model check**: This phase runs at light tier — recommended model: Haiku.
-   Detect the current model from the system prompt ("You are powered by the model named…").
-   If the current model does not match this tier:
-   - State the mismatch clearly (e.g., "This phase needs Haiku; you're currently on Sonnet.").
-   - Tell the user how to switch: "To switch, type `/model haiku` in Claude Code (conversation history is preserved)."
-   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
-   Wait for the user's response before proceeding to the next On Start step.
+   Session-level model choice is your own — no confirmation prompt; call `advisor` per CLAUDE.md's Advisor Guidance if model fit is in doubt.
 3. **Check for paused phases** (before anything else after model check):
    - Check `.workflow/state.md` for a `## Paused Phases` section.
    - If paused phases exist, list them: "You have [N] paused phase(s): Phase X — [Name] (paused [date], step: [step]), ..."

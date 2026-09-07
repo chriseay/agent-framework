@@ -8,13 +8,7 @@ Model tier: heavy
 
 1. Read `.workflow/state.md` to identify the current phase and implementation step.
 2. Note the model tier for this phase: `heavy`. Include it in the status block.
-   **Model check**: This phase runs at heavy tier — recommended model: Opus.
-   Detect the current model from the system prompt ("You are powered by the model named…").
-   If the current model does not match this tier:
-   - State the mismatch clearly (e.g., "This phase needs Opus; you're currently on Sonnet.").
-   - Tell the user how to switch: "To switch, type `/model opus` in Claude Code (conversation history is preserved)."
-   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
-   Wait for the user's response before proceeding to the next On Start step.
+   Session-level model choice is your own — no confirmation prompt; call `advisor` per CLAUDE.md's Advisor Guidance if model fit is in doubt.
 3. PLAN.md path resolution:
    - Read the **Subphase** field from `.workflow/state.md`.
    - If the field is set (e.g., `Subphase: 2 of 3`): resolve the plan path as `planning/phase-XX/sub-N/PLAN.md` where N is the current subphase number (e.g., `sub-2/PLAN.md`).
