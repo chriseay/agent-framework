@@ -29,7 +29,7 @@ Model tier: standard
    - **Summary**: what was delivered in this subphase
    - **Issues Encountered**: problems hit and how they were resolved
    - **Decisions and Rationale**: key choices made and why
-2a. Before proposing the commit in step 3, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
+   Before proposing the commit in step 3, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
 3. Output:
    **About to**: commit the subphase N of M deliverables
    **Why**: closing out this subphase so the next one can begin

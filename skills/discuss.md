@@ -9,7 +9,7 @@ Model tier: light
 1. Read `.workflow/state.md` to identify the current phase.
 2. Note the model tier for this phase: `light`. Include it in the status block.
    Session-level model choice is your own — no confirmation prompt; call `advisor` per CLAUDE.md's Advisor Guidance if model fit is in doubt.
-3. **Check for paused phases** (before anything else after model check):
+3. **Check for paused phases** (immediately after the previous step):
    - Check `.workflow/state.md` for a `## Paused Phases` section.
    - If paused phases exist, list them: "You have [N] paused phase(s): Phase X — [Name] (paused [date], step: [step]), ..."
    - Use `AskUserQuestion`: "Resume a paused phase, or continue with Phase [M] (current)?"
