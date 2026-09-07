@@ -161,13 +161,7 @@ Each workflow phase has a recommended **model tier** to balance cost and capabil
 
 The Model ID column above is a point-in-time reference — verify against Anthropic's model documentation before assuming it's still accurate. Dispatch code (including `claude-dispatch.sh`'s own `--model` default) uses the stable alias (`opus`/`sonnet`/`haiku`) instead of a hardcoded versioned ID, so it never goes stale.
 
-The agent shows the recommended tier in the status block at the start of each phase. By default it asks for confirmation — you can override to a different tier if needed.
-
-To skip confirmation and use recommended tiers automatically, add this to the Model Routing section of your `PROJECT.md`:
-
-```
-- auto-routing: yes
-```
+The agent shows the current model in the status block at the start of each phase — there's no tier-confirmation prompt; model-fit judgment is handled via `advisor` consultation instead (see `CLAUDE.md`'s Advisor Guidance section).
 
 To override the default tier for a specific phase, fill in the "Your Override" column in the Model Routing table in `PROJECT.md`.
 

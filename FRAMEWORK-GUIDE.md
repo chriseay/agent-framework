@@ -293,7 +293,7 @@ Each workflow phase has a recommended **model tier** to balance cost and capabil
 | light | Conversational Q&A, simple lookups (`/discuss`, `/status`, `/pause`, `/resume`, `/issues`) |
 | codex | Mechanical subtasks dispatched via `codex-dispatch.sh` |
 
-The agent shows the recommended tier in the status block. You can override to a different tier if needed, or set `auto-routing: yes` in `PROJECT.md` to skip confirmation.
+The agent shows the current model in the status block — there's no tier-confirmation prompt; you can override the default tier for a specific phase via `PROJECT.md`, and model-fit judgment mid-phase is handled via `advisor` consultation (see `CLAUDE.md`'s Advisor Guidance section).
 
 Within a phase, `/plan` annotates individual steps with model tiers, and `/implement` dispatches each step to the annotated tier. See [README.md](README.md#model-routing) for the full tier-to-phase mapping and override options.
 
