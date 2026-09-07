@@ -258,6 +258,9 @@ If you have a project with edits already in `CLAUDE.md` or skill files:
 
 ## Status
 
+Previously completed — **v1.8 — Continued Field Alignment**:
+- Phase 33: Home Dashboard Update Audit (complete)
+
 Previously completed — **v1.7 — Field-Tested Improvements**:
 - Phase 31: Real-World Usage Audit (complete)
 - Phase 32: Backport Field-Tested Improvements (complete)
