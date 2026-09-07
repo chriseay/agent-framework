@@ -16,7 +16,7 @@ Phase:    [number] — [name]
 Step:     [current workflow step]
 Subphase: N of M (only if in a subphase cycle)
 Paused:   [N phase(s) — Phase X: Name, ...] (only if paused phases exist)
-Model:    [tier] ([model name])
+Model:    [model name]
 Next:     type `/[next command]` to continue
 ```
 
@@ -113,13 +113,9 @@ Each skill file declares its tier in its On Start section. The agent resolves th
 
 1. **Detect current model**: Read the system prompt injection ("You are powered by the model named...") to identify the active model.
 2. **Detect Codex availability**: Check if Codex CLI is installed (`command -v codex`).
-3. **Look up phase tier**: Read the skill file's `Model tier:` annotation.
+3. **Look up phase tier**: Read the skill file's `Model tier:` annotation — still needed for per-step dispatch (Model-Aware Dispatch in `skills/implement.md`, the Tier Assignment Guide in `skills/plan.md`) to reference.
 4. **Check for overrides**: If `PROJECT.md` has a "Model Routing" section, use those overrides instead of defaults.
-5. **Show in status block**: Display the tier and model name in the `Model:` line.
-
-**Confirmation mode** (default): Show the tier in the status block as a brief inline note. The user can override by requesting a different tier.
-
-If `PROJECT.md` sets `auto-routing: yes`, skip confirmation and proceed with the recommended tier automatically.
+5. **Show in status block**: Display just the model name in the `Model:` line — no session-level tier-match prompt; see Advisor Guidance below for how model-fit judgment is handled instead.
 
 When dispatching to a lighter model via the Task tool, always set the `model` parameter explicitly (e.g. `model: haiku`). Do not rely on model inheritance.
 
@@ -136,6 +132,14 @@ When Anthropic releases a new model family, review and update the tier mapping:
 **Note on aliases**: Dispatch call sites (Agent tool invocations, `.claude/agents/*.md` frontmatter `model:` fields) use the stable alias (`opus`/`sonnet`/`haiku`), not a hardcoded versioned ID — they self-resolve to the current model on every release and need no update here. Only the tier table above (and any prose elsewhere in this file naming a specific model, e.g. "Opus 5") needs updating when a new model ships.
 
 If your `PROJECT.md` doesn't have a Model Routing section, see `templates/PROJECT.md` for a template that includes per-project tier overrides and update cadence settings.
+
+### Advisor Guidance [Ph34]
+
+Model tiers route work to an appropriately-sized model for a whole phase or step, but they don't catch everything — a step can turn out harder than its tier assumed, or an interpretation can be wrong in a way that no tier fixes. `advisor` (a no-parameter tool that forwards the full conversation to a stronger reviewer) is the mechanism for that: call it instead of, or alongside, changing which model is running the session.
+
+- **Named checkpoints are a floor, not a ceiling**: each skill names at least one point where calling `advisor` is expected (see each `skills/*.md` file's own checkpoint). These are minimums, not the only points it may be called — call `advisor` at any other judgment call too: before committing to an interpretation, on a recurring error, when considering a change of approach, or when a step feels riskier than its plan entry implied.
+- **Always consult `advisor` for silent-failure and high-stakes work**, regardless of phase tier or where in a phase it occurs: any step producing a check, guard, gate, monitor, suppression, or redaction; any unattended action on a live system; any security-sensitive boundary. Per-step dispatch may route this category to a heavy-tier (Opus) subagent directly, even inside an otherwise lighter-tier phase — see `skills/plan.md`'s Tier Assignment Guide.
+- This replaces the interactive session-level model-switch prompt that used to fire in every skill's On Start block. If the current model genuinely doesn't fit the work at hand, the user can always request a switch directly; the framework no longer prompts for it automatically.
 
 ## Documents
 
