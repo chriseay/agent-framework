@@ -67,6 +67,7 @@ Before diving into phase requirements, review the roadmap with the user to captu
    - Deferred phases: count and brief labels (or "none")
    - Deferred verifications: count and brief labels (or "none")
    - Deferred subagents: count and brief labels (or "none")
+   - Known Flaky Tests: count and brief labels (or "none")
 
    Example format:
    ```
@@ -76,6 +77,7 @@ Before diving into phase requirements, review the roadmap with the user to captu
    Deferred phases: 1 item (API rate limiting)
    Deferred verifications: 1 item (load test under concurrency)
    Deferred subagents: 1 item (data validation agent)
+   Known Flaky Tests: 1 item (ipad-9th-gen key-entities check)
    ```
 
 2. **Gate question**: Use `AskUserQuestion` to ask: "Any roadmap changes — new items to add, or deferred items to address?" with options:
@@ -83,6 +85,8 @@ Before diving into phase requirements, review the roadmap with the user to captu
    - "Yes, I have changes" — continue with the review flow below.
 
 3. **If the user has changes**, run this flow:
+
+   **Recheck before presenting the default option** [Ph34]: for steps a-d below, before defaulting to "keep deferred" / "still recurring", check or ask whether the blocking condition might have already resolved itself (e.g., "has the thing you were waiting on happened yet?") — a deferred item can go stale silently if nobody re-examines the reason it was deferred in the first place, rather than just re-confirming the status quo each time.
 
    a. **Deferred Verifications**: List each deferred verification by name. For each, use `AskUserQuestion` to ask:
       - "Satisfied — remove" — the verification has been met; delete it from the list.
@@ -98,7 +102,12 @@ Before diving into phase requirements, review the roadmap with the user to captu
       - "Keep deferred" — leave it in Deferred Subagents.
       - "Discard — no longer needed" — remove it from the list.
 
-   d. **New items**: Ask the user what they'd like to add. For each new item:
+   d. **Known Flaky Tests** [Ph34]: List each entry by name. For each, use `AskUserQuestion` to ask:
+      - "Still recurring — keep" — the flake is still happening; leave it in the list.
+      - "Hasn't recurred in [timeframe] — remove" — ask the user for the timeframe, then delete the entry.
+      - "Confirmed as a real regression — convert to a bug/phase" — this isn't a flake after all; route it through the same placement flow as new items below.
+
+   e. **New items**: Ask the user what they'd like to add. For each new item:
       - Ask clarifying questions (one at a time) to define scope, deliverable, and verification criteria.
       - Recommend placement using `AskUserQuestion`:
         - **New phase** — recommend where it fits best (between existing phases, at the end of the current milestone, or in a future milestone). If inserting between existing phases, run the **Phase Renumbering** procedure (see below).
@@ -114,7 +123,7 @@ Before diving into phase requirements, review the roadmap with the user to captu
 
         Then update `ROADMAP.md` immediately using the Edit tool. If the item was placed as a new phase, run the **GitHub Phase Sync** flow for it.
 
-   e. **Repeat** until the user says they have no more changes.
+   f. **Repeat** until the user says they have no more changes.
 
 4. After the review (or skip), continue with On Start step 6.
 
