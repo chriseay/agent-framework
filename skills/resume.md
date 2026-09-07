@@ -38,9 +38,9 @@ Paused:        [date]
 - If the Current Step marker in PLAN.md does not match the saved Implementation Step, warn: "Note: PLAN.md Current Step marker shows Step [X], but saved state says Step [Y]. The plan may have been updated while paused."
 
 **Model tier mapping** (for the recommended model display):
-- heavy → Opus (`claude-opus-4-6`)
-- standard → Sonnet (`claude-sonnet-4-6`)
-- light → Haiku (`claude-haiku-4-5-20251001`)
+- heavy → Opus (`opus`)
+- standard → Sonnet (`sonnet`)
+- light → Haiku (`haiku`)
 
 ### 3. Model-check
 

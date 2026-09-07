@@ -1,7 +1,7 @@
 ---
 name: implement-step
 description: Execute a self-contained implementation step from a plan. Use for standard and light tier steps to keep the main session context clean.
-model: claude-sonnet-4-6
+model: sonnet
 tools: Glob, Grep, Read, Edit, Write, Bash
 isolation: worktree
 ---

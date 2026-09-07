@@ -1,7 +1,7 @@
 ---
 name: test-runner
 description: Run the project's test suite and return a structured pass/fail summary. Use during /test to keep verbose test output out of the main session context.
-model: claude-sonnet-4-6
+model: sonnet
 tools: Bash, Read
 ---
 

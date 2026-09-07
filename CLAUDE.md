@@ -90,6 +90,8 @@ The framework uses **model tiers** to route phases to appropriately-sized models
 | codex | Codex CLI | — | Mechanical subtasks (via `codex-dispatch.sh`) |
 | claude | Claude Code CLI | `claude-haiku-4-5-20251001` | Mechanical subtasks dispatched headlessly via `claude-dispatch.sh` (Claude alternative to codex-dispatch.sh; no Codex required) |
 
+The Model ID column above is a point-in-time reference — current as of the last update to this table. Verify against Anthropic's model documentation before assuming it's still accurate. Dispatch code (Agent tool calls, subagent frontmatter `model:` fields) should use the stable alias (`opus`/`sonnet`/`haiku`) instead of a hardcoded versioned ID, so it never goes stale.
+
 **`opusplan` alias**: Claude Code offers an `opusplan` model alias that uses Opus during planning and Sonnet during execution. This matches the framework's heavy/standard tier intent and may be a convenient default for users on Max or Team plans.
 
 **Adaptive thinking**: Sonnet 5 with adaptive thinking (`effort: "high"`) can match Opus 5 performance on many complex tasks at lower cost. Consider this as an alternative to Opus 5 for cost-sensitive projects. Only Opus 5 supports `effort: "max"` for unconstrained reasoning depth. Haiku 4.5 does not support adaptive thinking.
@@ -106,7 +108,7 @@ Each skill file declares its tier in its On Start section. The agent resolves th
 
 If `PROJECT.md` sets `auto-routing: yes`, skip confirmation and proceed with the recommended tier automatically.
 
-When dispatching to a lighter model via the Task tool, always set the `model` parameter explicitly (e.g. `model: claude-haiku-4-5-20251001`). Do not rely on model inheritance.
+When dispatching to a lighter model via the Task tool, always set the `model` parameter explicitly (e.g. `model: haiku`). Do not rely on model inheritance.
 
 **Haiku dispatch scope**: Haiku is appropriate for mechanical steps only — file writes, package installs, directory creation, simple lookups, formatting. It is not appropriate for interpreting raw command or infrastructure output, where subtle field semantics require judgment (e.g. parsing `systemctl status`, `df`, or other tool output for meaning, not just presence) — handle those at the dispatching step's own tier instead.
 
@@ -117,6 +119,8 @@ When Anthropic releases a new model family, review and update the tier mapping:
 1. **Check**: Compare the tier table above against Anthropic's [model overview page](https://docs.anthropic.com/en/docs/about-claude/models). Note any new model IDs, deprecated models, or capability changes.
 2. **Update**: If the mapping is stale, update the tier table (model names and IDs) and the model-check blocks in all 10 skill files (`skills/*.md`). Each skill file has an On Start model-check block that references a specific model name and `/model` alias.
 3. **Propagate**: Re-run `bootstrap.sh` on active projects to copy the updated `CLAUDE.md` and skill files.
+
+**Note on aliases**: Dispatch call sites (Agent tool invocations, `.claude/agents/*.md` frontmatter `model:` fields) use the stable alias (`opus`/`sonnet`/`haiku`), not a hardcoded versioned ID — they self-resolve to the current model on every release and need no update here. Only the tier table above (and any prose elsewhere in this file naming a specific model, e.g. "Opus 5") needs updating when a new model ships.
 
 If your `PROJECT.md` doesn't have a Model Routing section, see `templates/PROJECT.md` for a template that includes per-project tier overrides and update cadence settings.
 

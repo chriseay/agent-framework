@@ -142,7 +142,7 @@ If you don't have Codex CLI, use `claude-dispatch.sh` instead — it dispatches 
 
 ```bash
 bash claude-dispatch.sh "add docstrings to src/utils.js"
-bash claude-dispatch.sh "rename all instances of oldName to newName in lib/" --model claude-sonnet-4-6
+bash claude-dispatch.sh "rename all instances of oldName to newName in lib/" --model sonnet
 ```
 
 Setup copies both `CLAUDE.md` and `AGENTS.md` into your project. Codex CLI is optional — the framework works fine with Claude Code alone.
@@ -158,6 +158,8 @@ Each workflow phase has a recommended **model tier** to balance cost and capabil
 | light | Haiku 4.5 | `claude-haiku-4-5-20251001` | `/discuss`, `/status`, `/pause`, `/resume`, `/issues`, `/help`, `/new-project` — conversational and lookups |
 | codex | Codex CLI | — | Mechanical subtasks dispatched during `/implement` |
 | claude | Claude Code CLI | `claude-haiku-4-5-20251001` | Mechanical subtasks dispatched headlessly via `claude-dispatch.sh` (no Codex required) |
+
+The Model ID column above is a point-in-time reference — verify against Anthropic's model documentation before assuming it's still accurate. Dispatch code (including `claude-dispatch.sh`'s own `--model` default) uses the stable alias (`opus`/`sonnet`/`haiku`) instead of a hardcoded versioned ID, so it never goes stale.
 
 The agent shows the recommended tier in the status block at the start of each phase. By default it asks for confirmation — you can override to a different tier if needed.
 

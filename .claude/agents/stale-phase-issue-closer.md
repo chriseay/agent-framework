@@ -1,7 +1,7 @@
 ---
 name: stale-phase-issue-closer
 description: Sweep for phases marked Complete in ROADMAP.md whose linked GitHub issue never actually closed. Defense-in-depth alongside /close-out's own issue-close verification — use when the user suspects GitHub state has drifted from ROADMAP.md, or periodically during /discuss.
-model: claude-sonnet-4-6
+model: sonnet
 tools: Glob, Grep, Read, Bash
 ---
 
