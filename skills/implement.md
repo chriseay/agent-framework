@@ -56,6 +56,10 @@ Model tier: heavy
 
 When dispatching a step with `isolation: worktree`, ensure all prior work in this session is committed and pushed to a remote ref first. Worktrees check out from refs, not uncommitted working-tree state — dispatching against unpushed local work fails silently into a stale checkout rather than erroring.
 
+**Pushing the feature branch alone is not sufficient** [Ph34]: worktree creation is governed by the `worktree.baseRef` setting — `fresh` (the default) branches from `origin/<default-branch>`, ignoring any other pushed branch entirely, and only `head` branches from the current local HEAD. A dispatch with the default setting silently checks out stale `main`, missing everything on the feature branch, even after a clean push. `bootstrap.sh` now sets `worktree.baseRef: "head"` in `.claude/settings.json` specifically to close this gap — verify that setting is actually in place (`cat .claude/settings.json`) before relying on "push first" alone, since this behavior has been reported inconsistent across at least one Claude Code version.
+
+**Confirm what actually triggers deploy/CI verification** [Ph34]: if a plan step's verification depends on a live deploy or CI run, confirm what actually triggers that pipeline (push to a specific branch? a PR event? a tag?) before assuming a feature-branch push already triggered it. A workflow scoped to `push`/`pull_request` against a specific branch (e.g. `main`) doesn't fire just because a feature branch was pushed.
+
 ## Model-Aware Dispatch
 
 Plan steps may include a tier annotation in the heading: `### Step N: Description (Tier: heavy/standard/light/codex)`. Steps without an annotation inherit the phase's default tier.
@@ -75,10 +79,11 @@ This makes the routing decision visible. Do not skip this checkpoint — if the 
 
 After the checkpoint:
 
+0. **Cross-repo check (before any `isolation: worktree` dispatch)** [Ph34]: worktree isolation only sees the current repo's checkout and history. If the step's actual work belongs to a different project/repo than the current checkout (e.g. a hub-and-satellite setup — see `FRAMEWORK-GUIDE.md`'s "Hub-and-Satellite Multi-Project Pattern"), stop and report the mismatch rather than dispatching to `implement-step` or any other worktree-isolated agent — a worktree dispatch against the wrong repo fails silently rather than erroring.
 1. **If the tier matches the current model** (or the step has no annotation), execute the step normally.
 2. **If the tier is lighter** (`standard`, `light`), dispatch to a subagent:
-   - For `standard` tier steps: Use the `Agent` tool with `subagent_type: implement-step` (model `claude-sonnet-4-6` is defined in the agent file).
-   - For `light` tier steps: Use the `Agent` tool with `subagent_type: general-purpose` and `model: claude-haiku-4-5-20251001` explicitly. Never rely on model inheritance.
+   - For `standard` tier steps: Use the `Agent` tool with `subagent_type: implement-step` (model `sonnet` is defined in the agent file).
+   - For `light` tier steps: Use the `Agent` tool with `subagent_type: general-purpose` and `model: haiku` explicitly. Never rely on model inheritance.
    - The prompt must be **self-contained**: include the full step description, relevant file paths, the content of any files the subagent needs to read or edit, and success criteria. The subagent does not have session context.
 3. **If the tier is `codex`**, use Codex dispatch (see below). Do not execute codex-tier steps locally.
 4. **Wait for the subagent's Agent result to return fully before reviewing or continuing.** Do not advance to the next step until the dispatched Agent has completed. Then review the output — if it looks wrong or incomplete, escalate via `AskUserQuestion`.
