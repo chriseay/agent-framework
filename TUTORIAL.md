@@ -100,7 +100,7 @@ Then you'll see this status block:
 ```
 Phase: 0 — Core CLI
 Step:  new-project
-Model: light (Haiku)
+Model: Haiku 4.5
 Next:  type `/discuss` to start Phase 0: Core CLI
 ```
 
@@ -151,7 +151,7 @@ When the conversation winds down, you'll see:
 ```
 Phase: 0 — Core CLI
 Step:  discuss
-Model: light (Haiku)
+Model: Haiku 4.5
 Next:  type `/research` to investigate codebase and constraints
 ```
 
@@ -211,7 +211,7 @@ Then:
 ```
 Phase: 0 — Core CLI
 Step:  research
-Model: standard (Sonnet)
+Model: Sonnet 5
 Next:  type `/plan` to create the implementation plan
 ```
 
@@ -269,7 +269,7 @@ The agent writes this to `planning/phase-00/PLAN.md` and updates the workflow st
 ```
 Phase: 0 — Core CLI
 Step:  plan
-Model: heavy (Opus)
+Model: Opus 5
 Next:  type `/implement` to start building on a feature branch
 ```
 
@@ -335,7 +335,7 @@ After all steps complete:
 ```
 Phase: 0 — Core CLI
 Step:  implement
-Model: heavy (Opus)
+Model: Opus 5
 Next:  type `/test` to verify the changes
 ```
 
@@ -377,7 +377,7 @@ The agent dispatches a `test-runner` sub-agent, which reads your `PROJECT.md` to
 ```
 Phase: 0 — Core CLI
 Step:  test
-Model: standard (Sonnet)
+Model: Sonnet 5
 Next:  type `/close-out` to wrap up the phase
 ```
 
@@ -433,7 +433,7 @@ The agent executes the steps, merges the branch, and updates the roadmap to mark
 ```
 Phase: 1 — (pending)
 Step:  close-out
-Model: standard (Sonnet)
+Model: Sonnet 5
 Next:  type `/discuss` to start Phase 1
 ```
 

@@ -48,7 +48,7 @@ When you open Claude Code, the agent immediately tells you where you are:
 ```
 Phase: 3 — Capture and Attachments
 Step:  implement (step 4 of 6)
-Model: heavy (Opus)
+Model: Opus 5
 Next:  type /implement to continue
 ```
 
@@ -105,6 +105,10 @@ You approve plans before implementation starts. You approve lessons learned befo
 For changes that are trivial by objective criteria — a single known defect, touching no more than 2 files, no new behaviour, fully reversible — you can skip straight to `/implement` without running the full `/discuss → /close-out` cycle. The agent shows an explicit About to/Why/Affects block confirming the change meets all four criteria and asks for your approval before proceeding. Hotfixes are logged to `ROADMAP.md`'s `## Hotfix Log` section and aren't numbered as phases.
 
 If any criterion is even arguable, the agent runs the full cycle instead — this is a guard, not a shortcut.
+
+## Triage Path
+
+A second, narrower bypass — **Triage** — applies to pure record-reconciliation of `ROADMAP.md`'s parked entries (Deferred Phases, Deferred Verifications, Deferred Subagents, Known Flaky Tests): no code change, just deciding keep/remove/promote/convert for each item. Same About to/Why/Affects and approval-gate pattern as Hotfix; logged with a `[triage]` prefix in the same Hotfix Log. See `FRAMEWORK-GUIDE.md` for detail.
 
 ## Session Breaks
 
@@ -239,7 +243,7 @@ This file is created automatically by `bootstrap.sh` and auto-loaded by Claude C
 
 **Bespoke sub-agents** (custom agent definitions for your project):
 → `.claude/agents/your-agent-name.md`
-Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`, `stale-phase-issue-closer`). Your agents are never overwritten.
+Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`, `stale-phase-issue-closer`, `worktree-result-applier`). Your agents are never overwritten.
 
 **Project facts** (tech stack, architecture, lessons learned):
 → `PROJECT.md` — the knowledge document Claude reads for context.

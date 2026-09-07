@@ -97,7 +97,7 @@ If any criterion is even arguable, the agent runs the full cycle instead. This i
 
 ### Triage Path
 
-A second, sibling bypass of the full `/discuss → /close-out` cycle — distinct from the Hotfix Path above. Hotfix is for a code fix to a known defect; Triage is for pure record-reconciliation, with no code change at all: walking existing `ROADMAP.md` entries (Deferred Phases, Deferred Verifications, Deferred Subagents, Known Flaky Tests, or similar parked records) and deciding a disposition — keep, remove, promote, convert — for each one.
+A second, sibling bypass of the full `/discuss → /close-out` cycle — distinct from the Hotfix Path above. Hotfix is for a code fix to a known defect; Triage is for pure record-reconciliation, with no code change at all: walking existing `ROADMAP.md` entries (Deferred Phases, Deferred Verifications, Deferred Subagents, Known Flaky Tests — tests parked as confirmed self-resolving flakes rather than regressions — or similar parked records) and deciding a disposition — keep, remove, promote, convert — for each one.
 
 Applies only when the work introduces no new code, no new files, no new entities, no design decisions, and no user-facing behaviour change. Like the Hotfix Path, this is a guard the agent proposes when a request qualifies, with an explicit About to/Why/Affects block and an `AskUserQuestion` approval gate — never a self-assessed skip. Approved Triage passes are logged in the same `ROADMAP.md` `## Hotfix Log` section as Hotfixes, prefixed `[triage]` to keep the two kinds distinguishable. Like Hotfixes, Triage passes aren't numbered as phases and don't update `.workflow/state.md`.
 
@@ -174,7 +174,7 @@ Loaded at session start. Keep it focused on facts and context about what you're 
 
 **Bespoke sub-agents**:
 → `.claude/agents/your-agent-name.md`
-Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`, `stale-phase-issue-closer`). Your agents are safe on upgrade.
+Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`, `stale-phase-issue-closer`, `worktree-result-applier`). Your agents are safe on upgrade.
 
 ### Migrating existing edits
 
