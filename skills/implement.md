@@ -60,6 +60,8 @@ When dispatching a step with `isolation: worktree`, ensure all prior work in thi
 
 **Confirm what actually triggers deploy/CI verification** [Ph34]: if a plan step's verification depends on a live deploy or CI run, confirm what actually triggers that pipeline (push to a specific branch? a PR event? a tag?) before assuming a feature-branch push already triggered it. A workflow scoped to `push`/`pull_request` against a specific branch (e.g. `main`) doesn't fire just because a feature branch was pushed.
 
+After a same-repo `isolation: worktree` dispatch reports real file changes, use the `worktree-result-applier` subagent (`.claude/agents/worktree-result-applier.md`) to extract/apply/verify/clean up rather than doing that dance manually.
+
 ## Model-Aware Dispatch
 
 Plan steps may include a tier annotation in the heading: `### Step N: Description (Tier: heavy/standard/light/codex)`. Steps without an annotation inherit the phase's default tier.
