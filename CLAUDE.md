@@ -53,6 +53,14 @@ If a change meets all four, skip straight to `/implement`. Before doing so, outp
 
 On approval: implement the change, then commit and push as normal (each still requires its own approval per Git Rules). Log the hotfix in `ROADMAP.md`'s `## Hotfix Log` section — date, one-sentence description, commit hash. Hotfixes are out-of-band from phase numbering; don't update `.workflow/state.md`'s phase tracking for one.
 
+**Triage path** [Ph34]: An optional, tightly-scoped bypass of the full cycle for pure record-reconciliation — not a judgment call, and distinct from the Hotfix path above (Hotfix is for code fixes to a known defect; Triage is for deciding the disposition of existing records, with no code change at all). Applies only when **every** one of these holds:
+- The work is walking existing `ROADMAP.md` entries — Deferred Phases, Deferred Verifications, Deferred Subagents, Known Flaky Tests, or similarly-parked records — and deciding a disposition (keep, remove, promote, convert) for each one.
+- It introduces no new code, no new files, no new entities, no design decisions, and no user-facing behaviour change.
+
+If a request meets both criteria, skip straight to actioning each item's disposition (no `/discuss`→`/close-out` cycle). Before doing so, output an About to/Why/Affects block that states explicitly how the request satisfies each criterion, then use `AskUserQuestion` to get explicit approval — "Yes, treat as triage/cleanup" / "No, run through /discuss normally". Never self-assess and proceed silently; if either criterion is even arguable, run the full `/discuss` cycle instead.
+
+On approval: walk each item, get the user's decision, and apply it directly to `ROADMAP.md`. Log the pass in `ROADMAP.md`'s `## Hotfix Log` section with a `[triage]` prefix (see that section's own header comment) — date, one-sentence description, commit hash. Like Hotfixes, Triage passes are out-of-band from phase numbering; don't update `.workflow/state.md`'s phase tracking for one.
+
 ### Always Apply
 
 - Use `AskUserQuestion` to ask **one question at a time** — never batch questions.
@@ -73,6 +81,10 @@ Before requesting approval, show a brief summary of what will happen and why. Al
 ### Git Safety
 
 These commands are **never allowed** without explicit user approval: `git push --force`, `git reset --hard`, `git rebase`, `git branch -D`, `git checkout .`, `git restore .`, `git clean -f`.
+
+### Editing Large Generated Files
+
+`ROADMAP.md` and `PROJECT.md` are large, multi-section generated files — an edit whose match can span across section boundaries (a broad regex/sed pass, or an `Edit` `old_string` that isn't scoped to one section) risks destroying unrelated content, as has happened in practice [Ph34]. When editing files with multiple independently-meaningful sections, scope each `Edit` call's `old_string` to content inside one section only; if a change genuinely needs to touch several sections, make it as separate `Edit` calls, one per section.
 
 ### Conflict Resolution
 
