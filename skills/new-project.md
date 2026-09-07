@@ -77,7 +77,8 @@ Alongside writing PROJECT.md, set up its starting subdocuments (bootstrap.sh has
 - Phase list with deliverables
 - Verification expectations per phase
 - Status for each phase
-- Deferred Phases and Deferred Verifications sections
+- Deferred Phases, Deferred Verifications, Deferred Subagents, and Known Flaky Tests sections
+- Hotfix Log section
 
 ### README.md Required Sections
 - Project description
