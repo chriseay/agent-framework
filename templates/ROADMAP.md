@@ -54,9 +54,15 @@
 - **Data validation agent**: Check incoming data format. Deferred from Phase 2 — can be built after core pipeline is stable.
 -->
 
+## Known Flaky Tests
+
+<!-- Recurring CI failures confirmed as self-resolving flakes, not regressions — don't re-investigate from scratch when these recur; check whether the entity/behavior has already recovered before treating as an incident. -->
+
+(none)
+
 ## Hotfix Log
 
-<!-- Record of changes made via CLAUDE.md's Hotfix path (skipping the full /discuss → /close-out cycle). Each entry: date, one-sentence description, commit hash. This log is the only record of hotfix work — it isn't tracked as a numbered phase. -->
+<!-- Record of changes made via CLAUDE.md's Hotfix path or Triage path (both skip the full /discuss → /close-out cycle). Each entry: date, one-sentence description, commit hash. Triage-path entries are prefixed "[triage]" to distinguish them from Hotfix entries — Hotfix is a code fix to a known defect, Triage is a record-reconciliation pass with no code change. This log is the only record of this work — neither is tracked as a numbered phase. -->
 
 <!-- Example:
 - 2026-03-14 — Fixed off-by-one in phase renumbering's descending-order loop. `a1b2c3d`
