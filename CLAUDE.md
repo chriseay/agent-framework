@@ -16,7 +16,7 @@ Phase:    [number] — [name]
 Step:     [current workflow step]
 Subphase: N of M (only if in a subphase cycle)
 Paused:   [N phase(s) — Phase X: Name, ...] (only if paused phases exist)
-Model:    [tier] ([model name])
+Model:    [model name]
 Next:     type `/[next command]` to continue
 ```
 
@@ -53,6 +53,15 @@ If a change meets all four, skip straight to `/implement`. Before doing so, outp
 
 On approval: implement the change, then commit and push as normal (each still requires its own approval per Git Rules). Log the hotfix in `ROADMAP.md`'s `## Hotfix Log` section — date, one-sentence description, commit hash. Hotfixes are out-of-band from phase numbering; don't update `.workflow/state.md`'s phase tracking for one.
 
+**Triage path** [Ph34]: An optional, tightly-scoped bypass of the full cycle for pure record-reconciliation — not a judgment call, and distinct from the Hotfix path above (Hotfix is for code fixes to a known defect; Triage is for deciding the disposition of existing records, with no code change at all). Applies only when **every** one of these holds:
+- The work is walking existing `ROADMAP.md` entries — Deferred Phases, Deferred Verifications, Deferred Subagents, Known Flaky Tests, or similarly-parked records — and deciding a disposition (keep, remove, promote, convert) for each one.
+- It introduces no new code, no new files, no new entities, no design decisions, and no user-facing behaviour change.
+- **Applies only when roadmap reconciliation is the entire request** — e.g. the user explicitly asks to clean up or reconcile the roadmap outside of any phase. It does not apply to the Roadmap Review step that already runs at the start of every `/discuss` cycle — that's routine, not a bypass, and needs no separate approval gate.
+
+If a request meets all three criteria, skip straight to actioning each item's disposition (no `/discuss`→`/close-out` cycle). Before doing so, output an About to/Why/Affects block that states explicitly how the request satisfies each criterion, then use `AskUserQuestion` to get explicit approval — "Yes, treat as triage/cleanup" / "No, run through /discuss normally". Never self-assess and proceed silently; if any criterion is even arguable, run the full `/discuss` cycle instead.
+
+On approval: walk each item, get the user's decision, and apply it directly to `ROADMAP.md`. Log the pass in `ROADMAP.md`'s `## Hotfix Log` section with a `[triage]` prefix (see that section's own header comment) — date, one-sentence description, commit hash. Like Hotfixes, Triage passes are out-of-band from phase numbering; don't update `.workflow/state.md`'s phase tracking for one.
+
 ### Always Apply
 
 - Use `AskUserQuestion` to ask **one question at a time** — never batch questions.
@@ -74,6 +83,10 @@ Before requesting approval, show a brief summary of what will happen and why. Al
 
 These commands are **never allowed** without explicit user approval: `git push --force`, `git reset --hard`, `git rebase`, `git branch -D`, `git checkout .`, `git restore .`, `git clean -f`.
 
+### Editing Large Generated Files
+
+`ROADMAP.md` and `PROJECT.md` are large, multi-section generated files — an edit whose match can span across section boundaries (a broad regex/sed pass, or an `Edit` `old_string` that isn't scoped to one section) risks destroying unrelated content, as has happened in practice [Ph34]. When editing files with multiple independently-meaningful sections, scope each `Edit` call's `old_string` to content inside one section only; if a change genuinely needs to touch several sections, make it as separate `Edit` calls, one per section.
+
 ### Conflict Resolution
 
 Process rules in `CLAUDE.md` take precedence over `PROJECT.md`. Project-specific technical rules in `PROJECT.md` override general guidance. If unclear, stop and ask.
@@ -90,6 +103,8 @@ The framework uses **model tiers** to route phases to appropriately-sized models
 | codex | Codex CLI | — | Mechanical subtasks (via `codex-dispatch.sh`) |
 | claude | Claude Code CLI | `claude-haiku-4-5-20251001` | Mechanical subtasks dispatched headlessly via `claude-dispatch.sh` (Claude alternative to codex-dispatch.sh; no Codex required) |
 
+The Model ID column above is a point-in-time reference — current as of the last update to this table. Verify against Anthropic's model documentation before assuming it's still accurate. Dispatch code (Agent tool calls, subagent frontmatter `model:` fields) should use the stable alias (`opus`/`sonnet`/`haiku`) instead of a hardcoded versioned ID, so it never goes stale.
+
 **`opusplan` alias**: Claude Code offers an `opusplan` model alias that uses Opus during planning and Sonnet during execution. This matches the framework's heavy/standard tier intent and may be a convenient default for users on Max or Team plans.
 
 **Adaptive thinking**: Sonnet 5 with adaptive thinking (`effort: "high"`) can match Opus 5 performance on many complex tasks at lower cost. Consider this as an alternative to Opus 5 for cost-sensitive projects. Only Opus 5 supports `effort: "max"` for unconstrained reasoning depth. Haiku 4.5 does not support adaptive thinking.
@@ -98,15 +113,11 @@ Each skill file declares its tier in its On Start section. The agent resolves th
 
 1. **Detect current model**: Read the system prompt injection ("You are powered by the model named...") to identify the active model.
 2. **Detect Codex availability**: Check if Codex CLI is installed (`command -v codex`).
-3. **Look up phase tier**: Read the skill file's `Model tier:` annotation.
+3. **Look up phase tier**: Read the skill file's `Model tier:` annotation — still needed for per-step dispatch (Model-Aware Dispatch in `skills/implement.md`, the Tier Assignment Guide in `skills/plan.md`) to reference.
 4. **Check for overrides**: If `PROJECT.md` has a "Model Routing" section, use those overrides instead of defaults.
-5. **Show in status block**: Display the tier and model name in the `Model:` line.
+5. **Show in status block**: Display just the model name in the `Model:` line — no session-level tier-match prompt; see Advisor Guidance below for how model-fit judgment is handled instead.
 
-**Confirmation mode** (default): Show the tier in the status block as a brief inline note. The user can override by requesting a different tier.
-
-If `PROJECT.md` sets `auto-routing: yes`, skip confirmation and proceed with the recommended tier automatically.
-
-When dispatching to a lighter model via the Task tool, always set the `model` parameter explicitly (e.g. `model: claude-haiku-4-5-20251001`). Do not rely on model inheritance.
+When dispatching to a lighter model via the Task tool, always set the `model` parameter explicitly (e.g. `model: haiku`). Do not rely on model inheritance.
 
 **Haiku dispatch scope**: Haiku is appropriate for mechanical steps only — file writes, package installs, directory creation, simple lookups, formatting. It is not appropriate for interpreting raw command or infrastructure output, where subtle field semantics require judgment (e.g. parsing `systemctl status`, `df`, or other tool output for meaning, not just presence) — handle those at the dispatching step's own tier instead.
 
@@ -118,7 +129,17 @@ When Anthropic releases a new model family, review and update the tier mapping:
 2. **Update**: If the mapping is stale, update the tier table (model names and IDs) and the model-check blocks in all 10 skill files (`skills/*.md`). Each skill file has an On Start model-check block that references a specific model name and `/model` alias.
 3. **Propagate**: Re-run `bootstrap.sh` on active projects to copy the updated `CLAUDE.md` and skill files.
 
+**Note on aliases**: Dispatch call sites (Agent tool invocations, `.claude/agents/*.md` frontmatter `model:` fields) use the stable alias (`opus`/`sonnet`/`haiku`), not a hardcoded versioned ID — they self-resolve to the current model on every release and need no update here. Only the tier table above (and any prose elsewhere in this file naming a specific model, e.g. "Opus 5") needs updating when a new model ships.
+
 If your `PROJECT.md` doesn't have a Model Routing section, see `templates/PROJECT.md` for a template that includes per-project tier overrides and update cadence settings.
+
+### Advisor Guidance [Ph34]
+
+Model tiers route work to an appropriately-sized model for a whole phase or step, but they don't catch everything — a step can turn out harder than its tier assumed, or an interpretation can be wrong in a way that no tier fixes. `advisor` (a no-parameter tool that forwards the full conversation to a stronger reviewer) is the mechanism for that: call it instead of, or alongside, changing which model is running the session.
+
+- **Named checkpoints are a floor, not a ceiling**: each skill names at least one point where calling `advisor` is expected (see each `skills/*.md` file's own checkpoint). These are minimums, not the only points it may be called — call `advisor` at any other judgment call too: before committing to an interpretation, on a recurring error, when considering a change of approach, or when a step feels riskier than its plan entry implied.
+- **Always consult `advisor` for silent-failure and high-stakes work**, regardless of phase tier or where in a phase it occurs: any step producing a check, guard, gate, monitor, suppression, or redaction; any unattended action on a live system; any security-sensitive boundary. Per-step dispatch may route this category to a heavy-tier (Opus) subagent directly, even inside an otherwise lighter-tier phase — see `skills/plan.md`'s Tier Assignment Guide.
+- This replaces the interactive session-level model-switch prompt that used to fire in every skill's On Start block. If the current model genuinely doesn't fit the work at hand, the user can always request a switch directly; the framework no longer prompts for it automatically.
 
 ## Documents
 

@@ -38,23 +38,13 @@ Paused:        [date]
 - If the Current Step marker in PLAN.md does not match the saved Implementation Step, warn: "Note: PLAN.md Current Step marker shows Step [X], but saved state says Step [Y]. The plan may have been updated while paused."
 
 **Model tier mapping** (for the recommended model display):
-- heavy → Opus (`claude-opus-4-6`)
-- standard → Sonnet (`claude-sonnet-4-6`)
-- light → Haiku (`claude-haiku-4-5-20251001`)
+- heavy → Opus (`opus`)
+- standard → Sonnet (`sonnet`)
+- light → Haiku (`haiku`)
 
 ### 3. Model-check
 
-If the model tier from the paused state differs from the currently active model (detected from system prompt injection "You are powered by the model named…"):
-
-State the mismatch clearly:
-> "Phase [N] was paused on [tier] tier ([model name]). You're currently on [current model]."
-
-Tell the user how to switch:
-> "To switch: type `/model [model-alias]` in Claude Code (conversation history is preserved)."
-
-Then use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
-
-Wait for the user's response before proceeding.
+State the paused phase's tier as an FYI, no prompt: "Phase [N] was paused on [tier] tier ([model name] recommended). Session-level model choice is your own — no prompt, continuing."
 
 ### 4. Ask where to resume
 

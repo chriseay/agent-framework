@@ -11,13 +11,7 @@ Run when `.workflow/state.md` shows "Next Command: /new-project" or when the use
 ## On Start
 
 1. Note the model tier for this command: `light`. Include it in the status block.
-   **Model check**: This phase runs at light tier — recommended model: Haiku.
-   Detect the current model from the system prompt ("You are powered by the model named…").
-   If the current model does not match this tier:
-   - State the mismatch clearly (e.g., "This phase needs Haiku; you're currently on Sonnet.").
-   - Tell the user how to switch: "To switch, type `/model haiku` in Claude Code (conversation history is preserved)."
-   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
-   Wait for the user's response before proceeding.
+   Session-level model choice is your own — no confirmation prompt; call `advisor` per CLAUDE.md's Advisor Guidance if model fit is in doubt.
 
 ## Process
 
@@ -37,6 +31,7 @@ Run when `.workflow/state.md` shows "Next Command: /new-project" or when the use
 3. **Plan**: Present a short outline for each document with assumptions called out.
 
 4. **Verify**: Use `AskUserQuestion` to confirm outlines before writing.
+5. Before finalizing the outlines and writing any document, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
 
 ## Document Creation
 
@@ -77,7 +72,8 @@ Alongside writing PROJECT.md, set up its starting subdocuments (bootstrap.sh has
 - Phase list with deliverables
 - Verification expectations per phase
 - Status for each phase
-- Deferred Phases and Deferred Verifications sections
+- Deferred Phases, Deferred Verifications, Deferred Subagents, and Known Flaky Tests sections
+- Hotfix Log section
 
 ### README.md Required Sections
 - Project description

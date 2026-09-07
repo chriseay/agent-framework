@@ -8,13 +8,7 @@ Model tier: heavy
 
 1. Read `.workflow/state.md` to identify the current phase.
 2. Note the model tier for this phase: `heavy`. Include it in the status block.
-   **Model check**: This phase runs at heavy tier — recommended model: Opus.
-   Detect the current model from the system prompt ("You are powered by the model named…").
-   If the current model does not match this tier:
-   - State the mismatch clearly (e.g., "This phase needs Opus; you're currently on Sonnet.").
-   - Tell the user how to switch: "To switch, type `/model opus` in Claude Code (conversation history is preserved)."
-   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
-   Wait for the user's response before proceeding to the next On Start step.
+   Session-level model choice is your own — no confirmation prompt; call `advisor` per CLAUDE.md's Advisor Guidance if model fit is in doubt.
 3. Read `planning/phase-XX/CONTEXT.md` and `planning/phase-XX/RESEARCH.md`.
 4. Read `ROADMAP.md` for the phase deliverables.
 
@@ -34,7 +28,7 @@ Model tier: heavy
    - The plan is growing significantly more complex than the phase's default tier can handle reliably (e.g., many interdependent architectural decisions emerging).
    - A specific plan step clearly requires a lighter touch (e.g., a pure doc update or rename) and the current model is wasteful for it.
    - Cross-cutting concerns emerge that weren't visible during research.
-   When triggered: output a one-line justification and use `AskUserQuestion` with options: "Switch to [recommended model] — ready to continue" / "Continue on current model."
+   When triggered: output a one-line justification, then call `advisor` per CLAUDE.md's Advisor Guidance and/or route the affected step(s) to a different tier via the Tier Assignment Guide above — do not prompt to switch the current session's model.
 
 ## Tier Assignment Guide
 
@@ -57,6 +51,7 @@ Assign tiers to plan steps based on what the step involves. The phase's default 
 | Write tests for an existing module | standard | Single-concern work following established patterns |
 | Redesign the authentication middleware | heavy | Multi-file changes, architectural decisions, complex reasoning |
 | Design new instructional language for a skill file | heavy | Requires careful wording that shapes future agent behaviour |
+| Any check/gate/guard/monitor/suppression/redaction, or unattended action on a live system, or security-sensitive boundary | heavy | Route to Opus regardless of the phase's own default tier — this is the category CLAUDE.md's Advisor Guidance always-consult rule covers; per-step dispatch is the mechanism for getting heavy-model judgment onto specific steps without a session-wide switch |
 | Rename `oldFunc` to `newFunc` across the codebase | codex | Mechanical find-and-replace, no reasoning needed |
 | Reformat a file to match a style guide | codex | Mechanical transform, deterministic output |
 
@@ -96,6 +91,8 @@ Before presenting the plan to the user, run this check:
 - Call out potential bugs, infeasible steps, or unaddressed risks.
 
 If verification fails, revise the plan before presenting it.
+
+Also call `advisor` per CLAUDE.md's Advisor Guidance before presenting the plan — this is a floor, not the only point it may be called.
 
 ## Present to User
 

@@ -8,14 +8,8 @@ Model tier: light
 
 1. Read `.workflow/state.md` to identify the current phase.
 2. Note the model tier for this phase: `light`. Include it in the status block.
-   **Model check**: This phase runs at light tier — recommended model: Haiku.
-   Detect the current model from the system prompt ("You are powered by the model named…").
-   If the current model does not match this tier:
-   - State the mismatch clearly (e.g., "This phase needs Haiku; you're currently on Sonnet.").
-   - Tell the user how to switch: "To switch, type `/model haiku` in Claude Code (conversation history is preserved)."
-   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
-   Wait for the user's response before proceeding to the next On Start step.
-3. **Check for paused phases** (before anything else after model check):
+   Session-level model choice is your own — no confirmation prompt; call `advisor` per CLAUDE.md's Advisor Guidance if model fit is in doubt.
+3. **Check for paused phases** (immediately after the previous step):
    - Check `.workflow/state.md` for a `## Paused Phases` section.
    - If paused phases exist, list them: "You have [N] paused phase(s): Phase X — [Name] (paused [date], step: [step]), ..."
    - Use `AskUserQuestion`: "Resume a paused phase, or continue with Phase [M] (current)?"
@@ -67,6 +61,7 @@ Before diving into phase requirements, review the roadmap with the user to captu
    - Deferred phases: count and brief labels (or "none")
    - Deferred verifications: count and brief labels (or "none")
    - Deferred subagents: count and brief labels (or "none")
+   - Known Flaky Tests: count and brief labels (or "none")
 
    Example format:
    ```
@@ -76,6 +71,7 @@ Before diving into phase requirements, review the roadmap with the user to captu
    Deferred phases: 1 item (API rate limiting)
    Deferred verifications: 1 item (load test under concurrency)
    Deferred subagents: 1 item (data validation agent)
+   Known Flaky Tests: 1 item (ipad-9th-gen key-entities check)
    ```
 
 2. **Gate question**: Use `AskUserQuestion` to ask: "Any roadmap changes — new items to add, or deferred items to address?" with options:
@@ -83,6 +79,8 @@ Before diving into phase requirements, review the roadmap with the user to captu
    - "Yes, I have changes" — continue with the review flow below.
 
 3. **If the user has changes**, run this flow:
+
+   **Recheck before presenting the default option** [Ph34]: for steps a-d below, before defaulting to "keep deferred" / "still recurring", check or ask whether the blocking condition might have already resolved itself (e.g., "has the thing you were waiting on happened yet?") — a deferred item can go stale silently if nobody re-examines the reason it was deferred in the first place, rather than just re-confirming the status quo each time.
 
    a. **Deferred Verifications**: List each deferred verification by name. For each, use `AskUserQuestion` to ask:
       - "Satisfied — remove" — the verification has been met; delete it from the list.
@@ -98,7 +96,12 @@ Before diving into phase requirements, review the roadmap with the user to captu
       - "Keep deferred" — leave it in Deferred Subagents.
       - "Discard — no longer needed" — remove it from the list.
 
-   d. **New items**: Ask the user what they'd like to add. For each new item:
+   d. **Known Flaky Tests** [Ph34]: List each entry by name. For each, use `AskUserQuestion` to ask:
+      - "Still recurring — keep" — the flake is still happening; leave it in the list.
+      - "Hasn't recurred in [timeframe] — remove" — ask the user for the timeframe, then delete the entry.
+      - "Confirmed as a real regression — convert to a bug/phase" — this isn't a flake after all; route it through the same placement flow as new items below.
+
+   e. **New items**: Ask the user what they'd like to add. For each new item:
       - Ask clarifying questions (one at a time) to define scope, deliverable, and verification criteria.
       - Recommend placement using `AskUserQuestion`:
         - **New phase** — recommend where it fits best (between existing phases, at the end of the current milestone, or in a future milestone). If inserting between existing phases, run the **Phase Renumbering** procedure (see below).
@@ -114,7 +117,7 @@ Before diving into phase requirements, review the roadmap with the user to captu
 
         Then update `ROADMAP.md` immediately using the Edit tool. If the item was placed as a new phase, run the **GitHub Phase Sync** flow for it.
 
-   e. **Repeat** until the user says they have no more changes.
+   f. **Repeat** until the user says they have no more changes.
 
 4. After the review (or skip), continue with On Start step 6.
 
@@ -234,6 +237,8 @@ Create `planning/phase-XX/CONTEXT.md` with:
 - **Open Questions**: Must be empty before moving on
 
 **Research-derived phases**: if this phase's scope comes from a prior phase's `RESEARCH.md` (the research-then-implement pattern — see FRAMEWORK-GUIDE.md's Research-Only Phases), before confirming CONTEXT.md, explicitly walk through every finding in that RESEARCH.md's recommendation table and verify each one traces to either a CONTEXT.md item or a documented rejection. A finding with neither is a gap, not a decision — surface it to the user rather than letting it silently drop between the research phase and this one. [Ph32]
+
+Before presenting the summary, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
 
 Show the user the CONTEXT.md summary and use `AskUserQuestion` to confirm it's accurate.
 

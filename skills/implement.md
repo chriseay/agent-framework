@@ -8,13 +8,7 @@ Model tier: heavy
 
 1. Read `.workflow/state.md` to identify the current phase and implementation step.
 2. Note the model tier for this phase: `heavy`. Include it in the status block.
-   **Model check**: This phase runs at heavy tier — recommended model: Opus.
-   Detect the current model from the system prompt ("You are powered by the model named…").
-   If the current model does not match this tier:
-   - State the mismatch clearly (e.g., "This phase needs Opus; you're currently on Sonnet.").
-   - Tell the user how to switch: "To switch, type `/model opus` in Claude Code (conversation history is preserved)."
-   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
-   Wait for the user's response before proceeding to the next On Start step.
+   Session-level model choice is your own — no confirmation prompt; call `advisor` per CLAUDE.md's Advisor Guidance if model fit is in doubt.
 3. PLAN.md path resolution:
    - Read the **Subphase** field from `.workflow/state.md`.
    - If the field is set (e.g., `Subphase: 2 of 3`): resolve the plan path as `planning/phase-XX/sub-N/PLAN.md` where N is the current subphase number (e.g., `sub-2/PLAN.md`).
@@ -56,6 +50,12 @@ Model tier: heavy
 
 When dispatching a step with `isolation: worktree`, ensure all prior work in this session is committed and pushed to a remote ref first. Worktrees check out from refs, not uncommitted working-tree state — dispatching against unpushed local work fails silently into a stale checkout rather than erroring.
 
+**Pushing the feature branch alone is not sufficient** [Ph34]: worktree creation is governed by the `worktree.baseRef` setting — `fresh` (the default) branches from `origin/<default-branch>`, ignoring any other pushed branch entirely, and only `head` branches from the current local HEAD. A dispatch with the default setting silently checks out stale `main`, missing everything on the feature branch, even after a clean push. `bootstrap.sh` now sets `worktree.baseRef: "head"` in `.claude/settings.json` specifically to close this gap — verify that setting is actually in place (`cat .claude/settings.json`) before relying on "push first" alone, since this behavior has been reported inconsistent across at least one Claude Code version.
+
+**Confirm what actually triggers deploy/CI verification** [Ph34]: if a plan step's verification depends on a live deploy or CI run, confirm what actually triggers that pipeline (push to a specific branch? a PR event? a tag?) before assuming a feature-branch push already triggered it. A workflow scoped to `push`/`pull_request` against a specific branch (e.g. `main`) doesn't fire just because a feature branch was pushed.
+
+After a same-repo `isolation: worktree` dispatch reports real file changes, use the `worktree-result-applier` subagent (`.claude/agents/worktree-result-applier.md`) to extract/apply/verify/clean up rather than doing that dance manually.
+
 ## Model-Aware Dispatch
 
 Plan steps may include a tier annotation in the heading: `### Step N: Description (Tier: heavy/standard/light/codex)`. Steps without an annotation inherit the phase's default tier.
@@ -75,10 +75,11 @@ This makes the routing decision visible. Do not skip this checkpoint — if the 
 
 After the checkpoint:
 
+0. **Cross-repo check (before any `isolation: worktree` dispatch)** [Ph34]: worktree isolation only sees the current repo's checkout and history. If the step's actual work belongs to a different project/repo than the current checkout (e.g. a hub-and-satellite setup — see `FRAMEWORK-GUIDE.md`'s "Hub-and-Satellite Multi-Project Pattern"), stop and report the mismatch rather than dispatching to `implement-step` or any other worktree-isolated agent — a worktree dispatch against the wrong repo fails silently rather than erroring.
 1. **If the tier matches the current model** (or the step has no annotation), execute the step normally.
 2. **If the tier is lighter** (`standard`, `light`), dispatch to a subagent:
-   - For `standard` tier steps: Use the `Agent` tool with `subagent_type: implement-step` (model `claude-sonnet-4-6` is defined in the agent file).
-   - For `light` tier steps: Use the `Agent` tool with `subagent_type: general-purpose` and `model: claude-haiku-4-5-20251001` explicitly. Never rely on model inheritance.
+   - For `standard` tier steps: Use the `Agent` tool with `subagent_type: implement-step` (model `sonnet` is defined in the agent file).
+   - For `light` tier steps: Use the `Agent` tool with `subagent_type: general-purpose` and `model: haiku` explicitly. Never rely on model inheritance.
    - The prompt must be **self-contained**: include the full step description, relevant file paths, the content of any files the subagent needs to read or edit, and success criteria. The subagent does not have session context.
 3. **If the tier is `codex`**, use Codex dispatch (see below). Do not execute codex-tier steps locally.
 4. **Wait for the subagent's Agent result to return fully before reviewing or continuing.** Do not advance to the next step until the dispatched Agent has completed. Then review the output — if it looks wrong or incomplete, escalate via `AskUserQuestion`.
@@ -92,7 +93,7 @@ During any step, if you detect any of the following signals, stop and recommend 
 - A code generation step is producing interdependent changes where one error could cascade.
 - The step turns out to be clearly mechanical and repetitive (rename, reformat, status update) but is annotated at `standard` or `heavy`.
 
-When triggered: output a one-line justification (e.g., "This step involves 12 files — Opus recommended.") and use `AskUserQuestion` with options: "Switch to [recommended model] — ready to continue" / "Continue on current model."
+When triggered: output a one-line justification (e.g., "This step involves 12 files — Opus recommended."), then call `advisor` per CLAUDE.md's Advisor Guidance and/or re-dispatch the remaining work at a different tier via Model-Aware Dispatch above — do not prompt to switch the current session's model.
 
 ### Codex dispatch
 
@@ -116,6 +117,7 @@ Dispatch report: N local, M dispatched (X to Haiku, Y to Sonnet, Z to Codex)
 
 - Follow the plan steps in order.
 - After completing each step, **update the Current Step marker** in PLAN.md.
+- Before declaring a step — or the whole implementation — done, call `advisor` per CLAUDE.md's Advisor Guidance. This is a floor, not the only point it may be called.
 - If deviation is needed, output:
   **About to**: deviate from the approved plan
   **Why**: [explain what was discovered and why the plan step cannot be followed as written]

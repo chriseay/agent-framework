@@ -8,13 +8,7 @@ Model tier: light
 
 1. Read `.workflow/state.md` to identify the current phase.
 2. Note the model tier for this command: `light`. Include it in the status block.
-   **Model check**: This phase runs at light tier — recommended model: Haiku.
-   Detect the current model from the system prompt ("You are powered by the model named…").
-   If the current model does not match this tier:
-   - State the mismatch clearly (e.g., "This phase needs Haiku; you're currently on Sonnet.").
-   - Tell the user how to switch: "To switch, type `/model haiku` in Claude Code (conversation history is preserved)."
-   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
-   Wait for the user's response before proceeding to the next On Start step.
+   Session-level model choice is your own — no confirmation prompt; call `advisor` per CLAUDE.md's Advisor Guidance if model fit is in doubt.
 3. Check that `gh` CLI is available:
    - Run `command -v gh`. If missing, tell the user: "GitHub CLI (`gh`) is not installed. Install it from https://cli.github.com/ and run `gh auth login`." Then stop.
    - Run `gh auth status`. If not authenticated, tell the user: "GitHub CLI is not authenticated. Run `gh auth login` to set up access." Then stop.
@@ -35,7 +29,7 @@ Model tier: light
 
 ## Operations
 
-Use `AskUserQuestion` to determine which operation the user wants, then follow the relevant section below. All mutation operations (create, edit, close, reopen, comment) require explicit user approval before executing.
+Use `AskUserQuestion` to determine which operation the user wants, then follow the relevant section below. All mutation operations (create, edit, close, reopen, comment) require explicit user approval before executing. Before finalizing any such action, call `advisor` per CLAUDE.md's Advisor Guidance if the action's impact is in doubt — this is a floor, not the only point it may be called.
 
 ### List
 

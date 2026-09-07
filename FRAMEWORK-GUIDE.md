@@ -95,6 +95,12 @@ If a change meets all four, the agent skips straight to `/implement`. Before doi
 
 If any criterion is even arguable, the agent runs the full cycle instead. This is a guard, not a shortcut you request — the agent proposes it when a change qualifies.
 
+### Triage Path
+
+A second, sibling bypass of the full `/discuss → /close-out` cycle — distinct from the Hotfix Path above. Hotfix is for a code fix to a known defect; Triage is for pure record-reconciliation, with no code change at all: walking existing `ROADMAP.md` entries (Deferred Phases, Deferred Verifications, Deferred Subagents, Known Flaky Tests — tests parked as confirmed self-resolving flakes rather than regressions — or similar parked records) and deciding a disposition — keep, remove, promote, convert — for each one.
+
+Applies only when the work introduces no new code, no new files, no new entities, no design decisions, and no user-facing behaviour change. Like the Hotfix Path, this is a guard the agent proposes when a request qualifies, with an explicit About to/Why/Affects block and an `AskUserQuestion` approval gate — never a self-assessed skip. Approved Triage passes are logged in the same `ROADMAP.md` `## Hotfix Log` section as Hotfixes, prefixed `[triage]` to keep the two kinds distinguishable. Like Hotfixes, Triage passes aren't numbered as phases and don't update `.workflow/state.md`.
+
 ### Hub-and-Satellite Multi-Project Pattern
 
 Sometimes several related projects end up sharing a single active development cadence — one is clearly the primary focus, and the others are smaller or slower-moving. Rather than running a full, independent phase-tracking cycle in each project, one repo can act as a **hub**: it holds the live `ROADMAP.md` and `planning/` for work that spans or primarily concerns the group, while the other **satellite** repos keep Agent Framework installed but mark their own tracking as vestigial and point to the hub instead.
@@ -168,7 +174,7 @@ Loaded at session start. Keep it focused on facts and context about what you're 
 
 **Bespoke sub-agents**:
 → `.claude/agents/your-agent-name.md`
-Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`, `stale-phase-issue-closer`). Your agents are safe on upgrade.
+Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`, `stale-phase-issue-closer`, `worktree-result-applier`). Your agents are safe on upgrade.
 
 ### Migrating existing edits
 
@@ -287,7 +293,7 @@ Each workflow phase has a recommended **model tier** to balance cost and capabil
 | light | Conversational Q&A, simple lookups (`/discuss`, `/status`, `/pause`, `/resume`, `/issues`) |
 | codex | Mechanical subtasks dispatched via `codex-dispatch.sh` |
 
-The agent shows the recommended tier in the status block. You can override to a different tier if needed, or set `auto-routing: yes` in `PROJECT.md` to skip confirmation.
+The agent shows the current model in the status block — there's no tier-confirmation prompt; you can override the default tier for a specific phase via `PROJECT.md`, and model-fit judgment mid-phase is handled via `advisor` consultation (see `CLAUDE.md`'s Advisor Guidance section).
 
 Within a phase, `/plan` annotates individual steps with model tiers, and `/implement` dispatches each step to the annotated tier. See [README.md](README.md#model-routing) for the full tier-to-phase mapping and override options.
 

@@ -23,7 +23,7 @@ Present to the user:
 ```
 Phase:       [number] — [name]
 Step:        [current workflow step]
-Model:       [tier] ([model name])
+Model:       [model name]
 Plan step:   [N of M] (if implementing)
 Subphase:    [N of M] (if in a subphase cycle)
 Paused:      [N phase(s) — Phase X: Name, ...] (if any paused phases exist)

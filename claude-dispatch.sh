@@ -8,7 +8,7 @@ set -e
 
 # Defaults
 DIR="$(pwd)"
-MODEL="claude-haiku-4-5-20251001"
+MODEL="haiku"
 TASK=""
 
 # Parse arguments

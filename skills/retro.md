@@ -14,13 +14,7 @@ Model tier: standard
 
 1. Read `.workflow/state.md` to identify the current milestone and phase.
 2. Note the model tier for this phase: `standard`. Include it in the status block.
-   **Model check**: This phase runs at standard tier — recommended model: Sonnet.
-   Detect the current model from the system prompt ("You are powered by the model named…").
-   If the current model does not match this tier:
-   - State the mismatch clearly (e.g., "This phase needs Sonnet; you're currently on Opus.").
-   - Tell the user how to switch: "To switch, type `/model sonnet` in Claude Code (conversation history is preserved)."
-   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
-   Wait for the user's response before proceeding.
+   Session-level model choice is your own — no confirmation prompt; call `advisor` per CLAUDE.md's Advisor Guidance if model fit is in doubt.
 
 ## Process
 
@@ -42,13 +36,14 @@ Model tier: standard
    **Affects**: `CLAUDE.md` (process rules), `PROJECT.md` (project-specific lessons)
 
    Then present via `AskUserQuestion` — clearly separating CLAUDE.md changes from PROJECT.md changes. Get approval before writing.
-5. **Create** `planning/milestone-[name]/RETROSPECTIVE.md` with:
+5. Before finalizing RETROSPECTIVE.md, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
+6. **Create** `planning/milestone-[name]/RETROSPECTIVE.md` with:
    - Phases Reviewed
    - What Worked
    - What Didn't Work
    - What Was Missing
    - Changes Made (CLAUDE.md / PROJECT.md / Removed or Simplified)
-6. **Propose commit and push**: Output:
+7. **Propose commit and push**: Output:
    **About to**: commit and push the retrospective changes
    **Why**: finalising the retrospective and recording it in the repo
    **Affects**: `RETROSPECTIVE.md`, `CLAUDE.md`, `PROJECT.md`, feature branch, remote origin

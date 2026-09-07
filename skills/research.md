@@ -8,13 +8,7 @@ Model tier: standard
 
 1. Read `.workflow/state.md` to identify the current phase.
 2. Note the model tier for this phase: `standard`. Include it in the status block.
-   **Model check**: This phase runs at standard tier — recommended model: Sonnet.
-   Detect the current model from the system prompt ("You are powered by the model named…").
-   If the current model does not match this tier:
-   - State the mismatch clearly (e.g., "This phase needs Sonnet; you're currently on Opus.").
-   - Tell the user how to switch: "To switch, type `/model sonnet` in Claude Code (conversation history is preserved)."
-   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
-   Wait for the user's response before proceeding to the next On Start step.
+   Session-level model choice is your own — no confirmation prompt; call `advisor` per CLAUDE.md's Advisor Guidance if model fit is in doubt.
 3. Read `planning/phase-XX/CONTEXT.md` to understand the requirements.
 4. Propose a research depth tier and get user confirmation.
 
@@ -51,8 +45,9 @@ Use `AskUserQuestion` to propose a tier with a brief rationale and get confirmat
    - The scan returns significantly more files or complexity than the phase annotation assumed.
    - The research surfaces unfamiliar technology or cross-system integration points not visible at the start.
    - The task turns out to be clearly mechanical (e.g., a simple status lookup) and the annotated tier feels excessive.
-   When triggered: output a one-line justification (e.g., "This research turned out to involve 3 unfamiliar subsystems — Opus recommended.") and use `AskUserQuestion` with options: "Switch to [recommended model] — ready to continue" / "Continue on current model."
+   When triggered: output a one-line justification (e.g., "This research turned out to involve 3 unfamiliar subsystems — Opus recommended."), then call `advisor` per CLAUDE.md's Advisor Guidance and/or dispatch the remaining investigation to a subagent at a different tier (e.g. `subagent_type: explore-codebase`) — do not prompt to switch the current session's model.
 4. After research, use `AskUserQuestion` for any remaining clarifying questions — one at a time.
+5. Before finalizing RESEARCH.md, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
 
 ## Artifact
 

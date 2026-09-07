@@ -14,13 +14,7 @@ Use `/onboard` instead of `/new-project` when:
 ## On Start
 
 1. Note the model tier for this command: `heavy`. Include it in the status block.
-   **Model check**: This phase runs at heavy tier — recommended model: Opus.
-   Detect the current model from the system prompt ("You are powered by the model named…").
-   If the current model does not match this tier:
-   - State the mismatch clearly (e.g., "This phase needs Opus; you're currently on Sonnet.").
-   - Tell the user how to switch: "To switch, type `/model opus` in Claude Code (conversation history is preserved)."
-   - Use `AskUserQuestion` with options: "Switched — ready to continue" / "Continue on [current model] anyway."
-   Wait for the user's response before proceeding.
+   Session-level model choice is your own — no confirmation prompt; call `advisor` per CLAUDE.md's Advisor Guidance if model fit is in doubt.
 
 ## Phase 1: Scan
 
@@ -110,6 +104,8 @@ Use `AskUserQuestion` — one question at a time — to fill in what the scan co
 
 ### PROJECT.md
 Pre-populate from scan results + gap-filling answers. Use the template from `templates/PROJECT.md` but fill in discovered values instead of placeholders.
+
+Before finalizing the scaffold, call `advisor` per CLAUDE.md's Advisor Guidance — this is a floor, not the only point it may be called.
 
 Output:
 **About to**: write `PROJECT.md` from the codebase scan and gap-filling answers

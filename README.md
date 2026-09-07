@@ -48,7 +48,7 @@ When you open Claude Code, the agent immediately tells you where you are:
 ```
 Phase: 3 — Capture and Attachments
 Step:  implement (step 4 of 6)
-Model: heavy (Opus)
+Model: Opus 5
 Next:  type /implement to continue
 ```
 
@@ -106,6 +106,10 @@ For changes that are trivial by objective criteria — a single known defect, to
 
 If any criterion is even arguable, the agent runs the full cycle instead — this is a guard, not a shortcut.
 
+## Triage Path
+
+A second, narrower bypass — **Triage** — applies to pure record-reconciliation of `ROADMAP.md`'s parked entries (Deferred Phases, Deferred Verifications, Deferred Subagents, Known Flaky Tests): no code change, just deciding keep/remove/promote/convert for each item. Same About to/Why/Affects and approval-gate pattern as Hotfix; logged with a `[triage]` prefix in the same Hotfix Log. See `FRAMEWORK-GUIDE.md` for detail.
+
 ## Session Breaks
 
 Close the terminal whenever you want. Nothing is lost:
@@ -142,7 +146,7 @@ If you don't have Codex CLI, use `claude-dispatch.sh` instead — it dispatches 
 
 ```bash
 bash claude-dispatch.sh "add docstrings to src/utils.js"
-bash claude-dispatch.sh "rename all instances of oldName to newName in lib/" --model claude-sonnet-4-6
+bash claude-dispatch.sh "rename all instances of oldName to newName in lib/" --model sonnet
 ```
 
 Setup copies both `CLAUDE.md` and `AGENTS.md` into your project. Codex CLI is optional — the framework works fine with Claude Code alone.
@@ -159,13 +163,9 @@ Each workflow phase has a recommended **model tier** to balance cost and capabil
 | codex | Codex CLI | — | Mechanical subtasks dispatched during `/implement` |
 | claude | Claude Code CLI | `claude-haiku-4-5-20251001` | Mechanical subtasks dispatched headlessly via `claude-dispatch.sh` (no Codex required) |
 
-The agent shows the recommended tier in the status block at the start of each phase. By default it asks for confirmation — you can override to a different tier if needed.
+The Model ID column above is a point-in-time reference — verify against Anthropic's model documentation before assuming it's still accurate. Dispatch code (including `claude-dispatch.sh`'s own `--model` default) uses the stable alias (`opus`/`sonnet`/`haiku`) instead of a hardcoded versioned ID, so it never goes stale.
 
-To skip confirmation and use recommended tiers automatically, add this to the Model Routing section of your `PROJECT.md`:
-
-```
-- auto-routing: yes
-```
+The agent shows the current model in the status block at the start of each phase — there's no tier-confirmation prompt; model-fit judgment is handled via `advisor` consultation instead (see `CLAUDE.md`'s Advisor Guidance section).
 
 To override the default tier for a specific phase, fill in the "Your Override" column in the Model Routing table in `PROJECT.md`.
 
@@ -243,7 +243,7 @@ This file is created automatically by `bootstrap.sh` and auto-loaded by Claude C
 
 **Bespoke sub-agents** (custom agent definitions for your project):
 → `.claude/agents/your-agent-name.md`
-Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`, `stale-phase-issue-closer`). Your agents are never overwritten.
+Use a unique filename that doesn't match framework agents (`doc-reviewer`, `explore-codebase`, `implement-step`, `test-runner`, `stale-phase-issue-closer`, `worktree-result-applier`). Your agents are never overwritten.
 
 **Project facts** (tech stack, architecture, lessons learned):
 → `PROJECT.md` — the knowledge document Claude reads for context.

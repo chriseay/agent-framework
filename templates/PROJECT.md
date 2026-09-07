@@ -80,10 +80,6 @@ This section is optional. The framework ships sensible defaults — only add ove
 
 Leave "Your Override" blank to use defaults. Supported tiers: `light`, `standard`, `heavy`, `codex`.
 
-### Preferences
-
-- auto-routing: no (set to `yes` to skip confirmation and use recommended tiers automatically)
-
 ### Model Update Cadence
 
 Review the model tier mapping when Anthropic announces a new model family. The framework's `CLAUDE.md` contains the current tier table — compare it against the [Anthropic model overview](https://docs.anthropic.com/en/docs/about-claude/models) and update if needed.

@@ -14,7 +14,7 @@ This file is automatically loaded at the start of every Codex CLI session. Detai
 Phase:    [number] — [name]
 Step:     [current workflow step]
 Subphase: N of M (only if in a subphase cycle)
-Model:    [tier] ([model name])
+Model:    [model name]
 Next:     [next phase command to run]
 ```
 
@@ -81,16 +81,16 @@ The framework uses **model tiers** to route phases to appropriately-sized models
 | light | Haiku | o4-mini | Conversational Q&A, simple lookups |
 | codex | — | o4-mini | Mechanical subtasks (via `codex-dispatch.sh`) |
 
+The Codex Model column above is a point-in-time reference — current as of the last update to this table, and unverified against OpenAI's current Codex CLI model lineup as of this edit. Verify against OpenAI's Codex CLI documentation before assuming it's still accurate; all four rows currently list the same model, which may reflect Codex CLI not differentiating by tier the way Claude does, or may reflect this table having gone stale — check rather than assume either way.
+
 Each skill file declares its tier in its On Start section. The agent resolves the tier as follows:
 
 1. **Detect current model**: In Codex CLI, the model is set via `~/.codex/config.toml` or the `-m` flag. Note which model is active.
-2. **Look up phase tier**: Read the skill file's `Model tier:` annotation.
+2. **Look up phase tier**: Read the skill file's `Model tier:` annotation — still needed for per-step dispatch (Model-Aware Dispatch in `skills/implement.md`) to reference.
 3. **Check for overrides**: If `PROJECT.md` has a "Model Routing" section, use those overrides instead of defaults.
-4. **Show in status block**: Display the tier and model name in the `Model:` line.
+4. **Show in status block**: Display just the model name in the `Model:` line — no session-level tier-match prompt.
 
-**Confirmation mode** (default): Show the tier in the status block as a brief inline note. The user can override by requesting a different tier.
-
-If `PROJECT.md` sets `auto-routing: yes`, skip confirmation and proceed with the recommended tier automatically.
+**No Advisor Guidance in this file**: Claude Code sessions use a tool called `advisor` (see `CLAUDE.md`'s Advisor Guidance section) to consult a stronger reviewer at named checkpoints instead of switching the whole session to a heavier model. That tool is Claude Code-specific and isn't part of Codex CLI's toolset, so this file has no equivalent section — if a step's tier genuinely doesn't fit the work, use `-m` or `~/.codex/config.toml` to change the active model directly.
 
 ## Documents
 

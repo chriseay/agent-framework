@@ -1,7 +1,7 @@
 ---
 name: explore-codebase
 description: Read-only codebase exploration — file discovery, code search, and architectural understanding. PROACTIVELY use for any search or investigation task.
-model: claude-haiku-4-5-20251001
+model: haiku
 tools: Glob, Grep, Read, Bash
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: doc-reviewer
 description: Review documentation files against a set of phase changes and return proposed updates. Use during /close-out doc refresh step.
-model: claude-sonnet-4-6
+model: sonnet
 tools: Glob, Grep, Read
 ---
 
